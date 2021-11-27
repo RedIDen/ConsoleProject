@@ -128,7 +128,31 @@ public static class Program
             Console.Write("Error! Enter the correct date (MM/dd/yyyy): ");
         }
 
-        int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth);
+        short workExperience;
+        Console.Write("Work experience: ");
+
+        while (!short.TryParse(Console.ReadLine(), out workExperience))
+        {
+            Console.Write("Error! Enter the correct number: ");
+        }
+
+        decimal balance;
+        Console.Write("Balance: ");
+
+        while (!decimal.TryParse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out balance))
+        {
+            Console.Write("Error! Enter the correct number: ");
+        }
+
+        char favChar;
+        Console.Write("Favorive char: ");
+
+        while (!char.TryParse(Console.ReadLine(), out favChar))
+        {
+            Console.Write("Error! Enter the correct char: ");
+        }
+
+        int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favChar);
 
         Console.WriteLine($"Record #{id} is created.");
     }
@@ -144,10 +168,14 @@ public static class Program
         {
             foreach (var record in list)
             {
-                Console.WriteLine($"#{record.Id}, " +
+                Console.WriteLine(
+                    $"#{record.Id}, " +
                     $"{record.FirstName}, " +
                     $"{record.LastName}, " +
-                    $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+                    $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, " +
+                    $"{record.WorkExperience}, " +
+                    $"{record.Balance.ToString(CultureInfo.InvariantCulture)}, " +
+                    $"\'{record.FavChar}\'");
             }
         }
     }

@@ -10,7 +10,7 @@ public class FileCabinetService
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
-    public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth)
+    public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favChar)
     {
         var record = new FileCabinetRecord
         {
@@ -18,6 +18,9 @@ public class FileCabinetService
             FirstName = firstName,
             LastName = lastName,
             DateOfBirth = dateOfBirth,
+            WorkExperience = workExperience,
+            Balance = balance,
+            FavChar = favChar,
         };
 
         this.list.Add(record);

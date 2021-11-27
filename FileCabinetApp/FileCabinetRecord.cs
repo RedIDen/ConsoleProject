@@ -11,4 +11,10 @@ public class FileCabinetRecord
     public string LastName { get; set; }
 
     public DateTime DateOfBirth { get; set; }
+
+    public decimal Balance { get; set; }
+
+    public char FavChar { get; set; }
+
+    public short WorkExperience { get; set; }
 }
