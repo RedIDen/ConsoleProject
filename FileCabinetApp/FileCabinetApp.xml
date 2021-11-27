@@ -2,10 +2,6 @@
 <doc>
     <assembly>
         <name>FileCabinetApp</name>
-	<PropertyGroup>
-  	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	</PropertyGroup>
-
     </assembly>
     <members>
     </members>
