@@ -25,14 +25,7 @@ public class FileCabinetService
         return record.Id;
     }
 
-    public FileCabinetRecord[] GetRecords()
-    {
-        // TODO: добавьте реализацию метода
-        return Array.Empty<FileCabinetRecord>();
-    }
+    public FileCabinetRecord[] GetRecords() => this.list.ToArray();
 
-    public int GetStat()
-    {
-        return this.list.Count;
-    }
+    public int GetStat() => this.list.Count;
 }

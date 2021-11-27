@@ -1,4 +1,6 @@
-﻿#pragma warning disable CS8604
+﻿using System.Globalization;
+
+#pragma warning disable CS8604
 #pragma warning disable CS8602
 #pragma warning disable CS8600
 
@@ -11,7 +13,7 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static readonly FileCabinetService fileCabinetService = new FileCabinetService();
+    private static FileCabinetService fileCabinetService = new FileCabinetService();
 
     private static bool isRunning = true;
 
@@ -21,13 +23,15 @@ public static class Program
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
     };
 
     private static string[][] helpMessages = new string[][]
     {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
             new string[] { "create", "creates new record", "The 'create' command creates new record." },
+            new string[] { "list", "shows the list of records", "The 'list' command shows the list of records." },
+            new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
     };
 
@@ -117,8 +121,8 @@ public static class Program
 
         while (!DateTime.TryParse(
             Console.ReadLine(),
-            System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
-            System.Globalization.DateTimeStyles.None,
+            CultureInfo.CreateSpecificCulture("en-US"),
+            DateTimeStyles.None,
             out dateOfBirth))
         {
             Console.Write("Error! Enter the correct date (MM/dd/yyyy): ");
@@ -127,6 +131,25 @@ public static class Program
         int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth);
 
         Console.WriteLine($"Record #{id} is created.");
+    }
+
+    private static void List(string parameters)
+    {
+        FileCabinetRecord[] list = fileCabinetService.GetRecords();
+        if (list.Length == 0)
+        {
+            Console.WriteLine("The list is empty.");
+        }
+        else
+        {
+            foreach (var record in list)
+            {
+                Console.WriteLine($"#{record.Id}, " +
+                    $"{record.FirstName}, " +
+                    $"{record.LastName}, " +
+                    $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+            }
+        }
     }
 
     private static void Exit(string parameters)

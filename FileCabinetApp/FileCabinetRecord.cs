@@ -1,4 +1,6 @@
-﻿namespace FileCabinetApp;
+﻿#pragma warning disable CS8618
+
+namespace FileCabinetApp;
 
 public class FileCabinetRecord
 {
