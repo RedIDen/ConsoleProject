@@ -110,31 +110,42 @@ public static class Program
 
     private static void Create(string parameters)
     {
-        Console.Write("First Name: ");
-        string firstName = Console.ReadLine();
+        while (true)
+        {
+            Console.Write("First Name: ");
+            string firstName = Console.ReadLine();
 
-        Console.Write("Last Name: ");
-        string lastName = Console.ReadLine();
+            Console.Write("Last Name: ");
+            string lastName = Console.ReadLine();
 
-        Console.Write("Date of birth: ");
+            Console.Write("Date of birth: ");
 
-        DateTime dateOfBirth = DateTime.Parse(
-            Console.ReadLine(),
-            CultureInfo.CreateSpecificCulture("en-US"),
-            DateTimeStyles.None);
+            DateTime dateOfBirth = DateTime.Parse(
+                Console.ReadLine(),
+                CultureInfo.CreateSpecificCulture("en-US"),
+                DateTimeStyles.None);
 
-        Console.Write("Work experience: ");
-        short workExperience = short.Parse(Console.ReadLine());
+            Console.Write("Work experience: ");
+            short workExperience = short.Parse(Console.ReadLine());
 
-        Console.Write("Balance: ");
-        decimal balance = decimal.Parse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+            Console.Write("Balance: ");
+            decimal balance = decimal.Parse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
 
-        Console.Write("Favorive letter: ");
-        char favLetter = char.Parse(Console.ReadLine());
+            Console.Write("Favorive letter: ");
+            char favLetter = char.Parse(Console.ReadLine());
 
-        int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter);
-
-        Console.WriteLine($"Record #{id} is created.");
+            int id;
+            try
+            {
+                id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter);
+                Console.WriteLine($"Record #{id} is created.");
+                return;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}. Please, enter correct data:");
+            }
+        }
     }
 
     private static void List(string parameters)
