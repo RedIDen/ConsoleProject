@@ -116,43 +116,23 @@ public static class Program
         Console.Write("Last Name: ");
         string lastName = Console.ReadLine();
 
-        DateTime dateOfBirth;
         Console.Write("Date of birth: ");
 
-        while (!DateTime.TryParse(
+        DateTime dateOfBirth = DateTime.Parse(
             Console.ReadLine(),
             CultureInfo.CreateSpecificCulture("en-US"),
-            DateTimeStyles.None,
-            out dateOfBirth))
-        {
-            Console.Write("Error! Enter the correct date (MM/dd/yyyy): ");
-        }
+            DateTimeStyles.None);
 
-        short workExperience;
         Console.Write("Work experience: ");
+        short workExperience = short.Parse(Console.ReadLine());
 
-        while (!short.TryParse(Console.ReadLine(), out workExperience))
-        {
-            Console.Write("Error! Enter the correct number: ");
-        }
-
-        decimal balance;
         Console.Write("Balance: ");
+        decimal balance = decimal.Parse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
 
-        while (!decimal.TryParse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out balance))
-        {
-            Console.Write("Error! Enter the correct number: ");
-        }
+        Console.Write("Favorive letter: ");
+        char favLetter = char.Parse(Console.ReadLine());
 
-        char favChar;
-        Console.Write("Favorive char: ");
-
-        while (!char.TryParse(Console.ReadLine(), out favChar))
-        {
-            Console.Write("Error! Enter the correct char: ");
-        }
-
-        int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favChar);
+        int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter);
 
         Console.WriteLine($"Record #{id} is created.");
     }
