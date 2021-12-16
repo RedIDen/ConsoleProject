@@ -60,6 +60,20 @@ public class FileCabinetService
 
     public int GetStat() => this.list.Count;
 
+    public FileCabinetRecord[] FindByFirstName(string firstName)
+    {
+        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
+        foreach (var record in this.list)
+        {
+            if (record.FirstName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchResult.Add(record);
+            }
+        }
+
+        return searchResult.ToArray();
+    }
+
     private static void CheckNames(string firstName, string lastName)
     {
         if (firstName is null)
