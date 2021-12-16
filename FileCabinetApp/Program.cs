@@ -157,6 +157,7 @@ public static class Program
         {
             "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
             "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
             _ => Array.Empty<FileCabinetRecord>(),
         };
 

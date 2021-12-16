@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,12 +75,31 @@ public class FileCabinetService
         return searchResult.ToArray();
     }
 
-    public FileCabinetRecord[] FindByLastName(string firstName)
+    public FileCabinetRecord[] FindByLastName(string lastName)
     {
         List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
         foreach (var record in this.list)
         {
-            if (record.LastName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase))
+            if (record.LastName.Contains(lastName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchResult.Add(record);
+            }
+        }
+
+        return searchResult.ToArray();
+    }
+
+    public FileCabinetRecord[] FindByDateOfBirth(string date)
+    {
+        DateTime dateOfBirth = DateTime.Parse(
+            date,
+            CultureInfo.CreateSpecificCulture("en-US"),
+            DateTimeStyles.None);
+
+        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
+        foreach (var record in this.list)
+        {
+            if (record.DateOfBirth.Equals(dateOfBirth))
             {
                 searchResult.Add(record);
             }
