@@ -74,6 +74,20 @@ public class FileCabinetService
         return searchResult.ToArray();
     }
 
+    public FileCabinetRecord[] FindByLastName(string firstName)
+    {
+        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
+        foreach (var record in this.list)
+        {
+            if (record.LastName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchResult.Add(record);
+            }
+        }
+
+        return searchResult.ToArray();
+    }
+
     private static void CheckNames(string firstName, string lastName)
     {
         if (firstName is null)

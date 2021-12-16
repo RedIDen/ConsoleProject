@@ -156,7 +156,8 @@ public static class Program
         var foundRecords = parametersArray[0].ToLower() switch
         {
             "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
-            _ => null,
+            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
+            _ => Array.Empty<FileCabinetRecord>(),
         };
 
         Program.ShowRecords(foundRecords, "No records found.");
