@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable CS8602
+
 namespace FileCabinetApp;
 
 public class FileCabinetService
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+    private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
     public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
     {
@@ -30,12 +33,14 @@ public class FileCabinetService
             FavChar = favLetter,
         };
 
+        this.AddToDictionaries(record);
+
         this.list.Add(record);
 
         return record.Id;
     }
 
-    public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
+    public void EditRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
     {
         CheckNames(firstName, lastName);
         CheckDateOfBirth(dateOfBirth);
@@ -43,16 +48,18 @@ public class FileCabinetService
         CheckBalance(balance);
         CheckFavLetter(favLetter);
 
-        this.list[index] = new FileCabinetRecord
-        {
-            Id = id,
-            FirstName = firstName,
-            LastName = lastName,
-            DateOfBirth = dateOfBirth,
-            WorkExperience = workExperience,
-            Balance = balance,
-            FavChar = favLetter,
-        };
+        var record = this.list[index];
+
+        this.DeleteFromDictionary(record);
+
+        record.FirstName = firstName;
+        record.LastName = lastName;
+        record.DateOfBirth = dateOfBirth;
+        record.WorkExperience = workExperience;
+        record.Balance = balance;
+        record.FavChar = favLetter;
+
+        this.AddToDictionaries(record);
     }
 
     public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
@@ -61,19 +68,8 @@ public class FileCabinetService
 
     public int GetStat() => this.list.Count;
 
-    public FileCabinetRecord[] FindByFirstName(string firstName)
-    {
-        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
-        foreach (var record in this.list)
-        {
-            if (record.FirstName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                searchResult.Add(record);
-            }
-        }
-
-        return searchResult.ToArray();
-    }
+    public FileCabinetRecord[] FindByFirstName(string firstName) =>
+        (this.firstNameDictionary.GetValueOrDefault(firstName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray();
 
     public FileCabinetRecord[] FindByLastName(string lastName)
     {
@@ -180,4 +176,23 @@ public class FileCabinetService
             throw new ArgumentException("The char is not a letter.");
         }
     }
+
+    private void AddToDictionaries(FileCabinetRecord record)
+    {
+        string lowerFirstName = record.FirstName.ToLower();
+
+        if (this.firstNameDictionary.ContainsKey(lowerFirstName))
+        {
+            this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.firstNameDictionary.Add(lowerFirstName, list);
+        }
+    }
+
+    private void DeleteFromDictionary(FileCabinetRecord record) =>
+        this.firstNameDictionary.GetValueOrDefault(record.FirstName.ToLower()).Remove(record);
 }

@@ -137,7 +137,7 @@ public static class Program
 
             try
             {
-                Program.fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
+                Program.fileCabinetService.EditRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
