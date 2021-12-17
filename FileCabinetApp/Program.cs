@@ -24,6 +24,7 @@ public static class Program
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("exit", Exit),
     };
 
@@ -34,6 +35,7 @@ public static class Program
             new string[] { "edit", "edits the record", "The 'edit' command edits the record." },
             new string[] { "list", "shows the list of records", "The 'list' command shows the list of records." },
             new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
+            new string[] { "find", "searches for the records", "The 'find' searches for the records by parameters." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
     };
 
@@ -122,7 +124,7 @@ public static class Program
         while (true)
         {
             int id = int.Parse(parameters);
- 
+
             int index = Program.fileCabinetService.FindRecordIndexById(id);
 
             if (index == -1)
@@ -135,7 +137,7 @@ public static class Program
 
             try
             {
-                Program.fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
+                Program.fileCabinetService.EditRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
@@ -144,6 +146,22 @@ public static class Program
                 Console.WriteLine($"{e.Message} Please, enter the correct data:");
             }
         }
+    }
+
+    private static void Find(string parameters)
+    {
+        var parametersArray = parameters.Split(' ', 2);
+        parametersArray[1] = parametersArray[1].Trim('\"');
+
+        var foundRecords = parametersArray[0].ToLower() switch
+        {
+            "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            _ => Array.Empty<FileCabinetRecord>(),
+        };
+
+        Program.ShowRecords(foundRecords, "No records found.");
     }
 
     private static void Create(string parameters)
@@ -204,30 +222,34 @@ public static class Program
 
     private static void List(string parameters)
     {
-        FileCabinetRecord[] list = fileCabinetService.GetRecords();
+        FileCabinetRecord[] list = Program.fileCabinetService.GetRecords();
+        Program.ShowRecords(list, "The list is empty.");
+    }
+
+    private static void ShowRecords(FileCabinetRecord[] list, string errorMessage)
+    {
         if (list.Length == 0)
         {
-            Console.WriteLine("The list is empty.");
+            Console.WriteLine(errorMessage);
+            return;
         }
-        else
+
+        foreach (var record in list)
         {
-            foreach (var record in list)
-            {
-                Console.WriteLine(
-                    $"#{record.Id}, " +
-                    $"{record.FirstName}, " +
-                    $"{record.LastName}, " +
-                    $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, " +
-                    $"{record.WorkExperience}, " +
-                    $"{record.Balance.ToString(CultureInfo.InvariantCulture)}, " +
-                    $"\'{record.FavChar}\'");
-            }
+            Console.WriteLine(
+                $"#{record.Id}, " +
+                $"{record.FirstName}, " +
+                $"{record.LastName}, " +
+                $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, " +
+                $"{record.WorkExperience}, " +
+                $"{record.Balance.ToString(CultureInfo.InvariantCulture)}, " +
+                $"\'{record.FavChar}\'");
         }
     }
 
     private static void Exit(string parameters)
     {
         Console.WriteLine("Exiting an application...");
-        isRunning = false;
+        Program.isRunning = false;
     }
 }

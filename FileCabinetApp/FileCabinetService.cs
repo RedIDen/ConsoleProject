@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+#pragma warning disable CS8602
 
 namespace FileCabinetApp;
 
 public class FileCabinetService
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+    private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+    private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+    private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
     public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
     {
@@ -29,12 +35,14 @@ public class FileCabinetService
             FavChar = favLetter,
         };
 
+        this.AddToDictionaries(record);
+
         this.list.Add(record);
 
         return record.Id;
     }
 
-    public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
+    public void EditRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
     {
         CheckNames(firstName, lastName);
         CheckDateOfBirth(dateOfBirth);
@@ -42,16 +50,18 @@ public class FileCabinetService
         CheckBalance(balance);
         CheckFavLetter(favLetter);
 
-        this.list[index] = new FileCabinetRecord
-        {
-            Id = id,
-            FirstName = firstName,
-            LastName = lastName,
-            DateOfBirth = dateOfBirth,
-            WorkExperience = workExperience,
-            Balance = balance,
-            FavChar = favLetter,
-        };
+        var record = this.list[index];
+
+        this.DeleteFromDictionaries(record);
+
+        record.FirstName = firstName;
+        record.LastName = lastName;
+        record.DateOfBirth = dateOfBirth;
+        record.WorkExperience = workExperience;
+        record.Balance = balance;
+        record.FavChar = favLetter;
+
+        this.AddToDictionaries(record);
     }
 
     public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
@@ -59,6 +69,42 @@ public class FileCabinetService
     public FileCabinetRecord[] GetRecords() => this.list.ToArray();
 
     public int GetStat() => this.list.Count;
+
+    public FileCabinetRecord[] FindByFirstName(string firstName) =>
+        (this.firstNameDictionary.GetValueOrDefault(firstName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray();
+
+    public FileCabinetRecord[] FindByLastName(string lastName)
+    {
+        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
+        foreach (var record in this.list)
+        {
+            if (record.LastName.Contains(lastName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchResult.Add(record);
+            }
+        }
+
+        return searchResult.ToArray();
+    }
+
+    public FileCabinetRecord[] FindByDateOfBirth(string date)
+    {
+        DateTime dateOfBirth = DateTime.Parse(
+            date,
+            CultureInfo.CreateSpecificCulture("en-US"),
+            DateTimeStyles.None);
+
+        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
+        foreach (var record in this.list)
+        {
+            if (record.DateOfBirth.Equals(dateOfBirth))
+            {
+                searchResult.Add(record);
+            }
+        }
+
+        return searchResult.ToArray();
+    }
 
     private static void CheckNames(string firstName, string lastName)
     {
@@ -131,5 +177,59 @@ public class FileCabinetService
         {
             throw new ArgumentException("The char is not a letter.");
         }
+    }
+
+    private void AddToDictionaries(FileCabinetRecord record)
+    {
+        string lowerFirstName = record.FirstName.ToLower();
+
+        if (this.firstNameDictionary.ContainsKey(lowerFirstName))
+        {
+            this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.firstNameDictionary.Add(lowerFirstName, list);
+        }
+
+        string lowerLastName = record.LastName.ToLower();
+
+        if (this.lastNameDictionary.ContainsKey(lowerLastName))
+        {
+            this.lastNameDictionary.GetValueOrDefault(lowerLastName).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.lastNameDictionary.Add(lowerLastName, list);
+        }
+
+        if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
+        {
+            this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.dateOfBirthDictionary.Add(record.DateOfBirth, list);
+        }
+    }
+
+    private void DeleteFromDictionaries(FileCabinetRecord record)
+    {
+        string lowerFirstName = record.FirstName.ToLower();
+        this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Remove(record);
+        this.firstNameDictionary.Remove(lowerFirstName);
+
+        string lowerLastName = record.LastName.ToLower();
+        this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
+        this.lastNameDictionary.Remove(lowerLastName);
+
+        this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
+        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
     }
 }
