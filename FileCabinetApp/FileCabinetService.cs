@@ -13,6 +13,8 @@ public class FileCabinetService
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
     private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+    private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+    private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
     public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
     {
@@ -50,7 +52,7 @@ public class FileCabinetService
 
         var record = this.list[index];
 
-        this.DeleteFromDictionary(record);
+        this.DeleteFromDictionaries(record);
 
         record.FirstName = firstName;
         record.LastName = lastName;
@@ -191,8 +193,33 @@ public class FileCabinetService
             list.Add(record);
             this.firstNameDictionary.Add(lowerFirstName, list);
         }
+
+        string lowerLastName = record.LastName.ToLower();
+
+        if (this.lastNameDictionary.ContainsKey(lowerLastName))
+        {
+            this.lastNameDictionary.GetValueOrDefault(lowerLastName).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.lastNameDictionary.Add(lowerLastName, list);
+        }
+
+
     }
 
-    private void DeleteFromDictionary(FileCabinetRecord record) =>
-        this.firstNameDictionary.GetValueOrDefault(record.FirstName.ToLower()).Remove(record);
+    private void DeleteFromDictionaries(FileCabinetRecord record)
+    {
+        string lowerFirstName = record.FirstName.ToLower();
+        this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Remove(record);
+        this.firstNameDictionary.Remove(lowerFirstName);
+
+        string lowerLastName = record.LastName.ToLower();
+        this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
+        this.lastNameDictionary.Remove(lowerLastName);
+
+
+    }
 }
