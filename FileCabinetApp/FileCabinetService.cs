@@ -14,7 +14,7 @@ public class FileCabinetService
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
     private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
     private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-    private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+    private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
     public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
     {
@@ -207,7 +207,16 @@ public class FileCabinetService
             this.lastNameDictionary.Add(lowerLastName, list);
         }
 
-
+        if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
+        {
+            this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Add(record);
+        }
+        else
+        {
+            var list = new List<FileCabinetRecord>();
+            list.Add(record);
+            this.dateOfBirthDictionary.Add(record.DateOfBirth, list);
+        }
     }
 
     private void DeleteFromDictionaries(FileCabinetRecord record)
@@ -220,6 +229,7 @@ public class FileCabinetService
         this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
         this.lastNameDictionary.Remove(lowerLastName);
 
-
+        this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
+        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
     }
 }
