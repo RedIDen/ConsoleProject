@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 
 #pragma warning disable CS8604
 #pragma warning disable CS8602
@@ -204,20 +205,61 @@ public static class Program
         Console.Write("Last Name: ");
         lastName = Console.ReadLine();
 
-        Console.Write("Date of birth: ");
-        dateOfBirth = DateTime.Parse(
-            Console.ReadLine(),
-            CultureInfo.CreateSpecificCulture("en-US"),
-            DateTimeStyles.None);
+        while (true)
+        {
+            Console.Write("Date of birth: ");
+            if (DateTime.TryParse(
+                Console.ReadLine(),
+                CultureInfo.CreateSpecificCulture("en-US"),
+                DateTimeStyles.None,
+                out dateOfBirth))
+            {
+                break;
+            }
 
-        Console.Write("Work experience: ");
-        workExperience = short.Parse(Console.ReadLine());
+            Console.Write("Wrong input. Try again. ");
+        }
 
-        Console.Write("Balance: ");
-        balance = decimal.Parse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+        while (true)
+        {
+            Console.Write("Work experience: ");
+            if (short.TryParse(
+                Console.ReadLine(),
+                out workExperience))
+            {
+                break;
+            }
 
-        Console.Write("Favorive letter: ");
-        favLetter = char.Parse(Console.ReadLine());
+            Console.Write("Wrong input. Try again. ");
+        }
+
+        while (true)
+        {
+            Console.Write("Balance: ");
+            if (decimal.TryParse(
+                Console.ReadLine(),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out balance))
+            {
+                break;
+            }
+
+            Console.Write("Wrong input. Try again. ");
+        }
+
+        while (true)
+        {
+            Console.Write("Favorite letter: ");
+            if (char.TryParse(
+                Console.ReadLine(),
+                out favLetter))
+            {
+                break;
+            }
+
+            Console.Write("Wrong input. Try again. ");
+        }
     }
 
     private static void List(string parameters)
@@ -236,14 +278,17 @@ public static class Program
 
         foreach (var record in list)
         {
-            Console.WriteLine(
-                $"#{record.Id}, " +
-                $"{record.FirstName}, " +
-                $"{record.LastName}, " +
-                $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, " +
-                $"{record.WorkExperience}, " +
-                $"{record.Balance.ToString(CultureInfo.InvariantCulture)}, " +
-                $"\'{record.FavChar}\'");
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"#{record.Id}, ");
+            stringBuilder.Append($"{record.FirstName}, ");
+            stringBuilder.Append($"{record.LastName}, ");
+            stringBuilder.Append($"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, ");
+            stringBuilder.Append($"{record.WorkExperience}, ");
+            stringBuilder.Append($"{record.Balance.ToString(CultureInfo.InvariantCulture)}, ");
+            stringBuilder.Append($"\'{record.FavChar}\'");
+
+            Console.WriteLine(stringBuilder);
         }
     }
 
