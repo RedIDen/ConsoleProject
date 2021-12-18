@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp;
 
+/// <summary>
+/// The class including the list of the recors and the methods to interact with this list.
+/// </summary>
 public class FileCabinetService
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
@@ -16,6 +19,16 @@ public class FileCabinetService
     private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
     private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
+    /// <summary>
+    /// Creates new record, if there's a correct data, and adds it to the list.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <param name="lastName">Last name.</param>
+    /// <param name="dateOfBirth">Date of birth.</param>
+    /// <param name="workExperience">Work experience.</param>
+    /// <param name="balance">Balance.</param>
+    /// <param name="favLetter">Favorite letter.</param>
+    /// <returns>Returns the id of the new record.</returns>
     public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
     {
         CheckNames(firstName, lastName);
@@ -42,6 +55,16 @@ public class FileCabinetService
         return record.Id;
     }
 
+    /// <summary>
+    /// Edits the existing record.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <param name="lastName">Last name.</param>
+    /// <param name="dateOfBirth">Date of birth.</param>
+    /// <param name="workExperience">Work experience.</param>
+    /// <param name="balance">Balance.</param>
+    /// <param name="favLetter">Favorite letter.</param>
+    /// <param name="index">Index.</param>
     public void EditRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
     {
         CheckNames(firstName, lastName);
@@ -64,29 +87,46 @@ public class FileCabinetService
         this.AddToDictionaries(record);
     }
 
+    /// <summary>
+    /// Returnd the index of the record with the recieved id.
+    /// </summary>
+    /// <param name="id">The record's id.</param>
+    /// <returns>The index in the list of rhe record with the recieved id.</returns>
     public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
 
+    /// <summary>
+    /// Returns the list of all records.
+    /// </summary>
+    /// <returns>The list of all records.</returns>
     public FileCabinetRecord[] GetRecords() => this.list.ToArray();
 
+    /// <summary>
+    /// Returns the stats (the number of records in the list).
+    /// </summary>
+    /// <returns>The number of records in the list.</returns>
     public int GetStat() => this.list.Count;
 
+    /// <summary>
+    /// Returns the list of the records with recieved first name.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <returns>The list of the records with recieved first name.</returns>
     public FileCabinetRecord[] FindByFirstName(string firstName) =>
         (this.firstNameDictionary.GetValueOrDefault(firstName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray();
 
-    public FileCabinetRecord[] FindByLastName(string lastName)
-    {
-        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
-        foreach (var record in this.list)
-        {
-            if (record.LastName.Contains(lastName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                searchResult.Add(record);
-            }
-        }
+    /// <summary>
+    /// Returns the list of the records with recieved last name.
+    /// </summary>
+    /// <param name="lastName">Last name.</param>
+    /// <returns>The list of the records with recieved last name.</returns>
+    public FileCabinetRecord[] FindByLastName(string lastName) =>
+        (this.lastNameDictionary.GetValueOrDefault(lastName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray();
 
-        return searchResult.ToArray();
-    }
-
+    /// <summary>
+    /// Returns the list of the records with recieved date of birth.
+    /// </summary>
+    /// <param name="date">Date of birth.</param>
+    /// <returns>The list of the records with recieved date of birth.</returns>
     public FileCabinetRecord[] FindByDateOfBirth(string date)
     {
         DateTime dateOfBirth = DateTime.Parse(
@@ -94,18 +134,17 @@ public class FileCabinetService
             CultureInfo.CreateSpecificCulture("en-US"),
             DateTimeStyles.None);
 
-        List<FileCabinetRecord> searchResult = new List<FileCabinetRecord>();
-        foreach (var record in this.list)
-        {
-            if (record.DateOfBirth.Equals(dateOfBirth))
-            {
-                searchResult.Add(record);
-            }
-        }
-
-        return searchResult.ToArray();
+        return (this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth) ?? new List<FileCabinetRecord>()).ToArray();
     }
 
+    /// <summary>
+    /// Checks if the first name and the last name are correct.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <param name="lastName">Last name.</param>
+    /// <exception cref="ArgumentNullException">Thrown if at least one of the names if null.</exception>
+    /// <exception cref="ArgumentException">Thrown if at least one of the names consists of only whitespaces
+    /// or has length less than 2 or more than 60.</exception>
     private static void CheckNames(string firstName, string lastName)
     {
         if (firstName is null)
@@ -146,6 +185,11 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Checks if the date of birth is correct.
+    /// </summary>
+    /// <param name="date">Date of birth.</param>
+    /// <exception cref="ArgumentException">Thrown when the date is less than 1950-Jan-1 or more than today's date.</exception>
     private static void CheckDateOfBirth(DateTime date)
     {
         if (date < new DateTime(1950, 1, 1) || date > DateTime.Now)
@@ -154,6 +198,12 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Checks if the work experience is correct.
+    /// </summary>
+    /// <param name="workExperience">Work experience.</param>
+    /// <param name="dateOfBirth">Date of birth.</param>
+    /// <exception cref="ArgumentException">Thrown when the work experience is less than 0 or more than person's age - 16 years.</exception>
     private static void CheckWorkExperience(short workExperience, DateTime dateOfBirth)
     {
         int age = DateTime.Now.Subtract(dateOfBirth).Days / 365;
@@ -163,6 +213,11 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Checks if the balance is correct.
+    /// </summary>
+    /// <param name="balance">Balance.</param>
+    /// <exception cref="ArgumentException">Thrown when the balance is less than 0.</exception>
     private static void CheckBalance(decimal balance)
     {
         if (balance < 0)
@@ -171,6 +226,11 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Checks if the favorite letter is correct.
+    /// </summary>
+    /// <param name="favLetter">Favorite letter.</param>
+    /// <exception cref="ArgumentException">Thrown then the char is not a letter.</exception>
     private static void CheckFavLetter(char favLetter)
     {
         if (!char.IsLetter(favLetter))
@@ -179,6 +239,10 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Adds new record to dicionaries.
+    /// </summary>
+    /// <param name="record">The record to add.</param>
     private void AddToDictionaries(FileCabinetRecord record)
     {
         string lowerFirstName = record.FirstName.ToLower();
@@ -219,6 +283,10 @@ public class FileCabinetService
         }
     }
 
+    /// <summary>
+    /// Deletes the record to dicionaries.
+    /// </summary>
+    /// <param name="record">The record to delete.</param>
     private void DeleteFromDictionaries(FileCabinetRecord record)
     {
         string lowerFirstName = record.FirstName.ToLower();

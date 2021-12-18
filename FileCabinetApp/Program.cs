@@ -1,11 +1,14 @@
 ﻿using System.Globalization;
 using System.Text;
 
-#pragma warning disable CS8604
 #pragma warning disable CS8602
 #pragma warning disable CS8601
 
 namespace FileCabinetApp;
+
+/// <summary>
+/// The main class of the program.
+/// </summary>
 public static class Program
 {
     private const string DeveloperName = "Deniska Vasilyev";
@@ -40,6 +43,10 @@ public static class Program
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
     };
 
+    /// <summary>
+    /// The main method of the program.
+    /// </summary>
+    /// <param name="args">Extra arguments to run the application.</param>
     public static void Main(string[] args)
     {
         Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
@@ -74,12 +81,20 @@ public static class Program
         while (isRunning);
     }
 
+    /// <summary>
+    /// Prints the error message, if user wtires the incorrect command.
+    /// </summary>
+    /// <param name="command">The name of comman user wrote.</param>
     private static void PrintMissedCommandInfo(string command)
     {
         Console.WriteLine($"There is no '{command}' command.");
         Console.WriteLine();
     }
 
+    /// <summary>
+    /// Shows the list of all commands and their descriptions.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void PrintHelp(string parameters)
     {
         if (!string.IsNullOrEmpty(parameters))
@@ -107,6 +122,10 @@ public static class Program
         Console.WriteLine();
     }
 
+    /// <summary>
+    /// Shows the count of records.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Stat(string parameters)
     {
         var recordsCount = Program.fileCabinetService.GetStat();
@@ -149,6 +168,10 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Searches the records by certain parameters.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
     private static void Find(string parameters)
     {
         var parametersArray = parameters.Split(' ', 2);
@@ -165,6 +188,10 @@ public static class Program
         Program.ShowRecords(foundRecords, "No records found.");
     }
 
+    /// <summary>
+    /// Creates new record.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Create(string parameters)
     {
         string firstName;
@@ -191,6 +218,15 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Reads the data for the record from the console.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <param name="lastName">Last name.</param>
+    /// <param name="dateOfBirth">Date of birth.</param>
+    /// <param name="workExperience">Work experience.</param>
+    /// <param name="balance">Balance.</param>
+    /// <param name="favLetter">Favorite letter.</param>
     private static void ReadDataForRecord(
         out string firstName,
         out string lastName,
@@ -262,12 +298,21 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Shows the list of all records.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void List(string parameters)
     {
         FileCabinetRecord[] list = Program.fileCabinetService.GetRecords();
         Program.ShowRecords(list, "The list is empty.");
     }
 
+    /// <summary>
+    /// Shows the recieved list of records in the console.
+    /// </summary>
+    /// <param name="list">The list to show.</param>
+    /// <param name="errorMessage">Error message to show if the list is empty.</param>
     private static void ShowRecords(FileCabinetRecord[] list, string errorMessage)
     {
         if (list.Length == 0)
@@ -292,6 +337,10 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Exits the application.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Exit(string parameters)
     {
         Console.WriteLine("Exiting an application...");

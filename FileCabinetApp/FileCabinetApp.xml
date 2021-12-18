@@ -4,5 +4,257 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+            The class describing the record unit.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets the unique identifier of the record.
+            </summary>
+            <value>
+            The unique Int32 number.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets the first name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets the last name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets the the record's owner's date of birth.
+            </summary>
+            <value>
+            DateTime.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Balance">
+            <summary>
+            Gets or sets the the record's owner's balance.
+            </summary>
+            <value>
+            Decimal.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FavChar">
+            <summary>
+            Gets or sets the the record's owner's favorite char.
+            </summary>
+            <value>
+            Char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.WorkExperience">
+            <summary>
+            Gets or sets the the record's owner's work experience.
+            </summary>
+            <value>
+            Short (Int16).
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            The class including the list of the recors and the methods to interact with this list.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Creates new record, if there's a correct data, and adds it to the list.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <param name="workExperience">Work experience.</param>
+            <param name="balance">Balance.</param>
+            <param name="favLetter">Favorite letter.</param>
+            <returns>Returns the id of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char,System.Int32)">
+            <summary>
+            Edits the existing record.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <param name="workExperience">Work experience.</param>
+            <param name="balance">Balance.</param>
+            <param name="favLetter">Favorite letter.</param>
+            <param name="index">Index.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindRecordIndexById(System.Int32)">
+            <summary>
+            Returnd the index of the record with the recieved id.
+            </summary>
+            <param name="id">The record's id.</param>
+            <returns>The index in the list of rhe record with the recieved id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+            Returns the list of all records.
+            </summary>
+            <returns>The list of all records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+            Returns the stats (the number of records in the list).
+            </summary>
+            <returns>The number of records in the list.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Returns the list of the records with recieved first name.
+            </summary>
+            <param name="firstName">First name.</param>
+            <returns>The list of the records with recieved first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Returns the list of the records with recieved last name.
+            </summary>
+            <param name="lastName">Last name.</param>
+            <returns>The list of the records with recieved last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Returns the list of the records with recieved date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <returns>The list of the records with recieved date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CheckNames(System.String,System.String)">
+            <summary>
+            Checks if the first name and the last name are correct.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if at least one of the names if null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if at least one of the names consists of only whitespaces
+            or has length less than 2 or more than 60.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CheckDateOfBirth(System.DateTime)">
+            <summary>
+            Checks if the date of birth is correct.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the date is less than 1950-Jan-1 or more than today's date.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CheckWorkExperience(System.Int16,System.DateTime)">
+            <summary>
+            Checks if the work experience is correct.
+            </summary>
+            <param name="workExperience">Work experience.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the work experience is less than 0 or more than person's age - 16 years.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CheckBalance(System.Decimal)">
+            <summary>
+            Checks if the balance is correct.
+            </summary>
+            <param name="balance">Balance.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the balance is less than 0.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CheckFavLetter(System.Char)">
+            <summary>
+            Checks if the favorite letter is correct.
+            </summary>
+            <param name="favLetter">Favorite letter.</param>
+            <exception cref="T:System.ArgumentException">Thrown then the char is not a letter.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Adds new record to dicionaries.
+            </summary>
+            <param name="record">The record to add.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.DeleteFromDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Deletes the record to dicionaries.
+            </summary>
+            <param name="record">The record to delete.</param>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            The main class of the program.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+            The main method of the program.
+            </summary>
+            <param name="args">Extra arguments to run the application.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Prints the error message, if user wtires the incorrect command.
+            </summary>
+            <param name="command">The name of comman user wrote.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.PrintHelp(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Stat(System.String)">
+            <summary>
+            Shows the count of records.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Find(System.String)">
+            <summary>
+            Searches the records by certain parameters.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Create(System.String)">
+            <summary>
+            Creates new record.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ReadDataForRecord(System.String@,System.String@,System.DateTime@,System.Int16@,System.Decimal@,System.Char@)">
+            <summary>
+            Reads the data for the record from the console.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <param name="workExperience">Work experience.</param>
+            <param name="balance">Balance.</param>
+            <param name="favLetter">Favorite letter.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.List(System.String)">
+            <summary>
+            Shows the list of all records.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ShowRecords(FileCabinetApp.FileCabinetRecord[],System.String)">
+            <summary>
+            Shows the recieved list of records in the console.
+            </summary>
+            <param name="list">The list to show.</param>
+            <param name="errorMessage">Error message to show if the list is empty.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Exit(System.String)">
+            <summary>
+            Exits the application.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
     </members>
 </doc>
