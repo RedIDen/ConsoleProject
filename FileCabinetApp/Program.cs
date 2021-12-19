@@ -2,8 +2,9 @@
 using System.Globalization;
 using System.Text;
 
-#pragma warning disable CS8602
 #pragma warning disable CS8601
+#pragma warning disable CS8602
+#pragma warning disable CS8604
 
 namespace FileCabinetApp;
 
@@ -300,67 +301,23 @@ public static class Program
         out decimal balance,
         out char favLetter)
     {
-        Console.Write("First Name: ");
-        firstName = Console.ReadLine();
+        Console.Write("First name: ");
+        firstName = ReadInput(Program.StringConverter, FileCabinetService.Validator.FirstNameValidator);
 
-        Console.Write("Last Name: ");
-        lastName = Console.ReadLine();
+        Console.Write("Last name: ");
+        lastName = ReadInput(Program.StringConverter, FileCabinetService.Validator.LastNameValidator);
 
-        while (true)
-        {
-            Console.Write("Date of birth: ");
-            if (DateTime.TryParse(
-                Console.ReadLine(),
-                CultureInfo.CreateSpecificCulture("en-US"),
-                DateTimeStyles.None,
-                out dateOfBirth))
-            {
-                break;
-            }
+        Console.Write("Date of birth: ");
+        dateOfBirth = ReadInput(Program.DateConverter, FileCabinetService.Validator.DateOfBirthValidator);
 
-            Console.Write("Wrong input. Try again. ");
-        }
+        Console.Write("Work experience: ");
+        workExperience = ReadInput(Program.ShortConverter, FileCabinetService.Validator.WorkExperienceValidator);
 
-        while (true)
-        {
-            Console.Write("Work experience: ");
-            if (short.TryParse(
-                Console.ReadLine(),
-                out workExperience))
-            {
-                break;
-            }
+        Console.Write("Balance: ");
+        balance = ReadInput(Program.DecimalConverter, FileCabinetService.Validator.BalanceValidator);
 
-            Console.Write("Wrong input. Try again. ");
-        }
-
-        while (true)
-        {
-            Console.Write("Balance: ");
-            if (decimal.TryParse(
-                Console.ReadLine(),
-                NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture,
-                out balance))
-            {
-                break;
-            }
-
-            Console.Write("Wrong input. Try again. ");
-        }
-
-        while (true)
-        {
-            Console.Write("Favorite letter: ");
-            if (char.TryParse(
-                Console.ReadLine(),
-                out favLetter))
-            {
-                break;
-            }
-
-            Console.Write("Wrong input. Try again. ");
-        }
+        Console.Write("Favorite letter: ");
+        favLetter = ReadInput(Program.CharConverter, FileCabinetService.Validator.FavLetterValidator);
     }
 
     /// <summary>
@@ -410,5 +367,118 @@ public static class Program
     {
         Console.WriteLine("Exiting an application...");
         Program.isRunning = false;
+    }
+
+    /// <summary>
+    /// Reads the input, converts and validates it.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to convert to.</typeparam>
+    /// <param name="converter">Converter.</param>
+    /// <param name="validator">Validator.</param>
+    /// <returns>The result of convertation and validation.</returns>
+    private static T ReadInput<T>(Func<string, ValueTuple<bool, string, T>> converter, Func<T, ValueTuple<bool, string>> validator)
+    {
+        do
+        {
+            T value;
+
+            var input = Console.ReadLine();
+            var conversionResult = converter(input);
+
+            if (!conversionResult.Item1)
+            {
+                Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                continue;
+            }
+
+            value = conversionResult.Item3;
+
+            var validationResult = validator(value);
+            if (!validationResult.Item1)
+            {
+                Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                continue;
+            }
+
+            return value;
+        }
+        while (true);
+    }
+
+    /// <summary>
+    /// Converter to string.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, string) StringConverter(string value) => (true, string.Empty, value);
+
+    /// <summary>
+    /// Converter to date.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, DateTime) DateConverter(string value)
+    {
+        var culture = CultureInfo.CreateSpecificCulture("en-US");
+        var styles = DateTimeStyles.None;
+        if (DateTime.TryParse(value, culture, styles, out DateTime result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "incorrect date format", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to short.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, short) ShortConverter(string value)
+    {
+        if (short.TryParse(value, out short result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct number", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to decimal.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, decimal) DecimalConverter(string value)
+    {
+        if (decimal.TryParse(value, out decimal result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct number", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to char.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, char) CharConverter(string value)
+    {
+        if (char.TryParse(value, out char result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct char", result);
+        }
     }
 }

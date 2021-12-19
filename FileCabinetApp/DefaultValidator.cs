@@ -15,117 +15,106 @@ namespace FileCabinetApp;
 public class DefaultValidator : IRecordValidator
 {
     /// <summary>
-    /// Validates the parameters.
+    /// Validates the first name.
     /// </summary>
-    /// <param name="record">The record to check its data.</param>
-    public void ValidateParameters(FileCabinetRecord record)
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) FirstNameValidator(string value)
     {
-        CheckNames(record.FirstName, record.LastName);
-        CheckDateOfBirth(record.DateOfBirth);
-        CheckWorkExperience(record.WorkExperience, record.DateOfBirth);
-        CheckBalance(record.Balance);
-        CheckFavLetter(record.FavLetter);
+        if (value is null)
+        {
+            return (false, "the name is null");
+        }
+        else if (value.Length > 60)
+        {
+            return (false, "the name is too long");
+        }
+        else if (value.Length < 2)
+        {
+            return (false, "the name is too short");
+        }
+        else if (value.Trim().Length == 0)
+        {
+            return (false, "the name can't consist of only whitespaces");
+        }
+        else
+        {
+            return (true, string.Empty);
+        }
     }
 
     /// <summary>
-    /// Validates the first and the last names.
+    /// Validates the second name.
     /// </summary>
-    /// <param name="firstName">First name.</param>
-    /// <param name="lastName">Last name.</param>
-    /// <exception cref="ArgumentNullException">Thrown when one of the names is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when one of the names is shorter than 2 or longer than 60 symbols.
-    /// Also thrown when the name consists of only whitespaces.</exception>
-    private static void CheckNames(string firstName, string lastName)
-    {
-        if (firstName is null)
-        {
-            throw new ArgumentNullException(nameof(firstName));
-        }
-
-        if (lastName is null)
-        {
-            throw new ArgumentNullException(nameof(lastName));
-        }
-
-        CheckNamesLength(firstName, "First name");
-        CheckNamesLength(lastName, "Last name");
-
-        CheckNameForSpaces(firstName, "First name");
-        CheckNameForSpaces(lastName, "Last name");
-
-        void CheckNamesLength(string a, string nameOfString)
-        {
-            if (a.Length < 2)
-            {
-                throw new ArgumentException($"{nameOfString} is too short.");
-            }
-
-            if (a.Length > 60)
-            {
-                throw new ArgumentException($"{nameOfString} is too long.");
-            }
-        }
-
-        void CheckNameForSpaces(string a, string nameOfString)
-        {
-            if (a.Trim().Length == 0)
-            {
-                throw new ArgumentException($"{nameOfString} can't consist of only whitespaces.");
-            }
-        }
-    }
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) LastNameValidator(string value) => this.FirstNameValidator(value);
 
     /// <summary>
     /// Validates the date of birth.
     /// </summary>
-    /// <param name="date">Date of birth.</param>
-    /// <exception cref="ArgumentException">Thrown when the dae is less than 1950-Jan-1 or more than today's date.</exception>
-    private static void CheckDateOfBirth(DateTime date)
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) DateOfBirthValidator(DateTime value)
     {
-        if (date < new DateTime(1950, 1, 1) || date > DateTime.Now)
+        if (value < new DateTime(1950, 1, 1) || value > DateTime.Now)
         {
-            throw new ArgumentException("Incorrect date.");
+            return (false, "the date should be between 1950-Jan-1 and today");
+        }
+        else
+        {
+            return (true, string.Empty);
         }
     }
 
     /// <summary>
     /// Validates the work experience.
     /// </summary>
-    /// <param name="workExperience">Work experience.</param>
-    /// <param name="dateOfBirth">Date of birth.</param>
-    /// <exception cref="ArgumentException">Thrown when the work experience more than persons age - 16.</exception>
-    private static void CheckWorkExperience(short workExperience, DateTime dateOfBirth)
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) WorkExperienceValidator(short value)
     {
-        int age = DateTime.Now.Subtract(dateOfBirth).Days / 365;
-        if (workExperience < 0 || workExperience > age - 16)
+        if (value < 0)
         {
-            throw new ArgumentException("Incorrect work experisnce.");
+            return (false, "the work experience can't be less than 0");
+        }
+        else
+        {
+            return (true, string.Empty);
         }
     }
 
     /// <summary>
     /// Validates the balance.
     /// </summary>
-    /// <param name="balance">Balance.</param>
-    /// <exception cref="ArgumentException">Thrown when balence is less than 0.</exception>
-    private static void CheckBalance(decimal balance)
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) BalanceValidator(decimal value)
     {
-        if (balance < 0)
+        if (value < 0)
         {
-            throw new ArgumentException("Incorrect balance.");
+            return (false, "the balance can't be less than 0");
+        }
+        else
+        {
+            return (true, string.Empty);
         }
     }
 
     /// <summary>
     /// Validates the favorite letter.
     /// </summary>
-    /// <param name="favLetter">Favorite letter.</param>
-    /// <exception cref="ArgumentException">Thrown when char is not a letter.</exception>
-    private static void CheckFavLetter(char favLetter)
+    /// <param name="value">Value.</param>
+    /// <returns>Result of validation.</returns>
+    public (bool, string) FavLetterValidator(char value)
     {
-        if (!char.IsLetter(favLetter))
+        if (!char.IsLetter(value))
         {
-            throw new ArgumentException("The char is not a letter.");
+            return (false, "enter the correct letter");
+        }
+        else
+        {
+            return (true, string.Empty);
         }
     }
 }

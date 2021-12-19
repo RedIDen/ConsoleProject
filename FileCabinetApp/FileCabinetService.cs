@@ -42,8 +42,6 @@ namespace FileCabinetApp
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            this.Validator.ValidateParameters(record);
-
             record.Id = this.list.Count + 1;
 
             this.AddToDictionaries(record);
@@ -60,8 +58,6 @@ namespace FileCabinetApp
         /// <param name="index">The index of the record to edit.</param>
         public void EditRecord(FileCabinetRecord record, int index)
         {
-            this.Validator.ValidateParameters(record);
-
             record.Id = this.list[index].Id;
 
             this.DeleteFromDictionaries(this.list[index]);

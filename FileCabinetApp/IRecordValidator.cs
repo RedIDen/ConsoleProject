@@ -12,9 +12,45 @@ namespace FileCabinetApp
     public interface IRecordValidator
     {
         /// <summary>
-        /// The method to validate the record's data.
+        /// Validates the first name.
         /// </summary>
-        /// <param name="record">Record.</param>
-        public void ValidateParameters(FileCabinetRecord record);
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) FirstNameValidator(string value);
+
+        /// <summary>
+        /// Validates the second name.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) LastNameValidator(string value);
+
+        /// <summary>
+        /// Validates the date of birth.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) DateOfBirthValidator(DateTime value);
+
+        /// <summary>
+        /// Validates the work experience.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) WorkExperienceValidator(short value);
+
+        /// <summary>
+        /// Validates the balance.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) BalanceValidator(decimal value);
+
+        /// <summary>
+        /// Validates the favorite letter.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <returns>Result of validation.</returns>
+        public (bool, string) FavLetterValidator(char value);
     }
 }
