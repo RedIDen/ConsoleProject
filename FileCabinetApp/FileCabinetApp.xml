@@ -4,6 +4,106 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="record">The record to check its data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckNames(System.String,System.String)">
+            <summary>
+            Validates the first and the last names.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the names is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when one of the names is shorter than 2 symbols.
+            Also thrown when the name consists of only whitespaces.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckDateOfBirth(System.DateTime)">
+            <summary>
+            Validates the date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the dae is less than 1900-Jan-1 or more than today's date.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckWorkExperience(System.Int16,System.DateTime)">
+            <summary>
+            Validates the work experience.
+            </summary>
+            <param name="workExperience">Work experience.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the work experience more than persons age - 16.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckBalance(System.Decimal)">
+            <summary>
+            Validates the balance.
+            </summary>
+            <param name="balance">Balance.</param>
+            <exception cref="T:System.ArgumentException">Thrown when balence is less than 0.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckFavLetter(System.Char)">
+            <summary>
+            Validates the favorite letter.
+            </summary>
+            <param name="favLetter">Favorite letter.</param>
+            <exception cref="T:System.ArgumentException">Thrown when char is not a letter.</exception>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetDefaultService">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="record">The record to check its data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckNames(System.String,System.String)">
+            <summary>
+            Validates the first and the last names.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when one of the names is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when one of the names is shorter than 2 or longer than 60 symbols.
+            Also thrown when the name consists of only whitespaces.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckDateOfBirth(System.DateTime)">
+            <summary>
+            Validates the date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the dae is less than 1950-Jan-1 or more than today's date.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckWorkExperience(System.Int16,System.DateTime)">
+            <summary>
+            Validates the work experience.
+            </summary>
+            <param name="workExperience">Work experience.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <exception cref="T:System.ArgumentException">Thrown when the work experience more than persons age - 16.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckBalance(System.Decimal)">
+            <summary>
+            Validates the balance.
+            </summary>
+            <param name="balance">Balance.</param>
+            <exception cref="T:System.ArgumentException">Thrown when balence is less than 0.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckFavLetter(System.Char)">
+            <summary>
+            Validates the favorite letter.
+            </summary>
+            <param name="favLetter">Favorite letter.</param>
+            <exception cref="T:System.ArgumentException">Thrown when char is not a letter.</exception>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             The class describing the record unit.
@@ -67,7 +167,7 @@
         </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
-            The class including the list of the recors and the methods to interact with this list.
+            The abstract class to ctreate File Cabinet Services.
             </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
@@ -124,44 +224,11 @@
             <param name="date">Date of birth.</param>
             <returns>The list of the records with recieved date of birth.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CheckNames(System.String,System.String)">
+        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
             <summary>
-            Checks if the first name and the last name are correct.
+            Validates the parameters.
             </summary>
-            <param name="firstName">First name.</param>
-            <param name="lastName">Last name.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if at least one of the names if null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if at least one of the names consists of only whitespaces
-            or has length less than 2 or more than 60.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CheckDateOfBirth(System.DateTime)">
-            <summary>
-            Checks if the date of birth is correct.
-            </summary>
-            <param name="date">Date of birth.</param>
-            <exception cref="T:System.ArgumentException">Thrown when the date is less than 1950-Jan-1 or more than today's date.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CheckWorkExperience(System.Int16,System.DateTime)">
-            <summary>
-            Checks if the work experience is correct.
-            </summary>
-            <param name="workExperience">Work experience.</param>
-            <param name="dateOfBirth">Date of birth.</param>
-            <exception cref="T:System.ArgumentException">Thrown when the work experience is less than 0 or more than person's age - 16 years.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CheckBalance(System.Decimal)">
-            <summary>
-            Checks if the balance is correct.
-            </summary>
-            <param name="balance">Balance.</param>
-            <exception cref="T:System.ArgumentException">Thrown when the balance is less than 0.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CheckFavLetter(System.Char)">
-            <summary>
-            Checks if the favorite letter is correct.
-            </summary>
-            <param name="favLetter">Favorite letter.</param>
-            <exception cref="T:System.ArgumentException">Thrown then the char is not a letter.</exception>
+            <param name="record">The record to check its data.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
