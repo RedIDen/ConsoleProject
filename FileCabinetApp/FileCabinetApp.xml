@@ -248,6 +248,71 @@
             </summary>
             <param name="record">The record to delete.</param>
         </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            The interface for the File Cabinet Service.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.IFileCabinetService.Validator">
+            <summary>
+            Gets or sets the record validator.
+            </summary>
+            <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            If there's a correct data, adds the record to the list.
+            </summary>
+            <param name="record">The record to add to the list.</param>
+            <returns>Returns the id of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecord,System.Int32)">
+            <summary>
+            Edits the existing record.
+            </summary>
+            <param name="record">The new record data.</param>
+            <param name="index">The index of the record to edit.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindRecordIndexById(System.Int32)">
+            <summary>
+            Returnd the index of the record with the recieved id.
+            </summary>
+            <param name="id">The record's id.</param>
+            <returns>The index in the list of rhe record with the recieved id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Returns the list of all records.
+            </summary>
+            <returns>The list of all records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Returns the stats (the number of records in the list).
+            </summary>
+            <returns>The number of records in the list.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Returns the list of the records with recieved first name.
+            </summary>
+            <param name="firstName">First name.</param>
+            <returns>The list of the records with recieved first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Returns the list of the records with recieved last name.
+            </summary>
+            <param name="lastName">Last name.</param>
+            <returns>The list of the records with recieved last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Returns the list of the records with recieved date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <returns>The list of the records with recieved date of birth.</returns>
+        </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
             The intarface for the record validators.

@@ -18,7 +18,7 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static readonly FileCabinetService FileCabinetService = new FileCabinetService(new DefaultValidator());
+    private static readonly IFileCabinetService FileCabinetService = new FileCabinetService(new DefaultValidator());
 
     private static string validationRulesMessage = "Using default validation rules.";
 
