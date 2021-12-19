@@ -4,5 +4,487 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.FirstNameValidator(System.String)">
+            <summary>
+            Validates the first name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.LastNameValidator(System.String)">
+            <summary>
+            Validates the second name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.DateOfBirthValidator(System.DateTime)">
+            <summary>
+            Validates the date of birth.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.WorkExperienceValidator(System.Int16)">
+            <summary>
+            Validates the work experience.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.BalanceValidator(System.Decimal)">
+            <summary>
+            Validates the balance.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.FavLetterValidator(System.Char)">
+            <summary>
+            Validates the favorite letter.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.FirstNameValidator(System.String)">
+            <summary>
+            Validates the first name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.LastNameValidator(System.String)">
+            <summary>
+            Validates the second name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.DateOfBirthValidator(System.DateTime)">
+            <summary>
+            Validates the date of birth.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.WorkExperienceValidator(System.Int16)">
+            <summary>
+            Validates the work experience.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.BalanceValidator(System.Decimal)">
+            <summary>
+            Validates the balance.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.FavLetterValidator(System.Char)">
+            <summary>
+            Validates the favorite letter.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+            The class describing the record unit.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets the unique identifier of the record.
+            </summary>
+            <value>
+            The unique Int32 number.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets the first name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets the last name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets the the record's owner's date of birth.
+            </summary>
+            <value>
+            DateTime.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Balance">
+            <summary>
+            Gets or sets the the record's owner's balance.
+            </summary>
+            <value>
+            Decimal.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FavLetter">
+            <summary>
+            Gets or sets the the record's owner's favorite letter.
+            </summary>
+            <value>
+            Char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.WorkExperience">
+            <summary>
+            Gets or sets the the record's owner's work experience.
+            </summary>
+            <value>
+            Short (Int16).
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            The abstract class to ctreate File Cabinet Services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            </summary>
+            <param name="recordValidator">Record validator.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetService.Validator">
+            <summary>
+            Gets or sets the record validator.
+            </summary>
+            <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            If there's a correct data, adds the record to the list.
+            </summary>
+            <param name="record">The record to add to the list.</param>
+            <returns>Returns the id of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecord,System.Int32)">
+            <summary>
+            Edits the existing record.
+            </summary>
+            <param name="record">The new record data.</param>
+            <param name="index">The index of the record to edit.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindRecordIndexById(System.Int32)">
+            <summary>
+            Returnd the index of the record with the recieved id.
+            </summary>
+            <param name="id">The record's id.</param>
+            <returns>The index in the list of rhe record with the recieved id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+            Returns the list of all records.
+            </summary>
+            <returns>The list of all records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+            Returns the stats (the number of records in the list).
+            </summary>
+            <returns>The number of records in the list.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Returns the list of the records with recieved first name.
+            </summary>
+            <param name="firstName">First name.</param>
+            <returns>The list of the records with recieved first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Returns the list of the records with recieved last name.
+            </summary>
+            <param name="lastName">Last name.</param>
+            <returns>The list of the records with recieved last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Returns the list of the records with recieved date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <returns>The list of the records with recieved date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Adds new record to dicionaries.
+            </summary>
+            <param name="record">The record to add.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.DeleteFromDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Deletes the record to dicionaries.
+            </summary>
+            <param name="record">The record to delete.</param>
+        </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            The interface for the File Cabinet Service.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.IFileCabinetService.Validator">
+            <summary>
+            Gets or sets the record validator.
+            </summary>
+            <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            If there's a correct data, adds the record to the list.
+            </summary>
+            <param name="record">The record to add to the list.</param>
+            <returns>Returns the id of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecord,System.Int32)">
+            <summary>
+            Edits the existing record.
+            </summary>
+            <param name="record">The new record data.</param>
+            <param name="index">The index of the record to edit.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindRecordIndexById(System.Int32)">
+            <summary>
+            Returnd the index of the record with the recieved id.
+            </summary>
+            <param name="id">The record's id.</param>
+            <returns>The index in the list of rhe record with the recieved id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Returns the list of all records.
+            </summary>
+            <returns>The list of all records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Returns the stats (the number of records in the list).
+            </summary>
+            <returns>The number of records in the list.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Returns the list of the records with recieved first name.
+            </summary>
+            <param name="firstName">First name.</param>
+            <returns>The list of the records with recieved first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Returns the list of the records with recieved last name.
+            </summary>
+            <param name="lastName">Last name.</param>
+            <returns>The list of the records with recieved last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Returns the list of the records with recieved date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <returns>The list of the records with recieved date of birth.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            The intarface for the record validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.FirstNameValidator(System.String)">
+            <summary>
+            Validates the first name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.LastNameValidator(System.String)">
+            <summary>
+            Validates the second name.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.DateOfBirthValidator(System.DateTime)">
+            <summary>
+            Validates the date of birth.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.WorkExperienceValidator(System.Int16)">
+            <summary>
+            Validates the work experience.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.BalanceValidator(System.Decimal)">
+            <summary>
+            Validates the balance.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.FavLetterValidator(System.Char)">
+            <summary>
+            Validates the favorite letter.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            The main class of the program.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+            The main method of the program.
+            </summary>
+            <param name="args">Extra arguments to run the application.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.WriteGreeting">
+            <summary>
+            Writes the greeting message.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Prints the error message, if user wtires the incorrect command.
+            </summary>
+            <param name="command">The name of comman user wrote.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.PrintHelp(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ChangeValidationRules(System.String)">
+            <summary>
+            Changes the validation rules.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Stat(System.String)">
+            <summary>
+            Shows the count of records.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Edit(System.String)">
+            <summary>
+            Edits the record data.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Find(System.String)">
+            <summary>
+            Searches the records by certain parameters.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Create(System.String)">
+            <summary>
+            Creates new record.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ReadDataForRecord(System.String@,System.String@,System.DateTime@,System.Int16@,System.Decimal@,System.Char@)">
+            <summary>
+            Reads the data for the record from the console.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <param name="workExperience">Work experience.</param>
+            <param name="balance">Balance.</param>
+            <param name="favLetter">Favorite letter.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.List(System.String)">
+            <summary>
+            Shows the list of all records.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
+            <summary>
+            Shows the recieved list of records in the console.
+            </summary>
+            <param name="list">The list to show.</param>
+            <param name="errorMessage">Error message to show if the list is empty.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Exit(System.String)">
+            <summary>
+            Exits the application.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ReadInput``1(System.Func{System.String,System.ValueTuple{System.Boolean,System.String,``0}},System.Func{``0,System.ValueTuple{System.Boolean,System.String}})">
+            <summary>
+            Reads the input, converts and validates it.
+            </summary>
+            <typeparam name="T">The type of the data to convert to.</typeparam>
+            <param name="converter">Converter.</param>
+            <param name="validator">Validator.</param>
+            <returns>The result of convertation and validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.StringConverter(System.String)">
+            <summary>
+            Converter to string.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.DateConverter(System.String)">
+            <summary>
+            Converter to date.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.ShortConverter(System.String)">
+            <summary>
+            Converter to short.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.DecimalConverter(System.String)">
+            <summary>
+            Converter to decimal.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.CharConverter(System.String)">
+            <summary>
+            Converter to char.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
     </members>
 </doc>

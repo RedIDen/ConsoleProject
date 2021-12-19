@@ -1,10 +1,16 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Text;
 
-#pragma warning disable CS8604
-#pragma warning disable CS8602
 #pragma warning disable CS8601
+#pragma warning disable CS8602
+#pragma warning disable CS8604
 
 namespace FileCabinetApp;
+
+/// <summary>
+/// The main class of the program.
+/// </summary>
 public static class Program
 {
     private const string DeveloperName = "Deniska Vasilyev";
@@ -13,7 +19,9 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static FileCabinetService fileCabinetService = new FileCabinetService();
+    private static readonly IFileCabinetService FileCabinetService = new FileCabinetService(new DefaultValidator());
+
+    private static string validationRulesMessage = "Using default validation rules.";
 
     private static bool isRunning = true;
 
@@ -26,6 +34,8 @@ public static class Program
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
+            new Tuple<string, Action<string>>("-v", ChangeValidationRules),
     };
 
     private static string[][] helpMessages = new string[][]
@@ -37,18 +47,21 @@ public static class Program
             new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
             new string[] { "find", "searches for the records", "The 'find' searches for the records by parameters." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
     };
 
+    /// <summary>
+    /// The main method of the program.
+    /// </summary>
+    /// <param name="args">Extra arguments to run the application.</param>
     public static void Main(string[] args)
     {
-        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-        Console.WriteLine(Program.HintMessage);
-        Console.WriteLine();
+        WriteGreeting();
 
         do
         {
             Console.Write("> ");
-            var inputs = Console.ReadLine().Split(' ', 2);
+            var inputs = Console.ReadLine().Split(new char[] { ' ', '=' }, 2);
             const int commandIndex = 0;
             var command = inputs[commandIndex];
 
@@ -73,12 +86,31 @@ public static class Program
         while (isRunning);
     }
 
+    /// <summary>
+    /// Writes the greeting message.
+    /// </summary>
+    private static void WriteGreeting()
+    {
+        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+        Console.WriteLine(Program.validationRulesMessage);
+        Console.WriteLine(Program.HintMessage);
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// Prints the error message, if user wtires the incorrect command.
+    /// </summary>
+    /// <param name="command">The name of comman user wrote.</param>
     private static void PrintMissedCommandInfo(string command)
     {
         Console.WriteLine($"There is no '{command}' command.");
         Console.WriteLine();
     }
 
+    /// <summary>
+    /// Shows the list of all commands and their descriptions.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void PrintHelp(string parameters)
     {
         if (!string.IsNullOrEmpty(parameters))
@@ -106,12 +138,45 @@ public static class Program
         Console.WriteLine();
     }
 
+    /// <summary>
+    /// Changes the validation rules.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void ChangeValidationRules(string parameters)
+    {
+        if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Program.FileCabinetService.Validator = new DefaultValidator();
+            Program.validationRulesMessage = "Using default validation rules.";
+        }
+        else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Program.FileCabinetService.Validator = new CustomValidator();
+            Program.validationRulesMessage = "Using custom validation rules.";
+        }
+        else
+        {
+            Console.WriteLine("Wrong parameters!");
+            return;
+        }
+
+        Program.WriteGreeting();
+    }
+
+    /// <summary>
+    /// Shows the count of records.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Stat(string parameters)
     {
-        var recordsCount = Program.fileCabinetService.GetStat();
+        var recordsCount = Program.FileCabinetService.GetStat();
         Console.WriteLine($"{recordsCount} record(s).");
     }
 
+    /// <summary>
+    /// Edits the record data.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
     private static void Edit(string parameters)
     {
         string firstName;
@@ -125,7 +190,7 @@ public static class Program
         {
             int id = int.Parse(parameters);
 
-            int index = Program.fileCabinetService.FindRecordIndexById(id);
+            int index = Program.FileCabinetService.FindRecordIndexById(id);
 
             if (index == -1)
             {
@@ -137,7 +202,18 @@ public static class Program
 
             try
             {
-                Program.fileCabinetService.EditRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
+                Program.FileCabinetService.EditRecord(
+                    new FileCabinetRecord()
+                    {
+                        Id = 0,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        DateOfBirth = dateOfBirth,
+                        WorkExperience = workExperience,
+                        Balance = balance,
+                        FavLetter = favLetter,
+                    },
+                    index);
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
@@ -148,6 +224,10 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Searches the records by certain parameters.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
     private static void Find(string parameters)
     {
         var parametersArray = parameters.Split(' ', 2);
@@ -155,15 +235,19 @@ public static class Program
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
-            _ => Array.Empty<FileCabinetRecord>(),
+            "firstname" => Program.FileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => Program.FileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => Program.FileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 
         Program.ShowRecords(foundRecords, "No records found.");
     }
 
+    /// <summary>
+    /// Creates new record.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Create(string parameters)
     {
         string firstName;
@@ -179,7 +263,17 @@ public static class Program
 
             try
             {
-                int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter);
+                int id = Program.FileCabinetService.CreateRecord(
+                    new FileCabinetRecord()
+                    {
+                        Id = 0,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        DateOfBirth = dateOfBirth,
+                        WorkExperience = workExperience,
+                        Balance = balance,
+                        FavLetter = favLetter,
+                    });
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
@@ -190,6 +284,15 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Reads the data for the record from the console.
+    /// </summary>
+    /// <param name="firstName">First name.</param>
+    /// <param name="lastName">Last name.</param>
+    /// <param name="dateOfBirth">Date of birth.</param>
+    /// <param name="workExperience">Work experience.</param>
+    /// <param name="balance">Balance.</param>
+    /// <param name="favLetter">Favorite letter.</param>
     private static void ReadDataForRecord(
         out string firstName,
         out string lastName,
@@ -198,37 +301,43 @@ public static class Program
         out decimal balance,
         out char favLetter)
     {
-        Console.Write("First Name: ");
-        firstName = Console.ReadLine();
+        Console.Write("First name: ");
+        firstName = ReadInput(Program.StringConverter, FileCabinetService.Validator.FirstNameValidator);
 
-        Console.Write("Last Name: ");
-        lastName = Console.ReadLine();
+        Console.Write("Last name: ");
+        lastName = ReadInput(Program.StringConverter, FileCabinetService.Validator.LastNameValidator);
 
         Console.Write("Date of birth: ");
-        dateOfBirth = DateTime.Parse(
-            Console.ReadLine(),
-            CultureInfo.CreateSpecificCulture("en-US"),
-            DateTimeStyles.None);
+        dateOfBirth = ReadInput(Program.DateConverter, FileCabinetService.Validator.DateOfBirthValidator);
 
         Console.Write("Work experience: ");
-        workExperience = short.Parse(Console.ReadLine());
+        workExperience = ReadInput(Program.ShortConverter, FileCabinetService.Validator.WorkExperienceValidator);
 
         Console.Write("Balance: ");
-        balance = decimal.Parse(Console.ReadLine(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+        balance = ReadInput(Program.DecimalConverter, FileCabinetService.Validator.BalanceValidator);
 
-        Console.Write("Favorive letter: ");
-        favLetter = char.Parse(Console.ReadLine());
+        Console.Write("Favorite letter: ");
+        favLetter = ReadInput(Program.CharConverter, FileCabinetService.Validator.FavLetterValidator);
     }
 
+    /// <summary>
+    /// Shows the list of all records.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void List(string parameters)
     {
-        FileCabinetRecord[] list = Program.fileCabinetService.GetRecords();
+        ReadOnlyCollection<FileCabinetRecord> list = Program.FileCabinetService.GetRecords();
         Program.ShowRecords(list, "The list is empty.");
     }
 
-    private static void ShowRecords(FileCabinetRecord[] list, string errorMessage)
+    /// <summary>
+    /// Shows the recieved list of records in the console.
+    /// </summary>
+    /// <param name="list">The list to show.</param>
+    /// <param name="errorMessage">Error message to show if the list is empty.</param>
+    private static void ShowRecords(ReadOnlyCollection<FileCabinetRecord> list, string errorMessage)
     {
-        if (list.Length == 0)
+        if (list.Count == 0)
         {
             Console.WriteLine(errorMessage);
             return;
@@ -236,20 +345,140 @@ public static class Program
 
         foreach (var record in list)
         {
-            Console.WriteLine(
-                $"#{record.Id}, " +
-                $"{record.FirstName}, " +
-                $"{record.LastName}, " +
-                $"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, " +
-                $"{record.WorkExperience}, " +
-                $"{record.Balance.ToString(CultureInfo.InvariantCulture)}, " +
-                $"\'{record.FavChar}\'");
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"#{record.Id}, ");
+            stringBuilder.Append($"{record.FirstName}, ");
+            stringBuilder.Append($"{record.LastName}, ");
+            stringBuilder.Append($"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, ");
+            stringBuilder.Append($"{record.WorkExperience}, ");
+            stringBuilder.Append($"{record.Balance.ToString(CultureInfo.InvariantCulture)}, ");
+            stringBuilder.Append($"\'{record.FavLetter}\'");
+
+            Console.WriteLine(stringBuilder);
         }
     }
 
+    /// <summary>
+    /// Exits the application.
+    /// </summary>
+    /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Exit(string parameters)
     {
         Console.WriteLine("Exiting an application...");
         Program.isRunning = false;
+    }
+
+    /// <summary>
+    /// Reads the input, converts and validates it.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to convert to.</typeparam>
+    /// <param name="converter">Converter.</param>
+    /// <param name="validator">Validator.</param>
+    /// <returns>The result of convertation and validation.</returns>
+    private static T ReadInput<T>(Func<string, ValueTuple<bool, string, T>> converter, Func<T, ValueTuple<bool, string>> validator)
+    {
+        do
+        {
+            T value;
+
+            var input = Console.ReadLine();
+            var conversionResult = converter(input);
+
+            if (!conversionResult.Item1)
+            {
+                Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                continue;
+            }
+
+            value = conversionResult.Item3;
+
+            var validationResult = validator(value);
+            if (!validationResult.Item1)
+            {
+                Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                continue;
+            }
+
+            return value;
+        }
+        while (true);
+    }
+
+    /// <summary>
+    /// Converter to string.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, string) StringConverter(string value) => (true, string.Empty, value);
+
+    /// <summary>
+    /// Converter to date.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, DateTime) DateConverter(string value)
+    {
+        var culture = CultureInfo.CreateSpecificCulture("en-US");
+        var styles = DateTimeStyles.None;
+        if (DateTime.TryParse(value, culture, styles, out DateTime result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "incorrect date format", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to short.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, short) ShortConverter(string value)
+    {
+        if (short.TryParse(value, out short result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct number", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to decimal.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, decimal) DecimalConverter(string value)
+    {
+        if (decimal.TryParse(value, out decimal result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct number", result);
+        }
+    }
+
+    /// <summary>
+    /// Converter to char.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    private static (bool, string, char) CharConverter(string value)
+    {
+        if (char.TryParse(value, out char result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct char", result);
+        }
     }
 }
