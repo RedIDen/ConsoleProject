@@ -17,7 +17,9 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
+    private static string validationRulesMessage = "Using default validation rules.";
+
+    private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
 
     private static bool isRunning = true;
 
@@ -30,6 +32,8 @@ public static class Program
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
+            new Tuple<string, Action<string>>("-v", ChangeValidationRules),
     };
 
     private static string[][] helpMessages = new string[][]
@@ -41,6 +45,7 @@ public static class Program
             new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
             new string[] { "find", "searches for the records", "The 'find' searches for the records by parameters." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
     };
 
     /// <summary>
@@ -49,14 +54,12 @@ public static class Program
     /// <param name="args">Extra arguments to run the application.</param>
     public static void Main(string[] args)
     {
-        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-        Console.WriteLine(Program.HintMessage);
-        Console.WriteLine();
+        WriteGreeting();
 
         do
         {
             Console.Write("> ");
-            var inputs = Console.ReadLine().Split(' ', 2);
+            var inputs = Console.ReadLine().Split(new char[] { ' ', '=' }, 2);
             const int commandIndex = 0;
             var command = inputs[commandIndex];
 
@@ -79,6 +82,17 @@ public static class Program
             }
         }
         while (isRunning);
+    }
+
+    /// <summary>
+    /// Writes the greeting message.
+    /// </summary>
+    private static void WriteGreeting()
+    {
+        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+        Console.WriteLine(Program.validationRulesMessage);
+        Console.WriteLine(Program.HintMessage);
+        Console.WriteLine();
     }
 
     /// <summary>
@@ -123,6 +137,31 @@ public static class Program
     }
 
     /// <summary>
+    /// Changes the validation rules.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void ChangeValidationRules(string parameters)
+    {
+        if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Program.fileCabinetService = new FileCabinetDefaultService();
+            Program.validationRulesMessage = "Using default validation rules.";
+        }
+        else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Program.fileCabinetService = new FileCabinetCustomService();
+            Program.validationRulesMessage = "Using custom validation rules.";
+        }
+        else
+        {
+            Console.WriteLine("Wrong parameters!");
+            return;
+        }
+
+        Program.WriteGreeting();
+    }
+
+    /// <summary>
     /// Shows the count of records.
     /// </summary>
     /// <param name="parameters">Extra parameteres for the method.</param>
@@ -132,6 +171,10 @@ public static class Program
         Console.WriteLine($"{recordsCount} record(s).");
     }
 
+    /// <summary>
+    /// Edits the record data.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
     private static void Edit(string parameters)
     {
         string firstName;

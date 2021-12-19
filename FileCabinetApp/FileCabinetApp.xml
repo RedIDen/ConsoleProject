@@ -253,6 +253,11 @@
             </summary>
             <param name="args">Extra arguments to run the application.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.WriteGreeting">
+            <summary>
+            Writes the greeting message.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.Program.PrintMissedCommandInfo(System.String)">
             <summary>
             Prints the error message, if user wtires the incorrect command.
@@ -265,11 +270,23 @@
             </summary>
             <param name="parameters">Extra parameteres for the method.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.ChangeValidationRules(System.String)">
+            <summary>
+            Changes the validation rules.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.Stat(System.String)">
             <summary>
             Shows the count of records.
             </summary>
             <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Edit(System.String)">
+            <summary>
+            Edits the record data.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
         </member>
         <member name="M:FileCabinetApp.Program.Find(System.String)">
             <summary>
