@@ -4,18 +4,18 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
+        <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             The class overriding FileCabinetService.ValidateParameters method.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Validates the parameters.
             </summary>
             <param name="record">The record to check its data.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckNames(System.String,System.String)">
+        <member name="M:FileCabinetApp.CustomValidator.CheckNames(System.String,System.String)">
             <summary>
             Validates the first and the last names.
             </summary>
@@ -25,14 +25,14 @@
             <exception cref="T:System.ArgumentException">Thrown when one of the names is shorter than 2 symbols.
             Also thrown when the name consists of only whitespaces.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckDateOfBirth(System.DateTime)">
+        <member name="M:FileCabinetApp.CustomValidator.CheckDateOfBirth(System.DateTime)">
             <summary>
             Validates the date of birth.
             </summary>
             <param name="date">Date of birth.</param>
             <exception cref="T:System.ArgumentException">Thrown when the dae is less than 1900-Jan-1 or more than today's date.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckWorkExperience(System.Int16,System.DateTime)">
+        <member name="M:FileCabinetApp.CustomValidator.CheckWorkExperience(System.Int16,System.DateTime)">
             <summary>
             Validates the work experience.
             </summary>
@@ -40,32 +40,32 @@
             <param name="dateOfBirth">Date of birth.</param>
             <exception cref="T:System.ArgumentException">Thrown when the work experience more than persons age - 16.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckBalance(System.Decimal)">
+        <member name="M:FileCabinetApp.CustomValidator.CheckBalance(System.Decimal)">
             <summary>
             Validates the balance.
             </summary>
             <param name="balance">Balance.</param>
             <exception cref="T:System.ArgumentException">Thrown when balence is less than 0.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CheckFavLetter(System.Char)">
+        <member name="M:FileCabinetApp.CustomValidator.CheckFavLetter(System.Char)">
             <summary>
             Validates the favorite letter.
             </summary>
             <param name="favLetter">Favorite letter.</param>
             <exception cref="T:System.ArgumentException">Thrown when char is not a letter.</exception>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetDefaultService">
+        <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             The class overriding FileCabinetService.ValidateParameters method.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Validates the parameters.
             </summary>
             <param name="record">The record to check its data.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckNames(System.String,System.String)">
+        <member name="M:FileCabinetApp.DefaultValidator.CheckNames(System.String,System.String)">
             <summary>
             Validates the first and the last names.
             </summary>
@@ -75,14 +75,14 @@
             <exception cref="T:System.ArgumentException">Thrown when one of the names is shorter than 2 or longer than 60 symbols.
             Also thrown when the name consists of only whitespaces.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckDateOfBirth(System.DateTime)">
+        <member name="M:FileCabinetApp.DefaultValidator.CheckDateOfBirth(System.DateTime)">
             <summary>
             Validates the date of birth.
             </summary>
             <param name="date">Date of birth.</param>
             <exception cref="T:System.ArgumentException">Thrown when the dae is less than 1950-Jan-1 or more than today's date.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckWorkExperience(System.Int16,System.DateTime)">
+        <member name="M:FileCabinetApp.DefaultValidator.CheckWorkExperience(System.Int16,System.DateTime)">
             <summary>
             Validates the work experience.
             </summary>
@@ -90,14 +90,14 @@
             <param name="dateOfBirth">Date of birth.</param>
             <exception cref="T:System.ArgumentException">Thrown when the work experience more than persons age - 16.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckBalance(System.Decimal)">
+        <member name="M:FileCabinetApp.DefaultValidator.CheckBalance(System.Decimal)">
             <summary>
             Validates the balance.
             </summary>
             <param name="balance">Balance.</param>
             <exception cref="T:System.ArgumentException">Thrown when balence is less than 0.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CheckFavLetter(System.Char)">
+        <member name="M:FileCabinetApp.DefaultValidator.CheckFavLetter(System.Char)">
             <summary>
             Validates the favorite letter.
             </summary>
@@ -170,6 +170,18 @@
             The abstract class to ctreate File Cabinet Services.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            </summary>
+            <param name="recordValidator">Record validator.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetService.Validator">
+            <summary>
+            Gets or sets the record validator.
+            </summary>
+            <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
             <summary>
             If there's a correct data, adds the record to the list.
@@ -224,12 +236,6 @@
             <param name="date">Date of birth.</param>
             <returns>The list of the records with recieved date of birth.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="record">The record to check its data.</param>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Adds new record to dicionaries.
@@ -241,6 +247,17 @@
             Deletes the record to dicionaries.
             </summary>
             <param name="record">The record to delete.</param>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            The intarface for the record validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            The method to validate the record's data.
+            </summary>
+            <param name="record">Record.</param>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

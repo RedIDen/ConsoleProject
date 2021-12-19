@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#pragma warning disable CS8618
 #pragma warning disable CS8602
 
 namespace FileCabinetApp
@@ -13,12 +12,27 @@ namespace FileCabinetApp
     /// <summary>
     /// The abstract class to ctreate File Cabinet Services.
     /// </summary>
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// </summary>
+        /// <param name="recordValidator">Record validator.</param>
+        public FileCabinetService(IRecordValidator recordValidator)
+        {
+            this.Validator = recordValidator;
+        }
+
+        /// <summary>
+        /// Gets or sets the record validator.
+        /// </summary>
+        /// <value>The object of the class realizing the IRecordValidator interface.</value>
+        public IRecordValidator Validator { get; set; }
 
         /// <summary>
         /// If there's a correct data, adds the record to the list.
@@ -27,7 +41,7 @@ namespace FileCabinetApp
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            this.ValidateParameters(record);
+            this.Validator.ValidateParameters(record);
 
             record.Id = this.list.Count + 1;
 
@@ -45,7 +59,7 @@ namespace FileCabinetApp
         /// <param name="index">The index of the record to edit.</param>
         public void EditRecord(FileCabinetRecord record, int index)
         {
-            this.ValidateParameters(record);
+            this.Validator.ValidateParameters(record);
 
             record.Id = this.list[index].Id;
 
@@ -105,12 +119,6 @@ namespace FileCabinetApp
 
             return (this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth) ?? new List<FileCabinetRecord>()).ToArray();
         }
-
-        /// <summary>
-        /// Validates the parameters.
-        /// </summary>
-        /// <param name="record">The record to check its data.</param>
-        public abstract void ValidateParameters(FileCabinetRecord record);
 
         /// <summary>
         /// Adds new record to dicionaries.

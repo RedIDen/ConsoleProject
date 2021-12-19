@@ -12,13 +12,13 @@ namespace FileCabinetApp;
 /// <summary>
 /// The class overriding FileCabinetService.ValidateParameters method.
 /// </summary>
-public class FileCabinetCustomService : FileCabinetService
+public class DefaultValidator : IRecordValidator
 {
     /// <summary>
     /// Validates the parameters.
     /// </summary>
     /// <param name="record">The record to check its data.</param>
-    public override void ValidateParameters(FileCabinetRecord record)
+    public void ValidateParameters(FileCabinetRecord record)
     {
         CheckNames(record.FirstName, record.LastName);
         CheckDateOfBirth(record.DateOfBirth);
@@ -33,7 +33,7 @@ public class FileCabinetCustomService : FileCabinetService
     /// <param name="firstName">First name.</param>
     /// <param name="lastName">Last name.</param>
     /// <exception cref="ArgumentNullException">Thrown when one of the names is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when one of the names is shorter than 2 symbols.
+    /// <exception cref="ArgumentException">Thrown when one of the names is shorter than 2 or longer than 60 symbols.
     /// Also thrown when the name consists of only whitespaces.</exception>
     private static void CheckNames(string firstName, string lastName)
     {
@@ -59,6 +59,11 @@ public class FileCabinetCustomService : FileCabinetService
             {
                 throw new ArgumentException($"{nameOfString} is too short.");
             }
+
+            if (a.Length > 60)
+            {
+                throw new ArgumentException($"{nameOfString} is too long.");
+            }
         }
 
         void CheckNameForSpaces(string a, string nameOfString)
@@ -74,10 +79,10 @@ public class FileCabinetCustomService : FileCabinetService
     /// Validates the date of birth.
     /// </summary>
     /// <param name="date">Date of birth.</param>
-    /// <exception cref="ArgumentException">Thrown when the dae is less than 1900-Jan-1 or more than today's date.</exception>
+    /// <exception cref="ArgumentException">Thrown when the dae is less than 1950-Jan-1 or more than today's date.</exception>
     private static void CheckDateOfBirth(DateTime date)
     {
-        if (date < new DateTime(1900, 1, 1) || date > DateTime.Now)
+        if (date < new DateTime(1950, 1, 1) || date > DateTime.Now)
         {
             throw new ArgumentException("Incorrect date.");
         }

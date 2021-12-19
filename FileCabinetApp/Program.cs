@@ -17,9 +17,9 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static string validationRulesMessage = "Using default validation rules.";
+    private static readonly FileCabinetService FileCabinetService = new FileCabinetService(new DefaultValidator());
 
-    private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
+    private static string validationRulesMessage = "Using default validation rules.";
 
     private static bool isRunning = true;
 
@@ -144,12 +144,12 @@ public static class Program
     {
         if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
         {
-            Program.fileCabinetService = new FileCabinetDefaultService();
+            Program.FileCabinetService.Validator = new DefaultValidator();
             Program.validationRulesMessage = "Using default validation rules.";
         }
         else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
         {
-            Program.fileCabinetService = new FileCabinetCustomService();
+            Program.FileCabinetService.Validator = new CustomValidator();
             Program.validationRulesMessage = "Using custom validation rules.";
         }
         else
@@ -167,7 +167,7 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Stat(string parameters)
     {
-        var recordsCount = Program.fileCabinetService.GetStat();
+        var recordsCount = Program.FileCabinetService.GetStat();
         Console.WriteLine($"{recordsCount} record(s).");
     }
 
@@ -188,7 +188,7 @@ public static class Program
         {
             int id = int.Parse(parameters);
 
-            int index = Program.fileCabinetService.FindRecordIndexById(id);
+            int index = Program.FileCabinetService.FindRecordIndexById(id);
 
             if (index == -1)
             {
@@ -200,7 +200,7 @@ public static class Program
 
             try
             {
-                Program.fileCabinetService.EditRecord(
+                Program.FileCabinetService.EditRecord(
                     new FileCabinetRecord()
                     {
                         Id = 0,
@@ -233,9 +233,9 @@ public static class Program
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            "firstname" => Program.FileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => Program.FileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => Program.FileCabinetService.FindByDateOfBirth(parametersArray[1]),
             _ => Array.Empty<FileCabinetRecord>(),
         };
 
@@ -261,7 +261,7 @@ public static class Program
 
             try
             {
-                int id = Program.fileCabinetService.CreateRecord(
+                int id = Program.FileCabinetService.CreateRecord(
                     new FileCabinetRecord()
                     {
                         Id = 0,
@@ -368,7 +368,7 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void List(string parameters)
     {
-        FileCabinetRecord[] list = Program.fileCabinetService.GetRecords();
+        FileCabinetRecord[] list = Program.FileCabinetService.GetRecords();
         Program.ShowRecords(list, "The list is empty.");
     }
 
