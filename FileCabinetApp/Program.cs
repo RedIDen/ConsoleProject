@@ -157,7 +157,18 @@ public static class Program
 
             try
             {
-                Program.fileCabinetService.EditRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter, index);
+                Program.fileCabinetService.EditRecord(
+                    new FileCabinetRecord()
+                    {
+                        Id = 0,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        DateOfBirth = dateOfBirth,
+                        WorkExperience = workExperience,
+                        Balance = balance,
+                        FavLetter = favLetter,
+                    },
+                    index);
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
@@ -207,7 +218,17 @@ public static class Program
 
             try
             {
-                int id = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, workExperience, balance, favLetter);
+                int id = Program.fileCabinetService.CreateRecord(
+                    new FileCabinetRecord()
+                    {
+                        Id = 0,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        DateOfBirth = dateOfBirth,
+                        WorkExperience = workExperience,
+                        Balance = balance,
+                        FavLetter = favLetter,
+                    });
                 Console.WriteLine($"Record #{id} is created.");
                 return;
             }
@@ -331,7 +352,7 @@ public static class Program
             stringBuilder.Append($"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, ");
             stringBuilder.Append($"{record.WorkExperience}, ");
             stringBuilder.Append($"{record.Balance.ToString(CultureInfo.InvariantCulture)}, ");
-            stringBuilder.Append($"\'{record.FavChar}\'");
+            stringBuilder.Append($"\'{record.FavLetter}\'");
 
             Console.WriteLine(stringBuilder);
         }

@@ -20,33 +20,19 @@ public class FileCabinetService
     private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
     /// <summary>
-    /// Creates new record, if there's a correct data, and adds it to the list.
+    /// If there's a correct data, adds the record to the list.
     /// </summary>
-    /// <param name="firstName">First name.</param>
-    /// <param name="lastName">Last name.</param>
-    /// <param name="dateOfBirth">Date of birth.</param>
-    /// <param name="workExperience">Work experience.</param>
-    /// <param name="balance">Balance.</param>
-    /// <param name="favLetter">Favorite letter.</param>
+    /// <param name="record">The record to add to the list.</param>
     /// <returns>Returns the id of the new record.</returns>
-    public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter)
+    public int CreateRecord(FileCabinetRecord record)
     {
-        CheckNames(firstName, lastName);
-        CheckDateOfBirth(dateOfBirth);
-        CheckWorkExperience(workExperience, dateOfBirth);
-        CheckBalance(balance);
-        CheckFavLetter(favLetter);
+        CheckNames(record.FirstName, record.LastName);
+        CheckDateOfBirth(record.DateOfBirth);
+        CheckWorkExperience(record.WorkExperience, record.DateOfBirth);
+        CheckBalance(record.Balance);
+        CheckFavLetter(record.FavLetter);
 
-        var record = new FileCabinetRecord
-        {
-            Id = this.list.Count + 1,
-            FirstName = firstName,
-            LastName = lastName,
-            DateOfBirth = dateOfBirth,
-            WorkExperience = workExperience,
-            Balance = balance,
-            FavChar = favLetter,
-        };
+        record.Id = this.list.Count + 1;
 
         this.AddToDictionaries(record);
 
@@ -58,31 +44,21 @@ public class FileCabinetService
     /// <summary>
     /// Edits the existing record.
     /// </summary>
-    /// <param name="firstName">First name.</param>
-    /// <param name="lastName">Last name.</param>
-    /// <param name="dateOfBirth">Date of birth.</param>
-    /// <param name="workExperience">Work experience.</param>
-    /// <param name="balance">Balance.</param>
-    /// <param name="favLetter">Favorite letter.</param>
-    /// <param name="index">Index.</param>
-    public void EditRecord(string firstName, string lastName, DateTime dateOfBirth, short workExperience, decimal balance, char favLetter, int index)
+    /// <param name="record">The new record data.</param>
+    /// <param name="index">The index of the record to edit.</param>
+    public void EditRecord(FileCabinetRecord record, int index)
     {
-        CheckNames(firstName, lastName);
-        CheckDateOfBirth(dateOfBirth);
-        CheckWorkExperience(workExperience, dateOfBirth);
-        CheckBalance(balance);
-        CheckFavLetter(favLetter);
+        CheckNames(record.FirstName, record.LastName);
+        CheckDateOfBirth(record.DateOfBirth);
+        CheckWorkExperience(record.WorkExperience, record.DateOfBirth);
+        CheckBalance(record.Balance);
+        CheckFavLetter(record.FavLetter);
 
-        var record = this.list[index];
+        record.Id = this.list[index].Id;
 
-        this.DeleteFromDictionaries(record);
+        this.DeleteFromDictionaries(this.list[index]);
 
-        record.FirstName = firstName;
-        record.LastName = lastName;
-        record.DateOfBirth = dateOfBirth;
-        record.WorkExperience = workExperience;
-        record.Balance = balance;
-        record.FavChar = favLetter;
+        this.list[index] = record;
 
         this.AddToDictionaries(record);
     }

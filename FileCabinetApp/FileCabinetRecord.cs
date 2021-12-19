@@ -48,12 +48,12 @@ public class FileCabinetRecord
     public decimal Balance { get; set; }
 
     /// <summary>
-    /// Gets or sets the the record's owner's favorite char.
+    /// Gets or sets the the record's owner's favorite letter.
     /// </summary>
     /// <value>
     /// Char.
     /// </value>
-    public char FavChar { get; set; }
+    public char FavLetter { get; set; }
 
     /// <summary>
     /// Gets or sets the the record's owner's work experience.
