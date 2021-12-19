@@ -334,7 +334,7 @@
             </summary>
             <param name="parameters">Extra parameteres for the method.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ShowRecords(FileCabinetApp.FileCabinetRecord[],System.String)">
+        <member name="M:FileCabinetApp.Program.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
             <summary>
             Shows the recieved list of records in the console.
             </summary>

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Text;
 
 #pragma warning disable CS8602
@@ -236,7 +237,7 @@ public static class Program
             "firstname" => Program.FileCabinetService.FindByFirstName(parametersArray[1]),
             "lastname" => Program.FileCabinetService.FindByLastName(parametersArray[1]),
             "dateofbirth" => Program.FileCabinetService.FindByDateOfBirth(parametersArray[1]),
-            _ => Array.Empty<FileCabinetRecord>(),
+            _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 
         Program.ShowRecords(foundRecords, "No records found.");
@@ -368,7 +369,7 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void List(string parameters)
     {
-        FileCabinetRecord[] list = Program.FileCabinetService.GetRecords();
+        ReadOnlyCollection<FileCabinetRecord> list = Program.FileCabinetService.GetRecords();
         Program.ShowRecords(list, "The list is empty.");
     }
 
@@ -377,9 +378,9 @@ public static class Program
     /// </summary>
     /// <param name="list">The list to show.</param>
     /// <param name="errorMessage">Error message to show if the list is empty.</param>
-    private static void ShowRecords(FileCabinetRecord[] list, string errorMessage)
+    private static void ShowRecords(ReadOnlyCollection<FileCabinetRecord> list, string errorMessage)
     {
-        if (list.Length == 0)
+        if (list.Count == 0)
         {
             Console.WriteLine(errorMessage);
             return;
