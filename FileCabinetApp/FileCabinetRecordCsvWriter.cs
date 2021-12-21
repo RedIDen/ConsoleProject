@@ -41,5 +41,13 @@ namespace FileCabinetApp
 
             this.textWriter.Write(stringBuilder.ToString());
         }
+
+        /// <summary>
+        /// Closes the current writer.
+        /// </summary>
+        public void Close()
+        {
+            this.textWriter.Close();
+        }
     }
 }

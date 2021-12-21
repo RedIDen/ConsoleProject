@@ -34,20 +34,28 @@ namespace FileCabinetApp
             {
                 fileCabinetRecordCsvWriter.Write(record);
             }
+
+            fileCabinetRecordCsvWriter.Close();
         }
 
-        //public void SaveToXml(StreamWriter stream)
-        //{
-        //    var fileCabinetRecordCsvWriter = new FileCabinetRecordXmlWriter(stream);
+        /// <summary>
+        /// Saves the snapshot to the XML file.
+        /// </summary>
+        /// <param name="stream">The stream to work with.</param>
+        public void SaveToXml(StreamWriter stream)
+        {
+            var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(stream);
 
-        //    fileCabinetRecordCsvWriter.WriteBegin();
+            fileCabinetRecordXmlWriter.WriteBegin();
 
-        //    foreach (var record in this.list)
-        //    {
-        //        fileCabinetRecordCsvWriter.Write(record);
-        //    }
+            foreach (var record in this.list)
+            {
+                fileCabinetRecordXmlWriter.Write(record);
+            }
 
-        //    fileCabinetRecordCsvWriter.WriteBegin();
-        //}
+            fileCabinetRecordXmlWriter.WriteEnd();
+
+            fileCabinetRecordXmlWriter.Close();
+        }
     }
 }

@@ -92,7 +92,7 @@ public static class Program
     /// </summary>
     private static void WriteGreeting()
     {
-        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}.");
         Console.WriteLine(Program.validationRulesMessage);
         Console.WriteLine(Program.HintMessage);
         Console.WriteLine();
@@ -220,7 +220,7 @@ public static class Program
             }
             else
             {
-                //fileCabinetServiceSnapshot.SaveToXml(streamWriter);
+                fileCabinetServiceSnapshot.SaveToXml(streamWriter);
             }
 
             Console.WriteLine($"All records are exported to {fileName}.");
