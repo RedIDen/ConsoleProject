@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Text;
 
-#pragma warning disable CS8601
 #pragma warning disable CS8602
 #pragma warning disable CS8604
 
@@ -36,6 +35,7 @@ public static class Program
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
             new Tuple<string, Action<string>>("-v", ChangeValidationRules),
+            new Tuple<string, Action<string>>("export", Export),
     };
 
     private static string[][] helpMessages = new string[][]
@@ -48,6 +48,7 @@ public static class Program
             new string[] { "find", "searches for the records", "The 'find' searches for the records by parameters." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
+            new string[] { "export", "exports records to the file", "The 'export' command exports records to the file." },
     };
 
     /// <summary>
@@ -164,6 +165,75 @@ public static class Program
     }
 
     /// <summary>
+    /// Exports the list of records to the file.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void Export(string parameters)
+    {
+        var parametersArray = parameters.Trim().Split();
+
+        if (parametersArray.Length != 2)
+        {
+            Console.WriteLine("Wrong command syntax!");
+            return;
+        }
+
+        string fileType = parametersArray[0];
+        string fileName = parametersArray[1];
+
+        if (!fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) &&
+            !fileType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Console.WriteLine("Wrong file type!");
+            return;
+        }
+
+        if (File.Exists(fileName))
+        {
+            Console.Write($"File exists - rewrite {fileName}? [Y/n] ");
+            do
+            {
+                ConsoleKey key = Console.ReadKey().Key;
+                if (key == ConsoleKey.Y)
+                {
+                    Console.WriteLine();
+                    break;
+                }
+
+                if (key == ConsoleKey.N)
+                {
+                    Console.WriteLine();
+                    return;
+                }
+            }
+            while (true);
+        }
+
+        try
+        {
+            var streamWriter = new StreamWriter(fileName);
+            var fileCabinetServiceSnapshot = Program.FileCabinetService.MakeSnapshot();
+
+            if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetServiceSnapshot.SaveToCsv(streamWriter);
+            }
+            else
+            {
+                //fileCabinetServiceSnapshot.SaveToXml(streamWriter);
+            }
+
+            Console.WriteLine($"All records are exported to {fileName}.");
+            streamWriter.Close();
+        }
+        catch (DirectoryNotFoundException)
+        {
+            Console.WriteLine($"Export failed: can't open file {fileName}.");
+            return;
+        }
+    }
+
+    /// <summary>
     /// Shows the count of records.
     /// </summary>
     /// <param name="parameters">Extra parameteres for the method.</param>
@@ -186,42 +256,36 @@ public static class Program
         decimal balance;
         char favLetter;
 
-        while (true)
+        if (!int.TryParse(parameters, out int id))
         {
-            int id = int.Parse(parameters);
-
-            int index = Program.FileCabinetService.FindRecordIndexById(id);
-
-            if (index == -1)
-            {
-                Console.WriteLine($"#{id} record is not found.");
-                break;
-            }
-
-            ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
-
-            try
-            {
-                Program.FileCabinetService.EditRecord(
-                    new FileCabinetRecord()
-                    {
-                        Id = 0,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        DateOfBirth = dateOfBirth,
-                        WorkExperience = workExperience,
-                        Balance = balance,
-                        FavLetter = favLetter,
-                    },
-                    index);
-                Console.WriteLine($"Record #{id} is created.");
-                return;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"{e.Message} Please, enter the correct data:");
-            }
+            Console.WriteLine("Wrong command syntax!");
+            return;
         }
+
+        int index = Program.FileCabinetService.FindRecordIndexById(id);
+
+        if (index == -1)
+        {
+            Console.WriteLine($"#{id} record is not found.");
+            return;
+        }
+
+        ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
+
+        Program.FileCabinetService.EditRecord(
+            new FileCabinetRecord()
+            {
+                Id = 0,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                WorkExperience = workExperience,
+                Balance = balance,
+                FavLetter = favLetter,
+            },
+            index);
+
+        Console.WriteLine($"Record #{id} is created.");
     }
 
     /// <summary>
@@ -257,31 +321,21 @@ public static class Program
         decimal balance;
         char favLetter;
 
-        while (true)
-        {
-            ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
+        ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-            try
+        int id = Program.FileCabinetService.CreateRecord(
+            new FileCabinetRecord()
             {
-                int id = Program.FileCabinetService.CreateRecord(
-                    new FileCabinetRecord()
-                    {
-                        Id = 0,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        DateOfBirth = dateOfBirth,
-                        WorkExperience = workExperience,
-                        Balance = balance,
-                        FavLetter = favLetter,
-                    });
-                Console.WriteLine($"Record #{id} is created.");
-                return;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"{e.Message} Please, enter the correct data:");
-            }
-        }
+                Id = 0,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                WorkExperience = workExperience,
+                Balance = balance,
+                FavLetter = favLetter,
+            });
+
+        Console.WriteLine($"Record #{id} is created.");
     }
 
     /// <summary>

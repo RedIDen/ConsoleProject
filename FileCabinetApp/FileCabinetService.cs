@@ -118,6 +118,12 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Creates the snapshot of the record list.
+        /// </summary>
+        /// <returns>The new snapshot object.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.list);
+
+        /// <summary>
         /// Adds new record to dicionaries.
         /// </summary>
         /// <param name="record">The record to add.</param>

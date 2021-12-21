@@ -159,6 +159,23 @@
             Short (Int16).
             </value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            The file cabinet record CSV writer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="textWriter">The TextWriter object to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Wtites the record into the file.
+            </summary>
+            <param name="record">The record to wtire.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             The abstract class to ctreate File Cabinet Services.
@@ -230,6 +247,12 @@
             <param name="date">Date of birth.</param>
             <returns>The list of the records with recieved date of birth.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Creates the snapshot of the record list.
+            </summary>
+            <returns>The new snapshot object.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Adds new record to dicionaries.
@@ -241,6 +264,23 @@
             Deletes the record to dicionaries.
             </summary>
             <param name="record">The record to delete.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            The file cabinet service snapshot.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="list">The list of records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves the snapshot to the CSV file.
+            </summary>
+            <param name="stream">The stream to work with.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -306,6 +346,12 @@
             </summary>
             <param name="date">Date of birth.</param>
             <returns>The list of the records with recieved date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Makes the snapshot of the service.
+            </summary>
+            <returns>Returns the new snapshot object.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
@@ -385,6 +431,12 @@
         <member name="M:FileCabinetApp.Program.ChangeValidationRules(System.String)">
             <summary>
             Changes the validation rules.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Export(System.String)">
+            <summary>
+            Exports the list of records to the file.
             </summary>
             <param name="parameters">Parameters for the method.</param>
         </member>
