@@ -98,6 +98,95 @@
             <param name="value">Value.</param>
             <returns>Result of validation.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetMemoryService">
+            <summary>
+            The abstract class to ctreate File Cabinet Services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="recordValidator">Record validator.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetMemoryService.Validator">
+            <summary>
+            Gets or sets the record validator.
+            </summary>
+            <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            If there's a correct data, adds the record to the list.
+            </summary>
+            <param name="record">The record to add to the list.</param>
+            <returns>Returns the id of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.FileCabinetRecord,System.Int32)">
+            <summary>
+            Edits the existing record.
+            </summary>
+            <param name="record">The new record data.</param>
+            <param name="index">The index of the record to edit.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindRecordIndexById(System.Int32)">
+            <summary>
+            Returnd the index of the record with the recieved id.
+            </summary>
+            <param name="id">The record's id.</param>
+            <returns>The index in the list of rhe record with the recieved id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Returns the list of all records.
+            </summary>
+            <returns>The list of all records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
+            <summary>
+            Returns the stats (the number of records in the list).
+            </summary>
+            <returns>The number of records in the list.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Returns the list of the records with recieved first name.
+            </summary>
+            <param name="firstName">First name.</param>
+            <returns>The list of the records with recieved first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Returns the list of the records with recieved last name.
+            </summary>
+            <param name="lastName">Last name.</param>
+            <returns>The list of the records with recieved last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
+            <summary>
+            Returns the list of the records with recieved date of birth.
+            </summary>
+            <param name="date">Date of birth.</param>
+            <returns>The list of the records with recieved date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Creates the snapshot of the record list.
+            </summary>
+            <returns>The new snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Adds new record to dicionaries.
+            </summary>
+            <param name="record">The record to add.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.DeleteFromDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Deletes the record to dicionaries.
+            </summary>
+            <param name="record">The record to delete.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             The class describing the record unit.
@@ -212,95 +301,6 @@
             <summary>
             Closes the current writer.
             </summary>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
-            <summary>
-            The abstract class to ctreate File Cabinet Services.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
-            </summary>
-            <param name="recordValidator">Record validator.</param>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetService.Validator">
-            <summary>
-            Gets or sets the record validator.
-            </summary>
-            <value>The object of the class realizing the IRecordValidator interface.</value>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            If there's a correct data, adds the record to the list.
-            </summary>
-            <param name="record">The record to add to the list.</param>
-            <returns>Returns the id of the new record.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecord,System.Int32)">
-            <summary>
-            Edits the existing record.
-            </summary>
-            <param name="record">The new record data.</param>
-            <param name="index">The index of the record to edit.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindRecordIndexById(System.Int32)">
-            <summary>
-            Returnd the index of the record with the recieved id.
-            </summary>
-            <param name="id">The record's id.</param>
-            <returns>The index in the list of rhe record with the recieved id.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
-            <summary>
-            Returns the list of all records.
-            </summary>
-            <returns>The list of all records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
-            <summary>
-            Returns the stats (the number of records in the list).
-            </summary>
-            <returns>The number of records in the list.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Returns the list of the records with recieved first name.
-            </summary>
-            <param name="firstName">First name.</param>
-            <returns>The list of the records with recieved first name.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Returns the list of the records with recieved last name.
-            </summary>
-            <param name="lastName">Last name.</param>
-            <returns>The list of the records with recieved last name.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Returns the list of the records with recieved date of birth.
-            </summary>
-            <param name="date">Date of birth.</param>
-            <returns>The list of the records with recieved date of birth.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
-            <summary>
-            Creates the snapshot of the record list.
-            </summary>
-            <returns>The new snapshot object.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Adds new record to dicionaries.
-            </summary>
-            <param name="record">The record to add.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.DeleteFromDictionaries(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Deletes the record to dicionaries.
-            </summary>
-            <param name="record">The record to delete.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>

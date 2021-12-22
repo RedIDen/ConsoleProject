@@ -9,7 +9,21 @@ namespace FileCabinetApp
 {
     internal class FileCabinetFilesystemService : IFileCabinetService
     {
-        public IRecordValidator Validator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public const string FILENAME = "cabinet-records.db";
+        private readonly FileStream fileStream;
+
+        public FileCabinetFilesystemService(IRecordValidator recordValidator, FileStream fileStream)
+        {
+            this.Validator = recordValidator;
+            this.fileStream = fileStream;
+        }
+
+        public IRecordValidator Validator { get; set; }
+
+        public void Close()
+        {
+            this.fileStream.Close();
+        }
 
         public int CreateRecord(FileCabinetRecord record)
         {

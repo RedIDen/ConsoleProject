@@ -35,6 +35,10 @@ namespace FileCabinetApp
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
         public IRecordValidator Validator { get; set; }
 
+        public void Close()
+        {
+        }
+
         /// <summary>
         /// If there's a correct data, adds the record to the list.
         /// </summary>
