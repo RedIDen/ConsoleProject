@@ -13,7 +13,7 @@ namespace FileCabinetApp
     /// <summary>
     /// The abstract class to ctreate File Cabinet Services.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -21,10 +21,10 @@ namespace FileCabinetApp
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="recordValidator">Record validator.</param>
-        public FileCabinetService(IRecordValidator recordValidator)
+        public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
             this.Validator = recordValidator;
         }
