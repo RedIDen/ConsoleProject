@@ -125,10 +125,7 @@ namespace FileCabinetApp
             return new ReadOnlyCollection<FileCabinetRecord>(list);
         }
 
-        public int GetStat()
-        {
-            throw new NotImplementedException();
-        }
+        public int GetStat() => (int)(this.fileStream.Length / RECORDLENGTH);
 
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
