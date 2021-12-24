@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// The abstract class to ctreate File Cabinet Services.
+    /// The File Cabinet Memory Service class.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -21,10 +21,10 @@ namespace FileCabinetApp
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="recordValidator">Record validator.</param>
-        public FileCabinetService(IRecordValidator recordValidator)
+        public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
             this.Validator = recordValidator;
         }
@@ -34,6 +34,13 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
         public IRecordValidator Validator { get; set; }
+
+        /// <summary>
+        /// The plug for the interface.
+        /// </summary>
+        public void Close()
+        {
+        }
 
         /// <summary>
         /// If there's a correct data, adds the record to the list.
@@ -75,9 +82,9 @@ namespace FileCabinetApp
         public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
 
         /// <summary>
-        /// Returns the list of all records.
+        /// Returns the readonly collection of all records.
         /// </summary>
-        /// <returns>The list of all records.</returns>
+        /// <returns>The readonly collection of all records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.list);
 
         /// <summary>

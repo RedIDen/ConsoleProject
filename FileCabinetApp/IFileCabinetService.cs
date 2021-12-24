@@ -77,5 +77,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>Returns the new snapshot object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot();
+
+        public void Close();
     }
 }

@@ -18,9 +18,10 @@ public static class Program
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static readonly IFileCabinetService FileCabinetService = new FileCabinetService(new DefaultValidator());
+    private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
     private static string validationRulesMessage = "Using default validation rules.";
+    private static string storageTypeMessage = "Using memory storage.";
 
     private static bool isRunning = true;
 
@@ -36,6 +37,8 @@ public static class Program
             new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
             new Tuple<string, Action<string>>("-v", ChangeValidationRules),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("--storage", ChangeStorage),
+            new Tuple<string, Action<string>>("-s", ChangeStorage),
     };
 
     private static string[][] helpMessages = new string[][]
@@ -49,6 +52,7 @@ public static class Program
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
             new string[] { "export", "exports records to the file", "The 'export' command exports records to the file." },
+            new string[] { "--storage (-s)", "changes the storage", "The '--storage' command changes the storage." },
     };
 
     /// <summary>
@@ -58,7 +62,6 @@ public static class Program
     public static void Main(string[] args)
     {
         WriteGreeting();
-
         do
         {
             Console.Write("> ");
@@ -94,6 +97,7 @@ public static class Program
     {
         Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}.");
         Console.WriteLine(Program.validationRulesMessage);
+        Console.WriteLine(Program.storageTypeMessage);
         Console.WriteLine(Program.HintMessage);
         Console.WriteLine();
     }
@@ -139,6 +143,40 @@ public static class Program
         Console.WriteLine();
     }
 
+    private static void ChangeStorage(string parameters)
+    {
+        if (parameters == "memory")
+        {
+            if (Program.fileCabinetService is FileCabinetMemoryService)
+            {
+                Console.WriteLine("This storage is already in use.");
+                return;
+            }
+
+            Program.fileCabinetService.Close();
+            Program.storageTypeMessage = "Using memory storage.";
+            Program.fileCabinetService = new FileCabinetMemoryService(Program.fileCabinetService.Validator);
+        }
+        else if (parameters == "file")
+        {
+            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            {
+                Console.WriteLine("This storage is already in use.");
+                return;
+            }
+
+            Program.storageTypeMessage = "Using filesystem storage.";
+            Program.fileCabinetService = new FileCabinetFilesystemService(Program.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
+        }
+        else
+        {
+            Console.WriteLine("Wrong parameters!");
+            return;
+        }
+
+        Program.WriteGreeting();
+    }
+
     /// <summary>
     /// Changes the validation rules.
     /// </summary>
@@ -147,12 +185,12 @@ public static class Program
     {
         if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
         {
-            Program.FileCabinetService.Validator = new DefaultValidator();
+            Program.fileCabinetService.Validator = new DefaultValidator();
             Program.validationRulesMessage = "Using default validation rules.";
         }
         else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
         {
-            Program.FileCabinetService.Validator = new CustomValidator();
+            Program.fileCabinetService.Validator = new CustomValidator();
             Program.validationRulesMessage = "Using custom validation rules.";
         }
         else
@@ -212,7 +250,7 @@ public static class Program
         try
         {
             var streamWriter = new StreamWriter(fileName);
-            var fileCabinetServiceSnapshot = Program.FileCabinetService.MakeSnapshot();
+            var fileCabinetServiceSnapshot = Program.fileCabinetService.MakeSnapshot();
 
             if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -239,7 +277,7 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Stat(string parameters)
     {
-        var recordsCount = Program.FileCabinetService.GetStat();
+        var recordsCount = Program.fileCabinetService.GetStat();
         Console.WriteLine($"{recordsCount} record(s).");
     }
 
@@ -262,7 +300,7 @@ public static class Program
             return;
         }
 
-        int index = Program.FileCabinetService.FindRecordIndexById(id);
+        int index = Program.fileCabinetService.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -272,10 +310,10 @@ public static class Program
 
         ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        Program.FileCabinetService.EditRecord(
+        Program.fileCabinetService.EditRecord(
             new FileCabinetRecord()
             {
-                Id = 0,
+                Id = id,
                 FirstName = firstName,
                 LastName = lastName,
                 DateOfBirth = dateOfBirth,
@@ -285,7 +323,7 @@ public static class Program
             },
             index);
 
-        Console.WriteLine($"Record #{id} is created.");
+        Console.WriteLine($"Record #{id} is edited.");
     }
 
     /// <summary>
@@ -299,9 +337,9 @@ public static class Program
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => Program.FileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => Program.FileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => Program.FileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
             _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 
@@ -323,7 +361,7 @@ public static class Program
 
         ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        int id = Program.FileCabinetService.CreateRecord(
+        int id = Program.fileCabinetService.CreateRecord(
             new FileCabinetRecord()
             {
                 Id = 0,
@@ -356,22 +394,22 @@ public static class Program
         out char favLetter)
     {
         Console.Write("First name: ");
-        firstName = ReadInput(Program.StringConverter, FileCabinetService.Validator.FirstNameValidator);
+        firstName = ReadInput(Program.StringConverter, fileCabinetService.Validator.FirstNameValidator);
 
         Console.Write("Last name: ");
-        lastName = ReadInput(Program.StringConverter, FileCabinetService.Validator.LastNameValidator);
+        lastName = ReadInput(Program.StringConverter, fileCabinetService.Validator.LastNameValidator);
 
         Console.Write("Date of birth: ");
-        dateOfBirth = ReadInput(Program.DateConverter, FileCabinetService.Validator.DateOfBirthValidator);
+        dateOfBirth = ReadInput(Program.DateConverter, fileCabinetService.Validator.DateOfBirthValidator);
 
         Console.Write("Work experience: ");
-        workExperience = ReadInput(Program.ShortConverter, FileCabinetService.Validator.WorkExperienceValidator);
+        workExperience = ReadInput(Program.ShortConverter, fileCabinetService.Validator.WorkExperienceValidator);
 
         Console.Write("Balance: ");
-        balance = ReadInput(Program.DecimalConverter, FileCabinetService.Validator.BalanceValidator);
+        balance = ReadInput(Program.DecimalConverter, fileCabinetService.Validator.BalanceValidator);
 
         Console.Write("Favorite letter: ");
-        favLetter = ReadInput(Program.CharConverter, FileCabinetService.Validator.FavLetterValidator);
+        favLetter = ReadInput(Program.CharConverter, fileCabinetService.Validator.FavLetterValidator);
     }
 
     /// <summary>
@@ -380,7 +418,7 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void List(string parameters)
     {
-        ReadOnlyCollection<FileCabinetRecord> list = Program.FileCabinetService.GetRecords();
+        ReadOnlyCollection<FileCabinetRecord> list = Program.fileCabinetService.GetRecords();
         Program.ShowRecords(list, "The list is empty.");
     }
 
