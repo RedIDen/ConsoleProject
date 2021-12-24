@@ -46,12 +46,12 @@ namespace FileCabinetApp
             this.writer.Write(id);
 
             byte[] firstNameBytes = new byte[120];
-            var temp1 = Encoding.Default.GetBytes(record.FirstName);
+            var temp1 = Encoding.Unicode.GetBytes(record.FirstName);
             Array.Copy(temp1, firstNameBytes, temp1.Length);
             this.writer.Write(firstNameBytes);
 
             byte[] lastNameBytes = new byte[120];
-            var temp2 = Encoding.Default.GetBytes(record.LastName);
+            var temp2 = Encoding.Unicode.GetBytes(record.LastName);
             Array.Copy(temp2, lastNameBytes, temp2.Length);
             this.writer.Write(lastNameBytes);
 
@@ -95,7 +95,13 @@ namespace FileCabinetApp
             throw new NotImplementedException();
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
+
+        public int GetStat() => (int)(this.fileStream.Length / RECORDLENGTH);
+
+        public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.GetListOfRecords());
+
+        private List<FileCabinetRecord> GetListOfRecords()
         {
             var list = new List<FileCabinetRecord>();
 
@@ -107,9 +113,9 @@ namespace FileCabinetApp
 
                 record.Id = this.reader.ReadInt32();
 
-                record.FirstName = Encoding.Default.GetString(this.reader.ReadBytes(120));
+                record.FirstName = Encoding.Unicode.GetString(this.reader.ReadBytes(120)).Trim('\0');
 
-                record.LastName = Encoding.Default.GetString(this.reader.ReadBytes(120));
+                record.LastName = Encoding.Unicode.GetString(this.reader.ReadBytes(120)).Trim('\0');
 
                 record.DateOfBirth = new DateTime(this.reader.ReadInt32(), this.reader.ReadInt32(), this.reader.ReadInt32());
 
@@ -122,14 +128,7 @@ namespace FileCabinetApp
                 list.Add(record);
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(list);
-        }
-
-        public int GetStat() => (int)(this.fileStream.Length / RECORDLENGTH);
-
-        public FileCabinetServiceSnapshot MakeSnapshot()
-        {
-            throw new NotImplementedException();
+            return list;
         }
     }
 }
