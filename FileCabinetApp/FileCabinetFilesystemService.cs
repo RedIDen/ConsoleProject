@@ -9,6 +9,7 @@ namespace FileCabinetApp
 {
     internal class FileCabinetFilesystemService : IFileCabinetService
     {
+        private const int RECORDLENGTH = 275;
         public const string FILENAME = "cabinet-records.db";
         private readonly FileStream fileStream;
         private readonly BinaryWriter writer;
@@ -38,9 +39,11 @@ namespace FileCabinetApp
 
         public int CreateRecord(FileCabinetRecord record)
         {
-            int id = (int)(this.fileStream.Length / 268) + 1;
+            int id = (int)(this.fileStream.Length / RECORDLENGTH) + 1;
 
-            this.writer.Write(record.Id);
+            this.writer.BaseStream.Position = this.writer.BaseStream.Length;
+
+            this.writer.Write(id);
 
             byte[] firstNameBytes = new byte[120];
             var temp1 = Encoding.Default.GetBytes(record.FirstName);
@@ -63,8 +66,6 @@ namespace FileCabinetApp
             this.writer.Write(record.WorkExperience);
 
             this.writer.Write(record.FavLetter);
-
-            this.writer.Flush();
 
             return id;
         }
@@ -96,7 +97,32 @@ namespace FileCabinetApp
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new NotImplementedException();
+            var list = new List<FileCabinetRecord>();
+
+            this.reader.BaseStream.Position = 0;
+
+            while (this.reader.BaseStream.Position < this.reader.BaseStream.Length)
+            {
+                var record = new FileCabinetRecord();
+
+                record.Id = this.reader.ReadInt32();
+
+                record.FirstName = Encoding.Default.GetString(this.reader.ReadBytes(120));
+
+                record.LastName = Encoding.Default.GetString(this.reader.ReadBytes(120));
+
+                record.DateOfBirth = new DateTime(this.reader.ReadInt32(), this.reader.ReadInt32(), this.reader.ReadInt32());
+
+                record.Balance = this.reader.ReadDecimal();
+
+                record.WorkExperience = this.reader.ReadInt16();
+
+                record.FavLetter = this.reader.ReadChar();
+
+                list.Add(record);
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(list);
         }
 
         public int GetStat()
