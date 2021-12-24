@@ -11,23 +11,62 @@ namespace FileCabinetApp
     {
         public const string FILENAME = "cabinet-records.db";
         private readonly FileStream fileStream;
+        private readonly BinaryWriter writer;
+        private readonly BinaryReader reader;
 
         public FileCabinetFilesystemService(IRecordValidator recordValidator, FileStream fileStream)
         {
             this.Validator = recordValidator;
             this.fileStream = fileStream;
+            this.writer = new BinaryWriter(this.fileStream);
+            this.reader = new BinaryReader(this.fileStream);
+        }
+
+        ~FileCabinetFilesystemService()
+        {
+            this.Close();
         }
 
         public IRecordValidator Validator { get; set; }
 
         public void Close()
         {
+            this.reader.Close();
+            this.writer.Close();
             this.fileStream.Close();
         }
 
         public int CreateRecord(FileCabinetRecord record)
         {
-            throw new NotImplementedException();
+            int id = (int)(this.fileStream.Length / 268) + 1;
+
+            this.writer.Write(record.Id);
+
+            byte[] firstNameBytes = new byte[120];
+            var temp1 = Encoding.Default.GetBytes(record.FirstName);
+            Array.Copy(temp1, firstNameBytes, temp1.Length);
+            this.writer.Write(firstNameBytes);
+
+            byte[] lastNameBytes = new byte[120];
+            var temp2 = Encoding.Default.GetBytes(record.LastName);
+            Array.Copy(temp2, lastNameBytes, temp2.Length);
+            this.writer.Write(lastNameBytes);
+
+            this.writer.Write(record.DateOfBirth.Year);
+
+            this.writer.Write(record.DateOfBirth.Month);
+
+            this.writer.Write(record.DateOfBirth.Day);
+
+            this.writer.Write(record.Balance);
+
+            this.writer.Write(record.WorkExperience);
+
+            this.writer.Write(record.FavLetter);
+
+            this.writer.Flush();
+
+            return id;
         }
 
         public void EditRecord(FileCabinetRecord record, int index)

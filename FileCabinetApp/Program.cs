@@ -166,7 +166,12 @@ public static class Program
             }
 
             Program.storageTypeMessage = "Using filesystem storage.";
-            Program.fileCabinetService = new FileCabinetFilesystemService(Program.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
+            Program.fileCabinetService = new FileCabinetFilesystemService(Program.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.Create));
+        }
+        else
+        {
+            Console.WriteLine("Wrong parameters!");
+            return;
         }
 
         Program.WriteGreeting();
