@@ -313,7 +313,7 @@ public static class Program
         Program.fileCabinetService.EditRecord(
             new FileCabinetRecord()
             {
-                Id = 0,
+                Id = id,
                 FirstName = firstName,
                 LastName = lastName,
                 DateOfBirth = dateOfBirth,

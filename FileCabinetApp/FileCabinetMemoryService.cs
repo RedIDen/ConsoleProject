@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// The abstract class to ctreate File Cabinet Services.
+    /// The File Cabinet Memory Service class.
     /// </summary>
     public class FileCabinetMemoryService : IFileCabinetService
     {
@@ -35,6 +35,9 @@ namespace FileCabinetApp
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
         public IRecordValidator Validator { get; set; }
 
+        /// <summary>
+        /// The plug for the interface.
+        /// </summary>
         public void Close()
         {
         }
@@ -79,9 +82,9 @@ namespace FileCabinetApp
         public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
 
         /// <summary>
-        /// Returns the list of all records.
+        /// Returns the readonly collection of all records.
         /// </summary>
-        /// <returns>The list of all records.</returns>
+        /// <returns>The readonly collection of all records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.list);
 
         /// <summary>
