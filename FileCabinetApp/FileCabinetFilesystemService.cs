@@ -39,40 +39,19 @@ namespace FileCabinetApp
 
         public int CreateRecord(FileCabinetRecord record)
         {
-            int id = (int)(this.fileStream.Length / RECORDLENGTH) + 1;
+            record.Id = (int)(this.fileStream.Length / RECORDLENGTH) + 1;
 
-            this.writer.BaseStream.Position = this.writer.BaseStream.Length;
+            this.WriteRecord(record, this.writer.BaseStream.Length);
 
-            this.writer.Write(id);
-
-            byte[] firstNameBytes = new byte[120];
-            var temp1 = Encoding.Unicode.GetBytes(record.FirstName);
-            Array.Copy(temp1, firstNameBytes, temp1.Length);
-            this.writer.Write(firstNameBytes);
-
-            byte[] lastNameBytes = new byte[120];
-            var temp2 = Encoding.Unicode.GetBytes(record.LastName);
-            Array.Copy(temp2, lastNameBytes, temp2.Length);
-            this.writer.Write(lastNameBytes);
-
-            this.writer.Write(record.DateOfBirth.Year);
-
-            this.writer.Write(record.DateOfBirth.Month);
-
-            this.writer.Write(record.DateOfBirth.Day);
-
-            this.writer.Write(record.Balance);
-
-            this.writer.Write(record.WorkExperience);
-
-            this.writer.Write(record.FavLetter);
-
-            return id;
+            return record.Id;
         }
 
         public void EditRecord(FileCabinetRecord record, int index)
         {
-            throw new NotImplementedException();
+            int position = index * RECORDLENGTH;
+            this.reader.BaseStream.Position = position;
+            record.Id = this.reader.ReadInt32();
+            this.WriteRecord(record, position);
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date)
@@ -92,7 +71,21 @@ namespace FileCabinetApp
 
         public int FindRecordIndexById(int id)
         {
-            throw new NotImplementedException();
+            this.reader.BaseStream.Position = 0;
+
+            while (this.reader.BaseStream.Position < this.reader.BaseStream.Length)
+            {
+                int currentId = this.reader.ReadInt32();
+
+                if (id == currentId)
+                {
+                    return (int)(this.reader.BaseStream.Position / RECORDLENGTH);
+                }
+
+                this.reader.BaseStream.Position += RECORDLENGTH - 4;
+            }
+
+            return -1;
         }
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
@@ -129,6 +122,35 @@ namespace FileCabinetApp
             }
 
             return list;
+        }
+
+        private void WriteRecord(FileCabinetRecord record, long position)
+        {
+            this.writer.BaseStream.Position = position;
+
+            this.writer.Write(record.Id);
+
+            byte[] firstNameBytes = new byte[120];
+            var temp1 = Encoding.Unicode.GetBytes(record.FirstName);
+            Array.Copy(temp1, firstNameBytes, temp1.Length);
+            this.writer.Write(firstNameBytes);
+
+            byte[] lastNameBytes = new byte[120];
+            var temp2 = Encoding.Unicode.GetBytes(record.LastName);
+            Array.Copy(temp2, lastNameBytes, temp2.Length);
+            this.writer.Write(lastNameBytes);
+
+            this.writer.Write(record.DateOfBirth.Year);
+
+            this.writer.Write(record.DateOfBirth.Month);
+
+            this.writer.Write(record.DateOfBirth.Day);
+
+            this.writer.Write(record.Balance);
+
+            this.writer.Write(record.WorkExperience);
+
+            this.writer.Write(record.FavLetter);
         }
     }
 }

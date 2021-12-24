@@ -323,7 +323,7 @@ public static class Program
             },
             index);
 
-        Console.WriteLine($"Record #{id} is created.");
+        Console.WriteLine($"Record #{id} is edited.");
     }
 
     /// <summary>
