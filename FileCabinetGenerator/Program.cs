@@ -12,39 +12,65 @@ namespace FileCabinetApp;
 /// </summary>
 public static class Program
 {
+    private static int startId;
+    private static int recordsAmount;
+    private static string fileName;
+    private static string format;
 
     /// <summary>
     /// The main method of the program.
     /// </summary>
     /// <param name="args">Extra arguments to run the application.</param>
-    //public static void Main(string[] args)
-    //{
-    //    WriteGreeting();
-    //    do
-    //    {
-    //        Console.Write("> ");
-    //        var inputs = Console.ReadLine().Split(new char[] { ' ', '=' }, 2);
-    //        const int commandIndex = 0;
-    //        var command = inputs[commandIndex];
+    public static void Main(string[] args)
+    {
+        do
+        {
+            Console.Write("> ");
+            var inputs = Console.ReadLine().Split(new char[] { ' ', '=' });
 
-    //        if (string.IsNullOrEmpty(command))
-    //        {
-    //            Console.WriteLine(Program.HintMessage);
-    //            continue;
-    //        }
+            if (inputs[0] == "exit")
+            {
+                Console.WriteLine("Exiting an application...");
+                break;
+            }
 
-    //        var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
-    //        if (index >= 0)
-    //        {
-    //            const int parametersIndex = 1;
-    //            var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-    //            commands[index].Item2(parameters);
-    //        }
-    //        else
-    //        {
-    //            PrintMissedCommandInfo(command);
-    //        }
-    //    }
-    //    while (isRunning);
-    //}
+            if (inputs.Length / 2 != 0)
+            {
+                Console.WriteLine("Wrong command syntax!");
+                continue;
+            }
+
+            for (int i = 0; i < inputs.Length; i += 2)
+            {
+                switch (inputs[i].ToLower())
+                {
+                    case "--output-type":
+                    case "-t":
+                        Program.OutputType(inputs[i + 1]);
+                        break;
+                    case "--output":
+                    case "-o":
+                        Program.Output(inputs[i + 1]);
+                        break;
+                    case "--records-amount":
+                    case "-a":
+                        Program.RecordsAmount(inputs[i + 1]);
+                        break;
+                    case "--start-id":
+                    case "-i":
+                        Program.StartId(inputs[i + 1]);
+                        break;
+                }
+            }
+        }
+        while (true);
+    }
+
+    private static void StartId(string parameter) => Program.startId = int.Parse(parameter);
+
+    private static void RecordsAmount(string parameter) => Program.recordsAmount = int.Parse(parameter);
+
+    private static void Output(string parameter) => Program.fileName = parameter;
+
+    private static void OutputType(string parameter) => Program.format = parameter;
 }
