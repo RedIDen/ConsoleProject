@@ -46,14 +46,7 @@ namespace FileCabinetApp
         {
             var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(stream);
 
-            fileCabinetRecordXmlWriter.WriteBegin();
-
-            foreach (var record in this.list)
-            {
-                fileCabinetRecordXmlWriter.Write(record);
-            }
-
-            fileCabinetRecordXmlWriter.WriteEnd();
+            fileCabinetRecordXmlWriter.Write(this.list);
 
             fileCabinetRecordXmlWriter.Close();
         }

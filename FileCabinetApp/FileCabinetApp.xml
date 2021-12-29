@@ -418,17 +418,7 @@
             </summary>
             <param name="textWriter">The TextWriter object to work with.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.WriteBegin">
-            <summary>
-            Wtires the beginning of the list.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.WriteEnd">
-            <summary>
-            Wtires the ending of the list.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Wtites the record into the file.
             </summary>

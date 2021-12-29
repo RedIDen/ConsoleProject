@@ -2,6 +2,9 @@
 #pragma warning disable CS8618
 
 using FileCabinetApp;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetGeneretor;
 
@@ -15,7 +18,9 @@ public static class Program
     private static string fileName;
     private static string format;
 
-    private const string testCommand = "-t csv -o a.csv -a 1000 -i 1";
+    private const string testCommand = "-t xml -o a.xml -a 5 -i 1";
+
+    private static readonly Random random = new Random();
 
     private static readonly string[] firstNames = {
         "Bob", "Fred", "Leon", "Martha", "Egor",
@@ -63,22 +68,22 @@ public static class Program
                 {
                     case "--output-type":
                     case "-t":
-                        Program.OutputType(inputs[i + 1]);
+                        Program.SetOutputType(inputs[i + 1]);
                         break;
 
                     case "--output":
                     case "-o":
-                        Program.Output(inputs[i + 1]);
+                        Program.SetOutput(inputs[i + 1]);
                         break;
 
                     case "--records-amount":
                     case "-a":
-                        Program.RecordsAmount(inputs[i + 1]);
+                        Program.SetRecordsAmount(inputs[i + 1]);
                         break;
 
                     case "--start-id":
                     case "-i":
-                        Program.StartId(inputs[i + 1]);
+                        Program.SetStartId(inputs[i + 1]);
                         break;
                 }
             }
@@ -101,7 +106,6 @@ public static class Program
 
     private static void WriteCsv()
     {
-        Random random = new Random();
         using (var streamWriter = new StreamWriter(Program.fileName))
         {
             var csvWriter = new FileCabinetRecordCsvWriter(streamWriter);
@@ -109,16 +113,7 @@ public static class Program
             int endId = Program.startId + Program.recordsAmount;
             for (int i = Program.startId; i < endId; i++)
             {
-                csvWriter.Write(new FileCabinetRecord
-                {
-                    Id = i,
-                    FirstName = Program.firstNames[random.Next(Program.firstNames.Length)],
-                    LastName = Program.lastNames[random.Next(Program.lastNames.Length)],
-                    DateOfBirth = new DateTime(1950, 1, 1).AddDays(random.Next(20_000)),
-                    Balance = random.Next(10),
-                    WorkExperience = (short)random.Next(5),
-                    FavLetter = (char)('a' + random.Next(26)),
-                });
+                csvWriter.Write(GenerateRecord(random, i));
             }
 
             csvWriter.Close();
@@ -127,16 +122,45 @@ public static class Program
         Console.WriteLine($"{Program.recordsAmount} records were written to {Program.fileName}");
     }
 
-    private static void WriteXml()
+    private static FileCabinetRecord GenerateRecord(Random random, int i)
     {
-        throw new NotImplementedException();
+        return new FileCabinetRecord
+        {
+            Id = i,
+            FirstName = Program.firstNames[random.Next(Program.firstNames.Length)],
+            LastName = Program.lastNames[random.Next(Program.lastNames.Length)],
+            DateOfBirth = new DateTime(1950, 1, 1).AddDays(random.Next(20_000)),
+            Balance = random.Next(10),
+            WorkExperience = (short)random.Next(5),
+            FavLetter = (char)('a' + random.Next(26)),
+        };
     }
 
-    private static void StartId(string parameter) => Program.startId = int.Parse(parameter);
+    private static void WriteXml()
+    {
+        using (var streamWriter = new StreamWriter(Program.fileName))
+        {
+            var list = new List<FileCabinetRecord>(Program.recordsAmount);
+            var xmlWriter = new FileCabinetRecordXmlWriter(streamWriter);
 
-    private static void RecordsAmount(string parameter) => Program.recordsAmount = int.Parse(parameter);
+            int endId = Program.startId + Program.recordsAmount;
+            for (int i = Program.startId; i < endId; i++)
+            {
+                list.Add(GenerateRecord(random, i));
+            }
 
-    private static void Output(string parameter) => Program.fileName = parameter;
+            xmlWriter.Write(list);
+            xmlWriter.Close();
+        }
 
-    private static void OutputType(string parameter) => Program.format = parameter;
+        Console.WriteLine($"{Program.recordsAmount} records were written to {Program.fileName}");
+    }
+
+    private static void SetStartId(string parameter) => Program.startId = int.Parse(parameter);
+
+    private static void SetRecordsAmount(string parameter) => Program.recordsAmount = int.Parse(parameter);
+
+    private static void SetOutput(string parameter) => Program.fileName = parameter;
+
+    private static void SetOutputType(string parameter) => Program.format = parameter;
 }

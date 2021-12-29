@@ -1,5 +1,7 @@
 ﻿#pragma warning disable CS8618
 
+using System.Xml.Serialization;
+
 namespace FileCabinetApp;
 
 /// <summary>
