@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetServiceSnapshot
     {
-        private readonly List<FileCabinetRecord> list;
+        private ReadOnlyCollection<FileCabinetRecord> list;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
@@ -19,7 +20,12 @@ namespace FileCabinetApp
         /// <param name="list">The list of records.</param>
         public FileCabinetServiceSnapshot(List<FileCabinetRecord> list)
         {
-            this.list = list;
+            this.list = new ReadOnlyCollection<FileCabinetRecord>(list);
+        }
+
+        public FileCabinetServiceSnapshot()
+        {
+            this.list = new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -46,16 +52,25 @@ namespace FileCabinetApp
         {
             var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(stream);
 
-            fileCabinetRecordXmlWriter.WriteBegin();
-
-            foreach (var record in this.list)
-            {
-                fileCabinetRecordXmlWriter.Write(record);
-            }
-
-            fileCabinetRecordXmlWriter.WriteEnd();
+            fileCabinetRecordXmlWriter.Write(this.list);
 
             fileCabinetRecordXmlWriter.Close();
+        }
+
+        public void LoadFromCsv(FileStream stream)
+        {
+            var fileCabinetRecordCsvReader = new FileCabinetRecordCsvReader(new StreamReader(stream));
+
+            this.list = fileCabinetRecordCsvReader.ReadAll();
+        }
+
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => this.list;
+
+        public void LoadFromXml(FileStream stream)
+        {
+            var fileCabinetRecordXmlReader = new FileCabinetRecordXmlReader(new StreamReader(stream));
+
+            this.list = fileCabinetRecordXmlReader.ReadAll();
         }
     }
 }

@@ -107,4 +107,38 @@ public class CustomValidator : IRecordValidator
             return (true, string.Empty);
         }
     }
+
+    public (bool, string) RecordValidator(FileCabinetRecord record)
+    {
+        bool result = true;
+        StringBuilder errorMessage = new StringBuilder();
+        bool tempResult;
+        string tempMessage;
+
+        (tempResult, tempMessage) = this.FirstNameValidator(record.FirstName);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        (tempResult, tempMessage) = this.LastNameValidator(record.LastName);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        (tempResult, tempMessage) = this.DateOfBirthValidator(record.DateOfBirth);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        (tempResult, tempMessage) = this.BalanceValidator(record.Balance);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        (tempResult, tempMessage) = this.FavLetterValidator(record.FavLetter);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        (tempResult, tempMessage) = this.WorkExperienceValidator(record.WorkExperience);
+        result &= tempResult;
+        errorMessage.Append(tempMessage);
+
+        return (result, errorMessage.ToString());
+    }
 }

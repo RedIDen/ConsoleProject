@@ -35,9 +35,9 @@ namespace FileCabinetApp
             stringBuilder.Append($"{record.FirstName},");
             stringBuilder.Append($"{record.LastName},");
             stringBuilder.Append($"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.CreateSpecificCulture("en-US"))},");
-            stringBuilder.Append($"{record.WorkExperience},");
             stringBuilder.Append($"{record.Balance},");
-            stringBuilder.Append($"{record.FavLetter}");
+            stringBuilder.Append($"{record.FavLetter},");
+            stringBuilder.Append($"{record.WorkExperience}\n");
 
             this.textWriter.Write(stringBuilder.ToString());
         }

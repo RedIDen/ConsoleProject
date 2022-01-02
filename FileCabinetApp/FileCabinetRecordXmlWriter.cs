@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
@@ -8,6 +9,7 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecordXmlWriter
     {
+        private readonly XmlSerializer xmlSerializer;
         private readonly XmlWriter xmlWriter;
 
         /// <summary>
@@ -18,42 +20,29 @@ namespace FileCabinetApp
         {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
-            this.xmlWriter = XmlWriter.Create(textWriter, settings);
+
+            XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings);
+
+            this.xmlSerializer = new XmlSerializer(typeof(XmlFileCabinetList));
+            this.xmlWriter = xmlWriter;
         }
-
-        /// <summary>
-        /// Wtires the beginning of the list.
-        /// </summary>
-        public void WriteBegin() => this.xmlWriter.WriteStartElement("records");
-
-        /// <summary>
-        /// Wtires the ending of the list.
-        /// </summary>
-        public void WriteEnd() => this.xmlWriter.WriteEndElement();
 
         /// <summary>
         /// Wtites the record into the file.
         /// </summary>
         /// <param name="record">The record to wtire.</param>
-        public void Write(FileCabinetRecord record)
+        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
         {
-            this.xmlWriter.WriteStartElement("record");
-            this.xmlWriter.WriteAttributeString("id", record.Id.ToString());
+            var xmlRecords = new List<XmlFileCabinetRecord>(records.Count);
 
-            this.xmlWriter.WriteStartElement("name");
-            this.xmlWriter.WriteAttributeString("first", record.FirstName);
-            this.xmlWriter.WriteAttributeString("last", record.LastName);
-            this.xmlWriter.WriteEndElement();
+            foreach (var record in records)
+            {
+                xmlRecords.Add(new XmlFileCabinetRecord(record));
+            }
 
-            this.xmlWriter.WriteElementString("dateOfBirth", record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.CreateSpecificCulture("en-US")));
+            var xmlRecordsObject = new XmlFileCabinetList(xmlRecords);
 
-            this.xmlWriter.WriteElementString("workExperience", record.WorkExperience.ToString());
-
-            this.xmlWriter.WriteElementString("balance", record.Balance.ToString());
-
-            this.xmlWriter.WriteElementString("favLetter", record.FavLetter.ToString());
-
-            this.xmlWriter.WriteEndElement();
+            this.xmlSerializer.Serialize(this.xmlWriter, xmlRecordsObject);
         }
 
         /// <summary>

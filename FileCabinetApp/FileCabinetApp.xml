@@ -120,14 +120,14 @@
             Finalizes an instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
-            <inheritdoc/>
-        </member>
         <member name="P:FileCabinetApp.FileCabinetFilesystemService.Validator">
             <summary>
             Gets or sets the record validator.
             </summary>
             <value>The object of the class realizing the IRecordValidator interface.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Close">
             <summary>
@@ -193,6 +193,12 @@
             Creates the snapshot of the record list.
             </summary>
             <returns>The new snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Resores the list from the snapshot.
+            </summary>
+            <param name="snapshot">THe snapshot to restore from.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetListOfRecords">
             <summary>
@@ -312,6 +318,12 @@
             </summary>
             <returns>The new snapshot object.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Resores the list from the snapshot.
+            </summary>
+            <param name="snapshot">THe snapshot to restore from.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Adds new record to dicionaries.
@@ -385,6 +397,23 @@
             Short (Int16).
             </value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            The file cabinet record CSV reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="stream">The stream to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Reads all the records from stream.
+            </summary>
+            <returns>The list of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
             The file cabinet record CSV writer.
@@ -407,6 +436,23 @@
             Closes the current writer.
             </summary>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
+            <summary>
+            The file cabinet record XML reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="stream">The stream to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Reads all the records from stream.
+            </summary>
+            <returns>The list of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
             The file cabinet record XML writer.
@@ -418,17 +464,7 @@
             </summary>
             <param name="textWriter">The TextWriter object to work with.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.WriteBegin">
-            <summary>
-            Wtires the beginning of the list.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.WriteEnd">
-            <summary>
-            Wtires the ending of the list.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Wtites the record into the file.
             </summary>
@@ -620,6 +656,12 @@
             </summary>
             <param name="parameters">Parameters for the method.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.Import(System.String)">
+            <summary>
+            Imports the list of records from the file.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.Stat(System.String)">
             <summary>
             Shows the count of records.
@@ -717,6 +759,139 @@
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
+        </member>
+        <member name="T:FileCabinetApp.XmlFileCabinetList">
+            <summary>
+            The class for file cabinet records' list serialization.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetList.#ctor(System.Collections.Generic.List{FileCabinetApp.XmlFileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetList"/> class.
+            </summary>
+            <param name="list">The list of records.</param>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetList.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetList"/> class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetList.List">
+            <summary>
+            Gets or sets list of records to serialize.
+            </summary>
+            <value>
+            The list object.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.XmlFileCabinetRecord">
+            <summary>
+            The class for file cabinet record's serialization.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetRecord.#ctor(System.Int32,System.String,System.String,System.DateTime,System.Decimal,System.Char,System.Int16)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetRecord"/> class.
+            </summary>
+            <param name="id">Id.</param>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+            <param name="dateOfBirth">Date of birth.</param>
+            <param name="balance">Balance.</param>
+            <param name="favLetter">Favorite letter.</param>
+            <param name="workExperience">Work experience.</param>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetRecord.#ctor(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetRecord"/> class.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetRecord"/> class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.Id">
+            <summary>
+            Gets or sets the unique identifier of the record.
+            </summary>
+            <value>
+            The unique Int32 number.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.Name">
+            <summary>
+            Gets or sets the Name object containing first and last names.
+            </summary>
+            <value>
+            The Name object.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets the the record's owner's date of birth.
+            </summary>
+            <value>
+            DateTime.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.Balance">
+            <summary>
+            Gets or sets the the record's owner's balance.
+            </summary>
+            <value>
+            Decimal.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.FavLetter">
+            <summary>
+            Gets or sets the the record's owner's favorite letter.
+            </summary>
+            <value>
+            Char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecord.WorkExperience">
+            <summary>
+            Gets or sets the the record's owner's work experience.
+            </summary>
+            <value>
+            Short (Int16).
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.XmlFileCabinetRecordName">
+            <summary>
+            The class for file cabinet record's name serialization.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetRecordName.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetRecordName"/> class.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.XmlFileCabinetRecordName.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.XmlFileCabinetRecordName"/> class.
+            </summary>
+            <param name="firstName">First name.</param>
+            <param name="lastName">Last name.</param>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecordName.FirstName">
+            <summary>
+            Gets or sets the first name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.XmlFileCabinetRecordName.LastName">
+            <summary>
+            Gets or sets the last name of the record's owner.
+            </summary>
+            <value>
+            String.
+            </value>
         </member>
     </members>
 </doc>
