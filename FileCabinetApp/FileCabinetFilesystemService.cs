@@ -339,7 +339,31 @@ namespace FileCabinetApp
 
         public void Restore(FileCabinetServiceSnapshot snapshot)
         {
-            throw new NotImplementedException();
+            var importList = snapshot.GetRecords();
+
+            foreach (var record in importList)
+            {
+                (bool result, string message) = this.Validator.RecordValidator(record);
+
+                if (result)
+                {
+                    int index = this.FindRecordIndexById(record.Id);
+                    if (index == -1)
+                    {
+                        this.WriteRecord(record, this.writer.BaseStream.Length);
+                        this.AddToDictionaries(record);
+                    }
+                    else
+                    {
+                        this.EditRecord(record, index);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Can't read record #{record.Id}");
+                    Console.WriteLine(message);
+                }
+            }
         }
     }
 }

@@ -202,7 +202,7 @@ namespace FileCabinetApp
 
                 if (result)
                 {
-                    int index = this.list.FindIndex(x => x.Id == record.Id);
+                    int index = this.FindRecordIndexById(record.Id);
                     if (index == -1)
                     {
                         this.list.Add(record);

@@ -79,6 +79,7 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot();
 
         public void Close();
+
         void Restore(FileCabinetServiceSnapshot snapshot);
     }
 }
