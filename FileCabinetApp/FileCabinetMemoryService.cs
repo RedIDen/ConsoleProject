@@ -131,6 +131,39 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.list);
 
         /// <summary>
+        /// Resores the list from the snapshot.
+        /// </summary>
+        /// <param name="snapshot">THe snapshot to restore from.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            var importList = snapshot.GetRecords();
+
+            foreach (var record in importList)
+            {
+                (bool result, string message) = this.Validator.RecordValidator(record);
+
+                if (result)
+                {
+                    int index = this.FindRecordIndexById(record.Id);
+                    if (index == -1)
+                    {
+                        this.list.Add(record);
+                        this.AddToDictionaries(record);
+                    }
+                    else
+                    {
+                        this.EditRecord(record, index);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Can't read record #{record.Id}");
+                    Console.WriteLine(message);
+                }
+            }
+        }
+
+        /// <summary>
         /// Adds new record to dicionaries.
         /// </summary>
         /// <param name="record">The record to add.</param>
@@ -182,43 +215,11 @@ namespace FileCabinetApp
         {
             string lowerFirstName = record.FirstName.ToLower();
             this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Remove(record);
-            this.firstNameDictionary.Remove(lowerFirstName);
 
             string lowerLastName = record.LastName.ToLower();
             this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
-            this.lastNameDictionary.Remove(lowerLastName);
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
-            this.dateOfBirthDictionary.Remove(record.DateOfBirth);
-        }
-
-        public void Restore(FileCabinetServiceSnapshot snapshot)
-        {
-            var importList = snapshot.GetRecords();
-
-            foreach (var record in importList)
-            {
-                (bool result, string message) = this.Validator.RecordValidator(record);
-
-                if (result)
-                {
-                    int index = this.FindRecordIndexById(record.Id);
-                    if (index == -1)
-                    {
-                        this.list.Add(record);
-                        this.AddToDictionaries(record);
-                    }
-                    else
-                    {
-                        this.list[index] = record;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Can't read record #{record.Id}");
-                    Console.WriteLine(message);
-                }
-            }
         }
     }
 }

@@ -5,15 +5,26 @@ using System.Globalization;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// The file cabinet record CSV reader.
+    /// </summary>
     public class FileCabinetRecordCsvReader
     {
-        private StreamReader stream;
+        private readonly StreamReader stream;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvReader"/> class.
+        /// </summary>
+        /// <param name="stream">The stream to work with.</param>
         public FileCabinetRecordCsvReader(StreamReader stream)
         {
             this.stream = stream;
         }
 
+        /// <summary>
+        /// Reads all the records from stream.
+        /// </summary>
+        /// <returns>The list of records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> ReadAll()
         {
             var list = new List<FileCabinetRecord>();

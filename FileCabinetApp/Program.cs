@@ -311,12 +311,12 @@ public static class Program
                 }
                 else
                 {
-                    //snapshot.LoadFromXml(fileStream);
+                    snapshot.LoadFromXml(fileStream);
                 }
 
                 Program.fileCabinetService.Restore(snapshot);
 
-                Console.WriteLine($"All records are exported to {fileName}.");
+                Console.WriteLine($"All records are imported from {fileName}.");
                 fileStream.Close();
             }
             catch (DirectoryNotFoundException)

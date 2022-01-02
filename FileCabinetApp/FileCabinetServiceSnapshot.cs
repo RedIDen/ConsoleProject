@@ -65,5 +65,12 @@ namespace FileCabinetApp
         }
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords() => this.list;
+
+        public void LoadFromXml(FileStream stream)
+        {
+            var fileCabinetRecordXmlReader = new FileCabinetRecordXmlReader(new StreamReader(stream));
+
+            this.list = fileCabinetRecordXmlReader.ReadAll();
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 #pragma warning disable CS8602
+#pragma warning disable CA1063
 
 namespace FileCabinetApp
 {
@@ -51,17 +52,17 @@ namespace FileCabinetApp
             this.Close();
         }
 
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            this.Close();
-        }
-
         /// <summary>
         /// Gets or sets the record validator.
         /// </summary>
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
         public IRecordValidator Validator { get; set; }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            this.Close();
+        }
 
         /// <summary>
         /// Closes all the opened file streams.
@@ -178,6 +179,39 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>The new snapshot object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.GetListOfRecords());
+
+        /// <summary>
+        /// Resores the list from the snapshot.
+        /// </summary>
+        /// <param name="snapshot">THe snapshot to restore from.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            var importList = snapshot.GetRecords();
+
+            foreach (var record in importList)
+            {
+                (bool result, string message) = this.Validator.RecordValidator(record);
+
+                if (result)
+                {
+                    int index = this.FindRecordIndexById(record.Id);
+                    if (index == -1)
+                    {
+                        this.WriteRecord(record, this.writer.BaseStream.Length);
+                        this.AddToDictionaries(record);
+                    }
+                    else
+                    {
+                        this.EditRecord(record, index);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Can't read record #{record.Id}");
+                    Console.WriteLine(message);
+                }
+            }
+        }
 
         /// <summary>
         /// Returns the list of all records.
@@ -326,44 +360,16 @@ namespace FileCabinetApp
         private void DeleteFromDictionaries(FileCabinetRecord record)
         {
             string lowerFirstName = record.FirstName.ToLower();
-            this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Remove(record);
-            this.firstNameDictionary.Remove(lowerFirstName);
+            this.firstNameDictionary
+                .GetValueOrDefault(lowerFirstName)
+                .Remove(record);
 
             string lowerLastName = record.LastName.ToLower();
-            this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
-            this.lastNameDictionary.Remove(lowerLastName);
+            this.lastNameDictionary
+                .GetValueOrDefault(lowerLastName)
+                .Remove(record);
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
-            this.dateOfBirthDictionary.Remove(record.DateOfBirth);
-        }
-
-        public void Restore(FileCabinetServiceSnapshot snapshot)
-        {
-            var importList = snapshot.GetRecords();
-
-            foreach (var record in importList)
-            {
-                (bool result, string message) = this.Validator.RecordValidator(record);
-
-                if (result)
-                {
-                    int index = this.FindRecordIndexById(record.Id);
-                    if (index == -1)
-                    {
-                        this.WriteRecord(record, this.writer.BaseStream.Length);
-                        this.AddToDictionaries(record);
-                    }
-                    else
-                    {
-                        this.EditRecord(record, index);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Can't read record #{record.Id}");
-                    Console.WriteLine(message);
-                }
-            }
         }
     }
 }
