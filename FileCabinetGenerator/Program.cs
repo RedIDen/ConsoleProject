@@ -18,7 +18,7 @@ public static class Program
     private static string fileName;
     private static string format;
 
-    private const string testCommand = "-t xml -o a.xml -a 5 -i 1";
+    private const string testCommand = "-t csv -o a.csv -a 100 -i 1";
 
     private static readonly Random random = new Random();
 

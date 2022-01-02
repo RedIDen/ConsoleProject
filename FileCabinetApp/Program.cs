@@ -37,6 +37,7 @@ public static class Program
             new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
             new Tuple<string, Action<string>>("-v", ChangeValidationRules),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("--storage", ChangeStorage),
             new Tuple<string, Action<string>>("-s", ChangeStorage),
     };
@@ -52,6 +53,7 @@ public static class Program
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
             new string[] { "export", "exports records to the file", "The 'export' command exports records to the file." },
+            new string[] { "import", "imports records from the file", "The 'import' command imports records from the file." },
             new string[] { "--storage (-s)", "changes the storage", "The '--storage' command changes the storage." },
     };
 
@@ -268,6 +270,64 @@ public static class Program
         {
             Console.WriteLine($"Export failed: can't open file {fileName}.");
             return;
+        }
+    }
+
+    /// <summary>
+    /// Imports the list of records from the file.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void Import(string parameters)
+    {
+        var parametersArray = parameters.Trim().Split();
+
+        if (parametersArray.Length != 2)
+        {
+            Console.WriteLine("Wrong command syntax!");
+            return;
+        }
+
+        string fileType = parametersArray[0];
+        string fileName = parametersArray[1];
+
+        if (!fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) &&
+            !fileType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Console.WriteLine("Wrong file type!");
+            return;
+        }
+
+        if (File.Exists(fileName))
+        {
+            try
+            {
+                var fileStream = new FileStream(fileName, FileMode.Open);
+
+                var snapshot = new FileCabinetServiceSnapshot();
+
+                if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    snapshot.LoadFromCsv(fileStream);
+                }
+                else
+                {
+                    //snapshot.LoadFromXml(fileStream);
+                }
+
+                Program.fileCabinetService.Restore(snapshot);
+
+                Console.WriteLine($"All records are exported to {fileName}.");
+                fileStream.Close();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Console.WriteLine($"Import failed: can't open file {fileName}.");
+                return;
+            }
+        }
+        else
+        {
+            Console.Write($"This file doesn't exist!");
         }
     }
 

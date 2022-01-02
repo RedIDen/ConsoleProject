@@ -418,7 +418,7 @@
             </summary>
             <param name="textWriter">The TextWriter object to work with.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Wtites the record into the file.
             </summary>
@@ -607,6 +607,12 @@
         <member name="M:FileCabinetApp.Program.Export(System.String)">
             <summary>
             Exports the list of records to the file.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Import(System.String)">
+            <summary>
+            Imports the list of records from the file.
             </summary>
             <param name="parameters">Parameters for the method.</param>
         </member>

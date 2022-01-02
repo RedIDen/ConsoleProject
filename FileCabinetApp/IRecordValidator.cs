@@ -52,5 +52,7 @@ namespace FileCabinetApp
         /// <param name="value">Value.</param>
         /// <returns>Result of validation.</returns>
         public (bool, string) FavLetterValidator(char value);
+
+        public (bool, string) RecordValidator(FileCabinetRecord record);
     }
 }

@@ -13,7 +13,7 @@ namespace FileCabinetApp
     /// <summary>
     /// The File Cabinet Filesystem Service class.
     /// </summary>
-    internal class FileCabinetFilesystemService : IFileCabinetService, IDisposable
+    public class FileCabinetFilesystemService : IFileCabinetService, IDisposable
     {
         /// <summary>
         /// The file link.
@@ -335,6 +335,11 @@ namespace FileCabinetApp
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
             this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+        }
+
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            throw new NotImplementedException();
         }
     }
 }

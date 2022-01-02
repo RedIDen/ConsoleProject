@@ -191,5 +191,34 @@ namespace FileCabinetApp
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
             this.dateOfBirthDictionary.Remove(record.DateOfBirth);
         }
+
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            var importList = snapshot.GetRecords();
+
+            foreach (var record in importList)
+            {
+                (bool result, string message) = this.Validator.RecordValidator(record);
+
+                if (result)
+                {
+                    int index = this.list.FindIndex(x => x.Id == record.Id);
+                    if (index == -1)
+                    {
+                        this.list.Add(record);
+                        this.AddToDictionaries(record);
+                    }
+                    else
+                    {
+                        this.list[index] = record;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Can't read record #{record.Id}");
+                    Console.WriteLine(message);
+                }
+            }
+        }
     }
 }

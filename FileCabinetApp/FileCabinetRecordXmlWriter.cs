@@ -31,7 +31,7 @@ namespace FileCabinetApp
         /// Wtites the record into the file.
         /// </summary>
         /// <param name="record">The record to wtire.</param>
-        public void Write(List<FileCabinetRecord> records)
+        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
         {
             var xmlRecords = new List<XmlFileCabinetRecord>(records.Count);
 
