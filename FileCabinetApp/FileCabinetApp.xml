@@ -51,6 +51,13 @@
             <param name="value">Value.</param>
             <returns>Result of validation.</returns>
         </member>
+        <member name="M:FileCabinetApp.CustomValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the whole record.
+            </summary>
+            <param name="record">Record.</param>
+            <returns>Result of validation.</returns>
+        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             The class overriding FileCabinetService.ValidateParameters method.
@@ -96,6 +103,13 @@
             Validates the favorite letter.
             </summary>
             <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the whole record.
+            </summary>
+            <param name="record">Record.</param>
             <returns>Result of validation.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
@@ -186,7 +200,7 @@
             <summary>
             Returns the stats (the number of records in the list).
             </summary>
-            <returns>The number of records in the list.</returns>
+            <returns>The number of records in the list and the number of deleted records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
@@ -200,15 +214,34 @@
             </summary>
             <param name="snapshot">THe snapshot to restore from.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the existing record.
+            </summary>
+            <param name="index">The id of record to remove.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
+            <summary>
+            Purges the records with deleted-flag.
+            </summary>
+            <returns>The number of purged records, the number of all the records before purge.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetListOfRecords">
             <summary>
             Returns the list of all records.
             </summary>
             <returns>The list of all records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.TryGetRecord(FileCabinetApp.FileCabinetRecord@)">
+            <summary>
+            Tries to read the record from file.
+            </summary>
+            <param name="record">The records to fill.</param>
+            <returns>The result of reading. True - succesfully, false - not.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecord">
             <summary>
-            Reads the record from the file from the current pointer position.
+            Reads the record from file.
             </summary>
             <returns>The record.</returns>
         </member>
@@ -253,11 +286,6 @@
             </summary>
             <value>The object of the class realizing the IRecordValidator interface.</value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.Close">
-            <summary>
-            The plug for the interface.
-            </summary>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
             <summary>
             If there's a correct data, adds the record to the list.
@@ -289,7 +317,7 @@
             <summary>
             Returns the stats (the number of records in the list).
             </summary>
-            <returns>The number of records in the list.</returns>
+            <returns>The number of records in the list and the number of deleted records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -323,6 +351,12 @@
             Resores the list from the snapshot.
             </summary>
             <param name="snapshot">THe snapshot to restore from.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the existing record.
+            </summary>
+            <param name="index">The id of record to remove.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -468,7 +502,7 @@
             <summary>
             Wtites the record into the file.
             </summary>
-            <param name="record">The record to wtire.</param>
+            <param name="records">The record to wtire.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Close">
             <summary>
@@ -486,6 +520,11 @@
             </summary>
             <param name="list">The list of records.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Saves the snapshot to the CSV file.
@@ -497,6 +536,24 @@
             Saves the snapshot to the XML file.
             </summary>
             <param name="stream">The stream to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.FileStream)">
+            <summary>
+            Loads snapshot from CSV.
+            </summary>
+            <param name="stream">The stream to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXml(System.IO.FileStream)">
+            <summary>
+            Loads snapshot from XML.
+            </summary>
+            <param name="stream">The stream to work with.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.GetRecords">
+            <summary>
+            Returns the list of records.
+            </summary>
+            <returns>The list of records.</returns>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -525,7 +582,7 @@
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindRecordIndexById(System.Int32)">
             <summary>
-            Returnd the index of the record with the recieved id.
+            Returns the index of the record with the recieved id.
             </summary>
             <param name="id">The record's id.</param>
             <returns>The index in the list of rhe record with the recieved id.</returns>
@@ -540,7 +597,7 @@
             <summary>
             Returns the stats (the number of records in the list).
             </summary>
-            <returns>The number of records in the list.</returns>
+            <returns>The number of records in the list and the number of deleted records.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -568,6 +625,18 @@
             Makes the snapshot of the service.
             </summary>
             <returns>Returns the new snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Resores the list from the snapshot.
+            </summary>
+            <param name="snapshot">THe snapshot to restore from.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the existing record.
+            </summary>
+            <param name="id">The id of record to remove.</param>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
@@ -614,6 +683,13 @@
             Validates the favorite letter.
             </summary>
             <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the whole record.
+            </summary>
+            <param name="record">Record.</param>
             <returns>Result of validation.</returns>
         </member>
         <member name="T:FileCabinetApp.Program">
@@ -671,6 +747,18 @@
         <member name="M:FileCabinetApp.Program.Edit(System.String)">
             <summary>
             Edits the record data.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Remove(System.String)">
+            <summary>
+            Removes the record.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Purge(System.String)">
+            <summary>
+            Purges the filesystem.
             </summary>
             <param name="parameters">Parameters for the method.</param>
         </member>

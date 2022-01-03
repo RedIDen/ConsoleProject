@@ -108,6 +108,11 @@ public class CustomValidator : IRecordValidator
         }
     }
 
+    /// <summary>
+    /// Validates the whole record.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>Result of validation.</returns>
     public (bool, string) RecordValidator(FileCabinetRecord record)
     {
         bool result = true;

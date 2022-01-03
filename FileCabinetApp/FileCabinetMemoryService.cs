@@ -36,20 +36,13 @@ namespace FileCabinetApp
         public IRecordValidator Validator { get; set; }
 
         /// <summary>
-        /// The plug for the interface.
-        /// </summary>
-        public void Close()
-        {
-        }
-
-        /// <summary>
         /// If there's a correct data, adds the record to the list.
         /// </summary>
         /// <param name="record">The record to add to the list.</param>
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            record.Id = this.list.Count + 1;
+            record.Id = this.list.Max(x => x.Id) + 1;
 
             this.AddToDictionaries(record);
 
@@ -90,8 +83,8 @@ namespace FileCabinetApp
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
-        /// <returns>The number of records in the list.</returns>
-        public int GetStat() => this.list.Count;
+        /// <returns>The number of records in the list and the number of deleted records.</returns>
+        public (int, int) GetStat() => (this.list.Count, 0);
 
         /// <summary>
         /// Returns the list of the records with recieved first name.
@@ -161,6 +154,17 @@ namespace FileCabinetApp
                     Console.WriteLine(message);
                 }
             }
+        }
+
+        /// <summary>
+        /// Removes the existing record.
+        /// </summary>
+        /// <param name="index">The id of record to remove.</param>
+        public void RemoveRecord(int index)
+        {
+            var record = this.list[index];
+            this.DeleteFromDictionaries(record);
+            this.list.Remove(record);
         }
 
         /// <summary>
