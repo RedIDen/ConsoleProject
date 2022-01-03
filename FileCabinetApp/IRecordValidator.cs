@@ -53,6 +53,11 @@ namespace FileCabinetApp
         /// <returns>Result of validation.</returns>
         public (bool, string) FavLetterValidator(char value);
 
+        /// <summary>
+        /// Validates the whole record.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        /// <returns>Result of validation.</returns>
         public (bool, string) RecordValidator(FileCabinetRecord record);
     }
 }

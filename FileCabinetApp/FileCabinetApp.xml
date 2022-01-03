@@ -220,6 +220,12 @@
             </summary>
             <param name="index">The id of record to remove.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
+            <summary>
+            Purges the records with deleted-flag.
+            </summary>
+            <returns>The number of purged records, the number of all the records before purge.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetListOfRecords">
             <summary>
             Returns the list of all records.
@@ -677,6 +683,13 @@
             Validates the favorite letter.
             </summary>
             <param name="value">Value.</param>
+            <returns>Result of validation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Validates the whole record.
+            </summary>
+            <param name="record">Record.</param>
             <returns>Result of validation.</returns>
         </member>
         <member name="T:FileCabinetApp.Program">

@@ -235,6 +235,10 @@ namespace FileCabinetApp
             this.writer.Write((short)(data | 0b0000_0000_0000_0100));
         }
 
+        /// <summary>
+        /// Purges the records with deleted-flag.
+        /// </summary>
+        /// <returns>The number of purged records, the number of all the records before purge.</returns>
         public (int, int) Purge()
         {
             long lengthBefore = this.fileStream.Length;
