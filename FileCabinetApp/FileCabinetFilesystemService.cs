@@ -172,8 +172,8 @@ namespace FileCabinetApp
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
-        /// <returns>The number of records in the list.</returns>
-        public int GetStat() => (int)(this.fileStream.Length / RECORDLENGTH);
+        /// <returns>The number of records in the list and the number of deleted records.</returns>
+        public (int, int) GetStat() => ((int)(this.fileStream.Length / RECORDLENGTH), this.CountDeletedRecords());
 
         /// <summary>
         /// Creates the snapshot of the record list.
@@ -285,9 +285,10 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Reads the record from the file from the current pointer position.
+        /// Tries to read the record from file.
         /// </summary>
-        /// <returns>The record.</returns>
+        /// <param name="record">The records to fill.</param>
+        /// <returns>The result of reading. True - succesfully, false - not.</returns>
         private bool TryGetRecord(ref FileCabinetRecord record)
         {
             short deleted = this.reader.ReadInt16();
@@ -305,6 +306,10 @@ namespace FileCabinetApp
             return true;
         }
 
+        /// <summary>
+        /// Reads the record from file.
+        /// </summary>
+        /// <returns>The record.</returns>
         private FileCabinetRecord GetRecord()
         {
             this.reader.ReadInt16();
@@ -442,6 +447,24 @@ namespace FileCabinetApp
                 .Remove(record);
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
+        }
+
+        private int CountDeletedRecords()
+        {
+            int result = 0;
+            this.reader.BaseStream.Position = 0;
+            while (this.reader.BaseStream.Position < this.reader.BaseStream.Length)
+            {
+                short deleted = this.reader.ReadInt16();
+                if ((deleted >> 2 & 1) == 1)
+                {
+                    result++;
+                }
+
+                this.reader.BaseStream.Position += RECORDLENGTH - 2;
+            }
+
+            return result;
         }
     }
 }

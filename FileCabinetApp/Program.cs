@@ -341,8 +341,9 @@ public static class Program
     /// <param name="parameters">Extra parameteres for the method.</param>
     private static void Stat(string parameters)
     {
-        var recordsCount = Program.fileCabinetService.GetStat();
-        Console.WriteLine($"{recordsCount} record(s).");
+        (int records, int deleted) = Program.fileCabinetService.GetStat();
+        Console.WriteLine($"{records} record(s).");
+        Console.WriteLine($"{deleted} removed.");
     }
 
     /// <summary>

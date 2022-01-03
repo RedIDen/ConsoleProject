@@ -48,8 +48,8 @@ namespace FileCabinetApp
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
-        /// <returns>The number of records in the list.</returns>
-        public int GetStat();
+        /// <returns>The number of records in the list and the number of deleted records.</returns>
+        public (int, int) GetStat();
 
         /// <summary>
         /// Returns the list of the records with recieved first name.
