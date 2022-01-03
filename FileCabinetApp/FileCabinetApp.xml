@@ -273,11 +273,6 @@
             </summary>
             <value>The object of the class realizing the IRecordValidator interface.</value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.Close">
-            <summary>
-            The plug for the interface.
-            </summary>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.FileCabinetRecord)">
             <summary>
             If there's a correct data, adds the record to the list.
@@ -618,11 +613,6 @@
             </summary>
             <returns>Returns the new snapshot object.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.Close">
-            <summary>
-            Closes all the opened file streams.
-            </summary>
-        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
             <summary>
             Resores the list from the snapshot.
@@ -742,7 +732,13 @@
         </member>
         <member name="M:FileCabinetApp.Program.Remove(System.String)">
             <summary>
-            Edits the record data.
+            Removes the record.
+            </summary>
+            <param name="parameters">Parameters for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Purge(System.String)">
+            <summary>
+            Purges the filesystem.
             </summary>
             <param name="parameters">Parameters for the method.</param>
         </member>

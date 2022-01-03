@@ -37,6 +37,7 @@ public static class Program
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
             new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
             new Tuple<string, Action<string>>("-v", ChangeValidationRules),
             new Tuple<string, Action<string>>("--storage", ChangeStorage),
@@ -54,8 +55,10 @@ public static class Program
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "export", "exports records to the file", "The 'export' command exports records to the file." },
             new string[] { "import", "imports records from the file", "The 'import' command imports records from the file." },
-            new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
-            new string[] { "--storage (-s)", "changes the storage", "The '--storage' command changes the storage." },
+            new string[] { "remove", "removes the record", "The 'remove' command removes the record." },
+            new string[] { "purge", "purges the filesystem", "The 'purge' command purges the filesystem." },
+            new string[] { "--validation-rules", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
+            new string[] { "--storage", "changes the storage", "The '--storage' command changes the storage." },
     };
 
     /// <summary>
@@ -156,7 +159,7 @@ public static class Program
                 return;
             }
 
-            Program.fileCabinetService.Close();
+            ((FileCabinetFilesystemService)Program.fileCabinetService).Close();
             Program.storageTypeMessage = "Using memory storage.";
             Program.fileCabinetService = new FileCabinetMemoryService(Program.fileCabinetService.Validator);
         }
@@ -388,7 +391,7 @@ public static class Program
     }
 
     /// <summary>
-    /// Edits the record data.
+    /// Removes the record.
     /// </summary>
     /// <param name="parameters">Parameters for the method.</param>
     private static void Remove(string parameters)
@@ -410,6 +413,23 @@ public static class Program
         Program.fileCabinetService.RemoveRecord(index);
 
         Console.WriteLine($"Record #{id} is removed.");
+    }
+
+    /// <summary>
+    /// Purges the filesystem.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void Purge(string parameters)
+    {
+        if (Program.fileCabinetService is not FileCabinetFilesystemService)
+        {
+            Console.WriteLine("This command is available only for filesystem storage mode.");
+            return;
+        }
+
+        (int deletedNum, int beforeNum) = ((FileCabinetFilesystemService)Program.fileCabinetService).Purge();
+
+        Console.WriteLine($"Data file processing is completed: {deletedNum} of {beforeNum} records were purged.");
     }
 
     /// <summary>

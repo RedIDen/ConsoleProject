@@ -80,7 +80,7 @@ namespace FileCabinetApp
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            record.Id = (int)(this.fileStream.Length / RECORDLENGTH) + 1;
+            record.Id = this.GetListOfRecords().Max(x => x.Id) + 1;
 
             this.AddToDictionaries(record);
 
@@ -233,6 +233,33 @@ namespace FileCabinetApp
             this.writer.BaseStream.Position = position;
 
             this.writer.Write((short)(data | 0b0000_0000_0000_0100));
+        }
+
+        public (int, int) Purge()
+        {
+            long lengthBefore = this.fileStream.Length;
+
+            long writerPosition = 0;
+            long readerPosition = 0;
+            this.writer.BaseStream.Position = 0;
+
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                FileCabinetRecord record = new FileCabinetRecord();
+                if (this.TryGetRecord(ref record))
+                {
+                    readerPosition = this.reader.BaseStream.Position;
+                    this.WriteRecord(record, writerPosition);
+                    writerPosition += RECORDLENGTH;
+                    this.reader.BaseStream.Position = readerPosition;
+                }
+            }
+
+            this.fileStream.SetLength(writerPosition);
+
+            long lengthAfter = this.fileStream.Length;
+
+            return ((int)((lengthBefore - lengthAfter) / RECORDLENGTH), (int)(lengthBefore / RECORDLENGTH));
         }
 
         /// <summary>

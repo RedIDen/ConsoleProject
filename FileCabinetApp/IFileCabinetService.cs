@@ -79,11 +79,6 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot();
 
         /// <summary>
-        /// Closes all the opened file streams.
-        /// </summary>
-        public void Close();
-
-        /// <summary>
         /// Resores the list from the snapshot.
         /// </summary>
         /// <param name="snapshot">THe snapshot to restore from.</param>

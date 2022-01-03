@@ -36,20 +36,13 @@ namespace FileCabinetApp
         public IRecordValidator Validator { get; set; }
 
         /// <summary>
-        /// The plug for the interface.
-        /// </summary>
-        public void Close()
-        {
-        }
-
-        /// <summary>
         /// If there's a correct data, adds the record to the list.
         /// </summary>
         /// <param name="record">The record to add to the list.</param>
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            record.Id = this.list.Count + 1;
+            record.Id = this.list.Max(x => x.Id) + 1;
 
             this.AddToDictionaries(record);
 
