@@ -164,6 +164,17 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Removes the existing record.
+        /// </summary>
+        /// <param name="index">The id of record to remove.</param>
+        public void RemoveRecord(int index)
+        {
+            var record = this.list[index];
+            this.DeleteFromDictionaries(record);
+            this.list.Remove(record);
+        }
+
+        /// <summary>
         /// Adds new record to dicionaries.
         /// </summary>
         /// <param name="record">The record to add.</param>

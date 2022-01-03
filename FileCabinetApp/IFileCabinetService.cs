@@ -33,7 +33,7 @@ namespace FileCabinetApp
         public void EditRecord(FileCabinetRecord record, int index);
 
         /// <summary>
-        /// Returnd the index of the record with the recieved id.
+        /// Returns the index of the record with the recieved id.
         /// </summary>
         /// <param name="id">The record's id.</param>
         /// <returns>The index in the list of rhe record with the recieved id.</returns>
@@ -78,8 +78,21 @@ namespace FileCabinetApp
         /// <returns>Returns the new snapshot object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot();
 
+        /// <summary>
+        /// Closes all the opened file streams.
+        /// </summary>
         public void Close();
 
+        /// <summary>
+        /// Resores the list from the snapshot.
+        /// </summary>
+        /// <param name="snapshot">THe snapshot to restore from.</param>
         void Restore(FileCabinetServiceSnapshot snapshot);
+
+        /// <summary>
+        /// Removes the existing record.
+        /// </summary>
+        /// <param name="id">The id of record to remove.</param>
+        void RemoveRecord(int id);
     }
 }

@@ -34,10 +34,11 @@ public static class Program
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("exit", Exit),
-            new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
-            new Tuple<string, Action<string>>("-v", ChangeValidationRules),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("--validation-rules", ChangeValidationRules),
+            new Tuple<string, Action<string>>("-v", ChangeValidationRules),
             new Tuple<string, Action<string>>("--storage", ChangeStorage),
             new Tuple<string, Action<string>>("-s", ChangeStorage),
     };
@@ -51,9 +52,9 @@ public static class Program
             new string[] { "stat", "shows stat", "The 'stat' command shows stat." },
             new string[] { "find", "searches for the records", "The 'find' searches for the records by parameters." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
-            new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
             new string[] { "export", "exports records to the file", "The 'export' command exports records to the file." },
             new string[] { "import", "imports records from the file", "The 'import' command imports records from the file." },
+            new string[] { "--validation-rules (-v)", "changes the validation rules", "The '--validation-rules (-v)' command changes the validation rules." },
             new string[] { "--storage (-s)", "changes the storage", "The '--storage' command changes the storage." },
     };
 
@@ -384,6 +385,31 @@ public static class Program
             index);
 
         Console.WriteLine($"Record #{id} is edited.");
+    }
+
+    /// <summary>
+    /// Edits the record data.
+    /// </summary>
+    /// <param name="parameters">Parameters for the method.</param>
+    private static void Remove(string parameters)
+    {
+        if (!int.TryParse(parameters, out int id))
+        {
+            Console.WriteLine("Wrong command syntax!");
+            return;
+        }
+
+        int index = Program.fileCabinetService.FindRecordIndexById(id);
+
+        if (index == -1)
+        {
+            Console.WriteLine($"#{id} record is not found.");
+            return;
+        }
+
+        Program.fileCabinetService.RemoveRecord(index);
+
+        Console.WriteLine($"Record #{id} is removed.");
     }
 
     /// <summary>

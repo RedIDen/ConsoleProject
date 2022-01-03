@@ -23,6 +23,9 @@ namespace FileCabinetApp
             this.list = new ReadOnlyCollection<FileCabinetRecord>(list);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
+        /// </summary>
         public FileCabinetServiceSnapshot()
         {
             this.list = new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
@@ -57,6 +60,10 @@ namespace FileCabinetApp
             fileCabinetRecordXmlWriter.Close();
         }
 
+        /// <summary>
+        /// Loads snapshot from CSV.
+        /// </summary>
+        /// <param name="stream">The stream to work with.</param>
         public void LoadFromCsv(FileStream stream)
         {
             var fileCabinetRecordCsvReader = new FileCabinetRecordCsvReader(new StreamReader(stream));
@@ -64,13 +71,21 @@ namespace FileCabinetApp
             this.list = fileCabinetRecordCsvReader.ReadAll();
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => this.list;
-
+        /// <summary>
+        /// Loads snapshot from XML.
+        /// </summary>
+        /// <param name="stream">The stream to work with.</param>
         public void LoadFromXml(FileStream stream)
         {
             var fileCabinetRecordXmlReader = new FileCabinetRecordXmlReader(new StreamReader(stream));
 
             this.list = fileCabinetRecordXmlReader.ReadAll();
         }
+
+        /// <summary>
+        /// Returns the list of records.
+        /// </summary>
+        /// <returns>The list of records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => this.list;
     }
 }

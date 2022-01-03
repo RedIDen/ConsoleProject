@@ -43,7 +43,6 @@ namespace FileCabinetApp
             this.FillDictionaries();
         }
 
-
         /// <summary>
         /// Finalizes an instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
@@ -153,7 +152,9 @@ namespace FileCabinetApp
 
                 if (id == currentId)
                 {
-                    return (int)(this.reader.BaseStream.Position / RECORDLENGTH);
+                    this.reader.BaseStream.Position -= 6;
+                    short deleted = this.reader.ReadInt16();
+                    return (deleted >> 2 & 1) == 1 ? -1 : (int)(this.reader.BaseStream.Position / RECORDLENGTH);
                 }
 
                 this.reader.BaseStream.Position += RECORDLENGTH - 4;
@@ -214,6 +215,27 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Removes the existing record.
+        /// </summary>
+        /// <param name="index">The id of record to remove.</param>
+        public void RemoveRecord(int index)
+        {
+            int position = RECORDLENGTH * index;
+            this.reader.BaseStream.Position = position;
+
+            var record = this.GetRecord();
+            this.DeleteFromDictionaries(record);
+
+            this.writer.BaseStream.Position = position;
+
+            short data = this.reader.ReadInt16();
+
+            this.writer.BaseStream.Position = position;
+
+            this.writer.Write((short)(data | 0b0000_0000_0000_0100));
+        }
+
+        /// <summary>
         /// Returns the list of all records.
         /// </summary>
         /// <returns>The list of all records.</returns>
@@ -225,7 +247,11 @@ namespace FileCabinetApp
 
             while (this.reader.BaseStream.Position < this.reader.BaseStream.Length)
             {
-                list.Add(this.GetRecord());
+                FileCabinetRecord record = new FileCabinetRecord();
+                if (this.TryGetRecord(ref record))
+                {
+                    list.Add(record);
+                }
             }
 
             return list;
@@ -235,11 +261,30 @@ namespace FileCabinetApp
         /// Reads the record from the file from the current pointer position.
         /// </summary>
         /// <returns>The record.</returns>
+        private bool TryGetRecord(ref FileCabinetRecord record)
+        {
+            short deleted = this.reader.ReadInt16();
+
+            this.reader.BaseStream.Position -= 2;
+
+            if ((deleted >> 2 & 1) == 1)
+            {
+                this.reader.BaseStream.Position += RECORDLENGTH;
+                return false;
+            }
+
+            record = this.GetRecord();
+
+            return true;
+        }
+
         private FileCabinetRecord GetRecord()
         {
+            this.reader.ReadInt16();
+
             var record = new FileCabinetRecord();
 
-            this.reader.ReadBytes(2);
+            record = new FileCabinetRecord();
 
             record.Id = this.reader.ReadInt32();
 

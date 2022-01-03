@@ -44,7 +44,6 @@ public class XmlFileCabinetRecord
         this.WorkExperience = record.WorkExperience;
     }
 
-
     /// <summary>
     /// Initializes a new instance of the <see cref="XmlFileCabinetRecord"/> class.
     /// </summary>
