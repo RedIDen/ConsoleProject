@@ -7,6 +7,11 @@ public class EditCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "edit";
 
+    public EditCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         string firstName;
@@ -22,7 +27,7 @@ public class EditCommandHandler : CommandHandlerBase
             return;
         }
 
-        int index = Program.fileCabinetService.FindRecordIndexById(id);
+        int index = this.fileCabinetService.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -32,7 +37,7 @@ public class EditCommandHandler : CommandHandlerBase
 
         this.ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        Program.fileCabinetService.EditRecord(
+        this.fileCabinetService.EditRecord(
             new FileCabinetRecord()
             {
                 Id = id,

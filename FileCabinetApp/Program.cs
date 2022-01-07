@@ -16,7 +16,7 @@ public static class Program
     private const string HintMessage = "Enter your command, or enter 'help' to get help.";
     private const string DeveloperName = "Deniska Vasilyev";
 
-    public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+    private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
     public static string validationRulesMessage = "Using default validation rules.";
     public static string storageTypeMessage = "Using memory storage.";
@@ -56,42 +56,42 @@ public static class Program
 
     private static ICommandHandler CreateCommandHandler()
     {
-        ICommandHandler exit = new ExitCommandHandler();
+        ICommandHandler exit = new ExitCommandHandler(Program.fileCabinetService);
 
-        ICommandHandler edit = new EditCommandHandler();
+        ICommandHandler edit = new EditCommandHandler(Program.fileCabinetService);
         edit.SetNext(exit);
 
-        ICommandHandler export = new ExportCommandHandler();
+        ICommandHandler export = new ExportCommandHandler(Program.fileCabinetService);
         export.SetNext(edit);
 
-        ICommandHandler find = new FindCommandHandler();
+        ICommandHandler find = new FindCommandHandler(Program.fileCabinetService);
         find.SetNext(export);
 
-        ICommandHandler help = new HelpCommandHandler();
+        ICommandHandler help = new HelpCommandHandler(Program.fileCabinetService);
         help.SetNext(find);
 
-        ICommandHandler import = new ImportCommandHandler();
+        ICommandHandler import = new ImportCommandHandler(Program.fileCabinetService);
         import.SetNext(help);
 
-        ICommandHandler list = new ListCommandHandler();
+        ICommandHandler list = new ListCommandHandler(Program.fileCabinetService);
         list.SetNext(import);
 
-        ICommandHandler purge = new PurgeCommandHandler();
+        ICommandHandler purge = new PurgeCommandHandler(Program.fileCabinetService);
         purge.SetNext(list);
 
-        ICommandHandler remove = new RemoveCommandHandler();
+        ICommandHandler remove = new RemoveCommandHandler(Program.fileCabinetService);
         remove.SetNext(purge);
 
-        ICommandHandler stat = new StatCommandHandler();
+        ICommandHandler stat = new StatCommandHandler(Program.fileCabinetService);
         stat.SetNext(remove);
 
-        ICommandHandler storage = new StorageCommandHandler();
+        ICommandHandler storage = new StorageCommandHandler(Program.fileCabinetService);
         storage.SetNext(stat);
 
-        ICommandHandler validation = new ValidationRulesCommandHandler();
+        ICommandHandler validation = new ValidationRulesCommandHandler(Program.fileCabinetService);
         validation.SetNext(storage);
 
-        ICommandHandler create = new CreateCommandHandler();
+        ICommandHandler create = new CreateCommandHandler(Program.fileCabinetService);
         create.SetNext(validation);
 
         return create;

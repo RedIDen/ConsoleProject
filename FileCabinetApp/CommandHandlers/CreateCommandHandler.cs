@@ -7,6 +7,11 @@ public class CreateCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "create";
 
+    public CreateCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         string firstName;
@@ -18,7 +23,7 @@ public class CreateCommandHandler : CommandHandlerBase
 
         this.ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        int id = Program.fileCabinetService.CreateRecord(
+        int id = this.fileCabinetService.CreateRecord(
             new FileCabinetRecord()
             {
                 Id = 0,

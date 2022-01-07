@@ -7,6 +7,8 @@ public abstract class CommandHandlerBase : ICommandHandler
 {
     protected ICommandHandler nextHandler;
 
+    protected IFileCabinetService fileCabinetService;
+
     protected virtual string CommandName { get; set; }
 
     public virtual void Handle(AppCommandRequest appCommandRequest)
@@ -42,22 +44,22 @@ public abstract class CommandHandlerBase : ICommandHandler
     out char favLetter)
     {
         Console.Write("First name: ");
-        firstName = this.ReadInput(this.StringConverter, Program.fileCabinetService.Validator.FirstNameValidator);
+        firstName = this.ReadInput(this.StringConverter, this.fileCabinetService.Validator.FirstNameValidator);
 
         Console.Write("Last name: ");
-        lastName = this.ReadInput(this.StringConverter, Program.fileCabinetService.Validator.LastNameValidator);
+        lastName = this.ReadInput(this.StringConverter, this.fileCabinetService.Validator.LastNameValidator);
 
         Console.Write("Date of birth: ");
-        dateOfBirth = this.ReadInput(this.DateConverter, Program.fileCabinetService.Validator.DateOfBirthValidator);
+        dateOfBirth = this.ReadInput(this.DateConverter, this.fileCabinetService.Validator.DateOfBirthValidator);
 
         Console.Write("Work experience: ");
-        workExperience = this.ReadInput(this.ShortConverter, Program.fileCabinetService.Validator.WorkExperienceValidator);
+        workExperience = this.ReadInput(this.ShortConverter, this.fileCabinetService.Validator.WorkExperienceValidator);
 
         Console.Write("Balance: ");
-        balance = this.ReadInput(this.DecimalConverter, Program.fileCabinetService.Validator.BalanceValidator);
+        balance = this.ReadInput(this.DecimalConverter, this.fileCabinetService.Validator.BalanceValidator);
 
         Console.Write("Favorite letter: ");
-        favLetter = this.ReadInput(this.CharConverter, Program.fileCabinetService.Validator.FavLetterValidator);
+        favLetter = this.ReadInput(this.CharConverter, this.fileCabinetService.Validator.FavLetterValidator);
     }
 
     protected T ReadInput<T>(Func<string, ValueTuple<bool, string, T>> converter, Func<T, ValueTuple<bool, string>> validator)

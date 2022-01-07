@@ -7,6 +7,11 @@ public class RemoveCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "remove";
 
+    public RemoveCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         if (!int.TryParse(parameters, out int id))
@@ -15,7 +20,7 @@ public class RemoveCommandHandler : CommandHandlerBase
             return;
         }
 
-        int index = Program.fileCabinetService.FindRecordIndexById(id);
+        int index = this.fileCabinetService.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -23,7 +28,7 @@ public class RemoveCommandHandler : CommandHandlerBase
             return;
         }
 
-        Program.fileCabinetService.RemoveRecord(index);
+        this.fileCabinetService.RemoveRecord(index);
 
         Console.WriteLine($"Record #{id} is removed.");
     }

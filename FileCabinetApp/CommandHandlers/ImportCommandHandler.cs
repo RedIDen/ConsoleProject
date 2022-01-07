@@ -7,6 +7,11 @@ public class ImportCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "import";
 
+    public ImportCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         var parametersArray = parameters.Trim().Split();
@@ -44,7 +49,7 @@ public class ImportCommandHandler : CommandHandlerBase
                     snapshot.LoadFromXml(fileStream);
                 }
 
-                Program.fileCabinetService.Restore(snapshot);
+                this.fileCabinetService.Restore(snapshot);
 
                 Console.WriteLine($"All records are imported from {fileName}.");
                 fileStream.Close();

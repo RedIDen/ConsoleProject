@@ -12,6 +12,11 @@ public class HelpCommandHandler : CommandHandlerBase
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
+    public HelpCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     private static string[][] helpMessages = new string[][]
     {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },

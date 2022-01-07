@@ -7,6 +7,11 @@ public class ExportCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "export";
 
+    public ExportCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         var parametersArray = parameters.Trim().Split();
@@ -51,7 +56,7 @@ public class ExportCommandHandler : CommandHandlerBase
         try
         {
             var streamWriter = new StreamWriter(fileName);
-            var fileCabinetServiceSnapshot = Program.fileCabinetService.MakeSnapshot();
+            var fileCabinetServiceSnapshot = this.fileCabinetService.MakeSnapshot();
 
             if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {

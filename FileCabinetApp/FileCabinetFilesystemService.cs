@@ -80,7 +80,8 @@ namespace FileCabinetApp
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            record.Id = this.GetListOfRecords().Max(x => x.Id) + 1;
+            var list = this.GetListOfRecords();
+            record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
 
             this.AddToDictionaries(record);
 

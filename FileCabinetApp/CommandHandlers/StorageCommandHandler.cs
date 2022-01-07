@@ -7,6 +7,11 @@ public class StorageCommandHandler : CommandHandlerBase
 
     private string ShortCommandName { get; set; } = "-s";
 
+    public StorageCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     public override void Handle(AppCommandRequest appCommandRequest)
     {
         if (string.Equals(appCommandRequest.Command, this.CommandName, StringComparison.InvariantCultureIgnoreCase) ||
@@ -33,26 +38,26 @@ public class StorageCommandHandler : CommandHandlerBase
     {
         if (parameters == "memory")
         {
-            if (Program.fileCabinetService is FileCabinetMemoryService)
+            if (this.fileCabinetService is FileCabinetMemoryService)
             {
                 Console.WriteLine("This storage is already in use.");
                 return;
             }
 
-            ((FileCabinetFilesystemService)Program.fileCabinetService).Close();
+            ((FileCabinetFilesystemService)this.fileCabinetService).Close();
             Program.storageTypeMessage = "Using memory storage.";
-            Program.fileCabinetService = new FileCabinetMemoryService(Program.fileCabinetService.Validator);
+            this.fileCabinetService = new FileCabinetMemoryService(this.fileCabinetService.Validator);
         }
         else if (parameters == "file")
         {
-            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            if (this.fileCabinetService is FileCabinetFilesystemService)
             {
                 Console.WriteLine("This storage is already in use.");
                 return;
             }
 
             Program.storageTypeMessage = "Using filesystem storage.";
-            Program.fileCabinetService = new FileCabinetFilesystemService(Program.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
+            this.fileCabinetService = new FileCabinetFilesystemService(this.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
         }
         else
         {

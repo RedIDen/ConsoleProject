@@ -7,6 +7,11 @@ public class FindCommandHandler : CommandHandlerBase
 {
     protected override string CommandName { get; set; } = "find";
 
+    public FindCommandHandler(IFileCabinetService fileCabinetService)
+    {
+        this.fileCabinetService = fileCabinetService;
+    }
+
     protected override void MakeWork(string parameters)
     {
         var parametersArray = parameters.Split(' ', 2);
@@ -14,9 +19,9 @@ public class FindCommandHandler : CommandHandlerBase
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => Program.fileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => Program.fileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => Program.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            "firstname" => this.fileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => this.fileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => this.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
             _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 
