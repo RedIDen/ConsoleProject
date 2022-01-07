@@ -32,13 +32,21 @@ public static class Program
     public static void Main(string[] args)
     {
         Program.commandHandler = Program.CreateCommandHandler();
+
         WriteGreeting();
 
         do
         {
             Console.Write("> ");
             var inputs = Console.ReadLine().Split(new char[] { ' ', '=' }, 2);
+
             const int commandIndex = 0;
+            if (string.IsNullOrEmpty(inputs[commandIndex]))
+            {
+                Console.WriteLine(Program.HintMessage);
+                return;
+            }
+
             const int parametersIndex = 1;
             var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
             Program.commandHandler.Handle(new AppCommandRequest(inputs[commandIndex], parameters));
@@ -46,7 +54,48 @@ public static class Program
         while (isRunning);
     }
 
-    private static ICommandHandler CreateCommandHandler() => new CommandHandler();
+    private static ICommandHandler CreateCommandHandler()
+    {
+        ICommandHandler exit = new ExitCommandHandler();
+
+        ICommandHandler edit = new EditCommandHandler();
+        edit.SetNext(exit);
+
+        ICommandHandler export = new ExportCommandHandler();
+        export.SetNext(edit);
+
+        ICommandHandler find = new FindCommandHandler();
+        find.SetNext(export);
+
+        ICommandHandler help = new HelpCommandHandler();
+        help.SetNext(find);
+
+        ICommandHandler import = new ImportCommandHandler();
+        import.SetNext(help);
+
+        ICommandHandler list = new ListCommandHandler();
+        list.SetNext(import);
+
+        ICommandHandler purge = new PurgeCommandHandler();
+        purge.SetNext(list);
+
+        ICommandHandler remove = new RemoveCommandHandler();
+        remove.SetNext(purge);
+
+        ICommandHandler stat = new StatCommandHandler();
+        stat.SetNext(remove);
+
+        ICommandHandler storage = new StorageCommandHandler();
+        storage.SetNext(stat);
+
+        ICommandHandler validation = new ValidationRulesCommandHandler();
+        validation.SetNext(storage);
+
+        ICommandHandler create = new CreateCommandHandler();
+        create.SetNext(validation);
+
+        return create;
+    }
 
     /// <summary>
     /// Writes the greeting message.

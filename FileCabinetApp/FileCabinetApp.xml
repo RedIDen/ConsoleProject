@@ -4,145 +4,65 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintMissedCommandInfo(System.String)">
-            <summary>
-            Prints the error message, if user wtires the incorrect command.
-            </summary>
-            <param name="command">The name of comman user wrote.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintHelp(System.String)">
-            <summary>
-            Shows the list of all commands and their descriptions.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ChangeValidationRules(System.String)">
-            <summary>
-            Changes the validation rules.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Export(System.String)">
-            <summary>
-            Exports the list of records to the file.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Import(System.String)">
-            <summary>
-            Imports the list of records from the file.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Stat(System.String)">
-            <summary>
-            Shows the count of records.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Edit(System.String)">
-            <summary>
-            Edits the record data.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Remove(System.String)">
-            <summary>
-            Removes the record.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Purge(System.String)">
-            <summary>
-            Purges the filesystem.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Find(System.String)">
-            <summary>
-            Searches the records by certain parameters.
-            </summary>
-            <param name="parameters">Parameters for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Create(System.String)">
-            <summary>
-            Creates new record.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ReadDataForRecord(System.String@,System.String@,System.DateTime@,System.Int16@,System.Decimal@,System.Char@)">
-            <summary>
-            Reads the data for the record from the console.
-            </summary>
-            <param name="firstName">First name.</param>
-            <param name="lastName">Last name.</param>
-            <param name="dateOfBirth">Date of birth.</param>
-            <param name="workExperience">Work experience.</param>
-            <param name="balance">Balance.</param>
-            <param name="favLetter">Favorite letter.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.List(System.String)">
-            <summary>
-            Shows the list of all records.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
-            <summary>
-            Shows the recieved list of records in the console.
-            </summary>
-            <param name="list">The list to show.</param>
-            <param name="errorMessage">Error message to show if the list is empty.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Exit(System.String)">
-            <summary>
-            Exits the application.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ReadInput``1(System.Func{System.String,System.ValueTuple{System.Boolean,System.String,``0}},System.Func{``0,System.ValueTuple{System.Boolean,System.String}})">
-            <summary>
-            Reads the input, converts and validates it.
-            </summary>
-            <typeparam name="T">The type of the data to convert to.</typeparam>
-            <param name="converter">Converter.</param>
-            <param name="validator">Validator.</param>
-            <returns>The result of convertation and validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.StringConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.StringConverter(System.String)">
             <summary>
             Converter to string.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.DateConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.DateConverter(System.String)">
             <summary>
             Converter to date.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ShortConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.ShortConverter(System.String)">
             <summary>
             Converter to short.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.DecimalConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.DecimalConverter(System.String)">
             <summary>
             Converter to decimal.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.CharConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.CharConverter(System.String)">
             <summary>
             Converter to char.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
+            <summary>
+            Shows the recieved list of records in the console.
+            </summary>
+            <param name="list">The list to show.</param>
+            <param name="errorMessage">Error message to show if the list is empty.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.MakeWork(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StorageCommandHandler.MakeWork(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ValidationRulesCommandHandler.MakeWork(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
         </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
