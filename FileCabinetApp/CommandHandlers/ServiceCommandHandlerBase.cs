@@ -149,34 +149,5 @@ namespace FileCabinetApp.CommandHandlers
                 return (false, "enter the correct char", result);
             }
         }
-
-        /// <summary>
-        /// Shows the recieved list of records in the console.
-        /// </summary>
-        /// <param name="list">The list to show.</param>
-        /// <param name="errorMessage">Error message to show if the list is empty.</param>
-        protected void ShowRecords(ReadOnlyCollection<FileCabinetRecord> list, string errorMessage)
-        {
-            if (list.Count == 0)
-            {
-                Console.WriteLine(errorMessage);
-                return;
-            }
-
-            foreach (var record in list)
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-
-                stringBuilder.Append($"#{record.Id}, ");
-                stringBuilder.Append($"{record.FirstName}, ");
-                stringBuilder.Append($"{record.LastName}, ");
-                stringBuilder.Append($"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, ");
-                stringBuilder.Append($"{record.WorkExperience}, ");
-                stringBuilder.Append($"{record.Balance.ToString(CultureInfo.InvariantCulture)}, ");
-                stringBuilder.Append($"\'{record.FavLetter}\'");
-
-                Console.WriteLine(stringBuilder);
-            }
-        }
     }
 }

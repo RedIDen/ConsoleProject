@@ -5,9 +5,12 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class ListCommandHandler : ServiceCommandHandlerBase
 {
-    public ListCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+    private IRecordPrinter recordPrinter;
+
+    public ListCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, IRecordPrinter recordPrinter)
         : base(fileCabinetServiceTransferHelper)
     {
+        this.recordPrinter = recordPrinter;
     }
 
     protected override string CommandName { get; set; } = "list";
@@ -15,6 +18,6 @@ public class ListCommandHandler : ServiceCommandHandlerBase
     protected override void MakeWork(string parameters)
     {
         ReadOnlyCollection<FileCabinetRecord> list = this.fileCabinetServiceTransferHelper.fileCabinetService.GetRecords();
-        this.ShowRecords(list, "The list is empty.");
+        this.recordPrinter.Print(list, "The list is empty.");
     }
 }

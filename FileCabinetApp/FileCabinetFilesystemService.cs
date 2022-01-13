@@ -245,7 +245,7 @@ namespace FileCabinetApp
             long lengthBefore = this.fileStream.Length;
 
             long writerPosition = 0;
-            long readerPosition = 0;
+            long readerPosition;
             this.writer.BaseStream.Position = 0;
 
             while (this.fileStream.Position < this.fileStream.Length)

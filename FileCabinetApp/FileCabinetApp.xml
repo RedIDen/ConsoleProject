@@ -45,13 +45,6 @@
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
-            <summary>
-            Shows the recieved list of records in the console.
-            </summary>
-            <param name="list">The list to show.</param>
-            <param name="errorMessage">Error message to show if the list is empty.</param>
-        </member>
         <member name="M:FileCabinetApp.CommandHandlers.StorageCommandHandler.MakeWork(System.String)">
             <summary>
             Shows the list of all commands and their descriptions.

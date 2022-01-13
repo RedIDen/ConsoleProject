@@ -56,42 +56,44 @@ public static class Program
 
     private static ICommandHandler CreateCommandHandler()
     {
-        ICommandHandler exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
+        var recordPrinter = new DefaultRecordPrinter();
 
-        ICommandHandler edit = new EditCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
+
+        var edit = new EditCommandHandler(Program.fileCabinetServiceTransferHelper);
         edit.SetNext(exit);
 
-        ICommandHandler export = new ExportCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var export = new ExportCommandHandler(Program.fileCabinetServiceTransferHelper);
         export.SetNext(edit);
 
-        ICommandHandler find = new FindCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var find = new FindCommandHandler(Program.fileCabinetServiceTransferHelper, recordPrinter);
         find.SetNext(export);
 
-        ICommandHandler help = new HelpCommandHandler();
+        var help = new HelpCommandHandler();
         help.SetNext(find);
 
-        ICommandHandler import = new ImportCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var import = new ImportCommandHandler(Program.fileCabinetServiceTransferHelper);
         import.SetNext(help);
 
-        ICommandHandler list = new ListCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var list = new ListCommandHandler(Program.fileCabinetServiceTransferHelper, recordPrinter);
         list.SetNext(import);
 
-        ICommandHandler purge = new PurgeCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var purge = new PurgeCommandHandler(Program.fileCabinetServiceTransferHelper);
         purge.SetNext(list);
 
-        ICommandHandler remove = new RemoveCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var remove = new RemoveCommandHandler(Program.fileCabinetServiceTransferHelper);
         remove.SetNext(purge);
 
-        ICommandHandler stat = new StatCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var stat = new StatCommandHandler(Program.fileCabinetServiceTransferHelper);
         stat.SetNext(remove);
 
-        ICommandHandler storage = new StorageCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var storage = new StorageCommandHandler(Program.fileCabinetServiceTransferHelper);
         storage.SetNext(stat);
 
-        ICommandHandler validation = new ValidationRulesCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var validation = new ValidationRulesCommandHandler(Program.fileCabinetServiceTransferHelper);
         validation.SetNext(storage);
 
-        ICommandHandler create = new CreateCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var create = new CreateCommandHandler(Program.fileCabinetServiceTransferHelper);
         create.SetNext(validation);
 
         return create;
