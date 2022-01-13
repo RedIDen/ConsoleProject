@@ -1,16 +1,16 @@
 ﻿using System.Globalization;
 
 namespace FileCabinetApp.CommandHandlers;
-public class StorageCommandHandler : CommandHandlerBase
+public class StorageCommandHandler : ServiceCommandHandlerBase
 {
+    public StorageCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
+    {
+    }
+
     protected override string CommandName { get; set; } = "--storage";
 
     private string ShortCommandName { get; set; } = "-s";
-
-    public StorageCommandHandler(IFileCabinetService fileCabinetService)
-    {
-        this.fileCabinetService = fileCabinetService;
-    }
 
     public override void Handle(AppCommandRequest appCommandRequest)
     {
@@ -38,26 +38,26 @@ public class StorageCommandHandler : CommandHandlerBase
     {
         if (parameters == "memory")
         {
-            if (this.fileCabinetService is FileCabinetMemoryService)
+            if (this.fileCabinetServiceTransferHelper.fileCabinetService is FileCabinetMemoryService)
             {
                 Console.WriteLine("This storage is already in use.");
                 return;
             }
 
-            ((FileCabinetFilesystemService)this.fileCabinetService).Close();
+            ((FileCabinetFilesystemService)this.fileCabinetServiceTransferHelper.fileCabinetService).Close();
             Program.storageTypeMessage = "Using memory storage.";
-            this.fileCabinetService = new FileCabinetMemoryService(this.fileCabinetService.Validator);
+            this.fileCabinetServiceTransferHelper.fileCabinetService = new FileCabinetMemoryService(this.fileCabinetServiceTransferHelper.fileCabinetService.Validator);
         }
         else if (parameters == "file")
         {
-            if (this.fileCabinetService is FileCabinetFilesystemService)
+            if (this.fileCabinetServiceTransferHelper.fileCabinetService is FileCabinetFilesystemService)
             {
                 Console.WriteLine("This storage is already in use.");
                 return;
             }
 
             Program.storageTypeMessage = "Using filesystem storage.";
-            this.fileCabinetService = new FileCabinetFilesystemService(this.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
+            this.fileCabinetServiceTransferHelper.fileCabinetService = new FileCabinetFilesystemService(this.fileCabinetServiceTransferHelper.fileCabinetService.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate));
         }
         else
         {

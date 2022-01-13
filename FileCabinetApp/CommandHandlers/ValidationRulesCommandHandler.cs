@@ -1,16 +1,16 @@
 ﻿using System.Globalization;
 
 namespace FileCabinetApp.CommandHandlers;
-public class ValidationRulesCommandHandler : CommandHandlerBase
+public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
+    public ValidationRulesCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
+    {
+    }
+
     protected override string CommandName { get; set; } = "--validation-rules";
 
     private string ShortCommandName { get; set; } = "-v";
-
-    public ValidationRulesCommandHandler(IFileCabinetService fileCabinetService)
-    {
-        this.fileCabinetService = fileCabinetService;
-    }
 
     public override void Handle(AppCommandRequest appCommandRequest)
     {
@@ -38,12 +38,12 @@ public class ValidationRulesCommandHandler : CommandHandlerBase
     {
         if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
         {
-            this.fileCabinetService.Validator = new DefaultValidator();
+            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new DefaultValidator();
             Program.validationRulesMessage = "Using default validation rules.";
         }
         else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
         {
-            this.fileCabinetService.Validator = new CustomValidator();
+            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new CustomValidator();
             Program.validationRulesMessage = "Using custom validation rules.";
         }
         else

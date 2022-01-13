@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class FindCommandHandler : CommandHandlerBase
+public class FindCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "find";
-
-    public FindCommandHandler(IFileCabinetService fileCabinetService)
+    public FindCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "find";
 
     protected override void MakeWork(string parameters)
     {
@@ -19,9 +19,9 @@ public class FindCommandHandler : CommandHandlerBase
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => this.fileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => this.fileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => this.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            "firstname" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByFirstName(parametersArray[1]),
+            "lastname" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByLastName(parametersArray[1]),
+            "dateofbirth" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
             _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 

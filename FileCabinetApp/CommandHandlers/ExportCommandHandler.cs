@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class ExportCommandHandler : CommandHandlerBase
+public class ExportCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "export";
-
-    public ExportCommandHandler(IFileCabinetService fileCabinetService)
+    public ExportCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "export";
 
     protected override void MakeWork(string parameters)
     {
@@ -56,7 +56,7 @@ public class ExportCommandHandler : CommandHandlerBase
         try
         {
             var streamWriter = new StreamWriter(fileName);
-            var fileCabinetServiceSnapshot = this.fileCabinetService.MakeSnapshot();
+            var fileCabinetServiceSnapshot = this.fileCabinetServiceTransferHelper.fileCabinetService.MakeSnapshot();
 
             if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {

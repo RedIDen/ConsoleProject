@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class CreateCommandHandler : CommandHandlerBase
+public class CreateCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "create";
-
-    public CreateCommandHandler(IFileCabinetService fileCabinetService)
+    public CreateCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "create";
 
     protected override void MakeWork(string parameters)
     {
@@ -23,7 +23,7 @@ public class CreateCommandHandler : CommandHandlerBase
 
         this.ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        int id = this.fileCabinetService.CreateRecord(
+        int id = this.fileCabinetServiceTransferHelper.fileCabinetService.CreateRecord(
             new FileCabinetRecord()
             {
                 Id = 0,

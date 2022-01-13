@@ -3,18 +3,18 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class StatCommandHandler : CommandHandlerBase
+public class StatCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "stat";
-
-    public StatCommandHandler(IFileCabinetService fileCabinetService)
+    public StatCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "stat";
 
     protected override void MakeWork(string parameters)
     {
-        (int records, int deleted) = this.fileCabinetService.GetStat();
+        (int records, int deleted) = this.fileCabinetServiceTransferHelper.fileCabinetService.GetStat();
         Console.WriteLine($"{records} record(s).");
         Console.WriteLine($"{deleted} removed.");
     }

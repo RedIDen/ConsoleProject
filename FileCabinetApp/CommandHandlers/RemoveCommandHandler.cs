@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class RemoveCommandHandler : CommandHandlerBase
+public class RemoveCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "remove";
-
-    public RemoveCommandHandler(IFileCabinetService fileCabinetService)
+    public RemoveCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "remove";
 
     protected override void MakeWork(string parameters)
     {
@@ -20,7 +20,7 @@ public class RemoveCommandHandler : CommandHandlerBase
             return;
         }
 
-        int index = this.fileCabinetService.FindRecordIndexById(id);
+        int index = this.fileCabinetServiceTransferHelper.fileCabinetService.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -28,7 +28,7 @@ public class RemoveCommandHandler : CommandHandlerBase
             return;
         }
 
-        this.fileCabinetService.RemoveRecord(index);
+        this.fileCabinetServiceTransferHelper.fileCabinetService.RemoveRecord(index);
 
         Console.WriteLine($"Record #{id} is removed.");
     }

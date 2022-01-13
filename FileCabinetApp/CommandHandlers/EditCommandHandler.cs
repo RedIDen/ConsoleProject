@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class EditCommandHandler : CommandHandlerBase
+public class EditCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "edit";
-
-    public EditCommandHandler(IFileCabinetService fileCabinetService)
+    public EditCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "edit";
 
     protected override void MakeWork(string parameters)
     {
@@ -27,7 +27,7 @@ public class EditCommandHandler : CommandHandlerBase
             return;
         }
 
-        int index = this.fileCabinetService.FindRecordIndexById(id);
+        int index = this.fileCabinetServiceTransferHelper.fileCabinetService.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -37,7 +37,7 @@ public class EditCommandHandler : CommandHandlerBase
 
         this.ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
 
-        this.fileCabinetService.EditRecord(
+        this.fileCabinetServiceTransferHelper.fileCabinetService.EditRecord(
             new FileCabinetRecord()
             {
                 Id = id,

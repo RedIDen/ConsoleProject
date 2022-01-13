@@ -4,53 +4,53 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.StringConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.MakeWork(System.String)">
+            <summary>
+            Shows the list of all commands and their descriptions.
+            </summary>
+            <param name="parameters">Extra parameteres for the method.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.StringConverter(System.String)">
             <summary>
             Converter to string.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.DateConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.DateConverter(System.String)">
             <summary>
             Converter to date.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.ShortConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.ShortConverter(System.String)">
             <summary>
             Converter to short.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.DecimalConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.DecimalConverter(System.String)">
             <summary>
             Converter to decimal.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.CharConverter(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.CharConverter(System.String)">
             <summary>
             Converter to char.
             </summary>
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.ShowRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.String)">
             <summary>
             Shows the recieved list of records in the console.
             </summary>
             <param name="list">The list to show.</param>
             <param name="errorMessage">Error message to show if the list is empty.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.MakeWork(System.String)">
-            <summary>
-            Shows the list of all commands and their descriptions.
-            </summary>
-            <param name="parameters">Extra parameteres for the method.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.StorageCommandHandler.MakeWork(System.String)">
             <summary>

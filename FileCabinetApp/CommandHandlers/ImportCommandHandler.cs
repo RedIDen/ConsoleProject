@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class ImportCommandHandler : CommandHandlerBase
+public class ImportCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "import";
-
-    public ImportCommandHandler(IFileCabinetService fileCabinetService)
+    public ImportCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "import";
 
     protected override void MakeWork(string parameters)
     {
@@ -49,7 +49,7 @@ public class ImportCommandHandler : CommandHandlerBase
                     snapshot.LoadFromXml(fileStream);
                 }
 
-                this.fileCabinetService.Restore(snapshot);
+                this.fileCabinetServiceTransferHelper.fileCabinetService.Restore(snapshot);
 
                 Console.WriteLine($"All records are imported from {fileName}.");
                 fileStream.Close();

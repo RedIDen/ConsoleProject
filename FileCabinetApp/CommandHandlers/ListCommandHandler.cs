@@ -3,18 +3,18 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class ListCommandHandler : CommandHandlerBase
+public class ListCommandHandler : ServiceCommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "list";
-
-    public ListCommandHandler(IFileCabinetService fileCabinetService)
+    public ListCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+        : base(fileCabinetServiceTransferHelper)
     {
-        this.fileCabinetService = fileCabinetService;
     }
+
+    protected override string CommandName { get; set; } = "list";
 
     protected override void MakeWork(string parameters)
     {
-        ReadOnlyCollection<FileCabinetRecord> list = this.fileCabinetService.GetRecords();
+        ReadOnlyCollection<FileCabinetRecord> list = this.fileCabinetServiceTransferHelper.fileCabinetService.GetRecords();
         this.ShowRecords(list, "The list is empty.");
     }
 }
