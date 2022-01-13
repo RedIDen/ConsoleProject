@@ -23,7 +23,7 @@ public static class Program
 
     private static ICommandHandler commandHandler;
 
-    public static bool isRunning = true;
+    private static bool isRunning = true;
 
     /// <summary>
     /// The main method of the program.
@@ -56,7 +56,7 @@ public static class Program
 
     private static ICommandHandler CreateCommandHandler()
     {
-        ICommandHandler exit = new ExitCommandHandler();
+        ICommandHandler exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
 
         ICommandHandler edit = new EditCommandHandler(Program.fileCabinetServiceTransferHelper);
         edit.SetNext(exit);
