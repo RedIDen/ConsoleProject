@@ -56,8 +56,6 @@ public static class Program
 
     private static ICommandHandler CreateCommandHandler()
     {
-        var recordPrinter = new DefaultRecordPrinter();
-
         var exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
 
         var edit = new EditCommandHandler(Program.fileCabinetServiceTransferHelper);
@@ -66,7 +64,7 @@ public static class Program
         var export = new ExportCommandHandler(Program.fileCabinetServiceTransferHelper);
         export.SetNext(edit);
 
-        var find = new FindCommandHandler(Program.fileCabinetServiceTransferHelper, recordPrinter);
+        var find = new FindCommandHandler(Program.fileCabinetServiceTransferHelper, Program.DefaultRecordPrinter);
         find.SetNext(export);
 
         var help = new HelpCommandHandler();
@@ -75,7 +73,7 @@ public static class Program
         var import = new ImportCommandHandler(Program.fileCabinetServiceTransferHelper);
         import.SetNext(help);
 
-        var list = new ListCommandHandler(Program.fileCabinetServiceTransferHelper, recordPrinter);
+        var list = new ListCommandHandler(Program.fileCabinetServiceTransferHelper, Program.DefaultRecordPrinter);
         list.SetNext(import);
 
         var purge = new PurgeCommandHandler(Program.fileCabinetServiceTransferHelper);
@@ -97,6 +95,30 @@ public static class Program
         create.SetNext(validation);
 
         return create;
+    }
+
+    private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records, string errorMessage)
+    {
+        if (records.Count() == 0)
+        {
+            Console.WriteLine(errorMessage);
+            return;
+        }
+
+        foreach (var record in records)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"#{record.Id}, ");
+            stringBuilder.Append($"{record.FirstName}, ");
+            stringBuilder.Append($"{record.LastName}, ");
+            stringBuilder.Append($"{record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}, ");
+            stringBuilder.Append($"{record.WorkExperience}, ");
+            stringBuilder.Append($"{record.Balance.ToString(CultureInfo.InvariantCulture)}, ");
+            stringBuilder.Append($"\'{record.FavLetter}\'");
+
+            Console.WriteLine(stringBuilder);
+        }
     }
 
     /// <summary>

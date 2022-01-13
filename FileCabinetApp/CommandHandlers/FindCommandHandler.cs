@@ -5,9 +5,9 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class FindCommandHandler : ServiceCommandHandlerBase
 {
-    private IRecordPrinter recordPrinter;
+    private Action<IEnumerable<FileCabinetRecord>, string> recordPrinter;
 
-    public FindCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, IRecordPrinter recordPrinter)
+    public FindCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, Action<IEnumerable<FileCabinetRecord>, string> recordPrinter)
         : base(fileCabinetServiceTransferHelper)
     {
         this.recordPrinter = recordPrinter;
@@ -28,6 +28,6 @@ public class FindCommandHandler : ServiceCommandHandlerBase
             _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 
-        this.recordPrinter.Print(foundRecords, "No records found.");
+        this.recordPrinter(foundRecords, "No records found.");
     }
 }
