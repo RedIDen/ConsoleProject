@@ -80,7 +80,8 @@ namespace FileCabinetApp
         /// <returns>Returns the id of the new record.</returns>
         public int CreateRecord(FileCabinetRecord record)
         {
-            record.Id = this.GetListOfRecords().Max(x => x.Id) + 1;
+            var list = this.GetListOfRecords();
+            record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
 
             this.AddToDictionaries(record);
 
@@ -191,7 +192,7 @@ namespace FileCabinetApp
 
             foreach (var record in importList)
             {
-                (bool result, string message) = this.Validator.RecordValidator(record);
+                (bool result, string message) = this.Validator.Validate(record);
 
                 if (result)
                 {
@@ -244,7 +245,7 @@ namespace FileCabinetApp
             long lengthBefore = this.fileStream.Length;
 
             long writerPosition = 0;
-            long readerPosition = 0;
+            long readerPosition;
             this.writer.BaseStream.Position = 0;
 
             while (this.fileStream.Position < this.fileStream.Length)

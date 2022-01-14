@@ -79,9 +79,9 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot();
 
         /// <summary>
-        /// Resores the list from the snapshot.
+        /// Restores the list from the snapshot.
         /// </summary>
-        /// <param name="snapshot">THe snapshot to restore from.</param>
+        /// <param name="snapshot">The snapshot to restore from.</param>
         void Restore(FileCabinetServiceSnapshot snapshot);
 
         /// <summary>
