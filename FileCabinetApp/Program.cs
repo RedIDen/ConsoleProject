@@ -3,6 +3,7 @@ global using System.Globalization;
 global using System.Text;
 global using FileCabinetApp.CommandHandlers;
 global using FileCabinetApp.Validators;
+global using FileCabinetApp.Validators.FullRecordValidators;
 
 #pragma warning disable CS8602
 
@@ -16,7 +17,7 @@ public static class Program
     private const string HintMessage = "Enter your command, or enter 'help' to get help.";
     private const string DeveloperName = "Deniska Vasilyev";
 
-    private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+    private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
     private static FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper = new FileCabinetServiceTransferHelper() { fileCabinetService = Program.fileCabinetService };
 
     public static string validationRulesMessage = "Using default validation rules.";

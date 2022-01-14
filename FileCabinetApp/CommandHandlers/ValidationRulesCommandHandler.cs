@@ -38,12 +38,12 @@ public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
     {
         if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
         {
-            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new DefaultValidator();
+            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new ValidatorBuilder().CreateDefault();
             Program.validationRulesMessage = "Using default validation rules.";
         }
         else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
         {
-            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new CustomValidator();
+            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new ValidatorBuilder().CreateCustom();
             Program.validationRulesMessage = "Using custom validation rules.";
         }
         else

@@ -599,16 +599,6 @@
             Writes the greeting message.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidator">
-            <summary>
-            The class overriding FileCabinetService.ValidateParameters method.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidator">
-            <summary>
-            The class overriding FileCabinetService.ValidateParameters method.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>
             The intarface for the record validators.
