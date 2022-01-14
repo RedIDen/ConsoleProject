@@ -57,114 +57,6 @@
             </summary>
             <param name="parameters">Extra parameteres for the method.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            The class overriding FileCabinetService.ValidateParameters method.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FirstNameValidator(System.String)">
-            <summary>
-            Validates the first name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.LastNameValidator(System.String)">
-            <summary>
-            Validates the second name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.DateOfBirthValidator(System.DateTime)">
-            <summary>
-            Validates the date of birth.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.WorkExperienceValidator(System.Int16)">
-            <summary>
-            Validates the work experience.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.BalanceValidator(System.Decimal)">
-            <summary>
-            Validates the balance.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FavLetterValidator(System.Char)">
-            <summary>
-            Validates the favorite letter.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Validates the whole record.
-            </summary>
-            <param name="record">Record.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            The class overriding FileCabinetService.ValidateParameters method.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FirstNameValidator(System.String)">
-            <summary>
-            Validates the first name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.LastNameValidator(System.String)">
-            <summary>
-            Validates the second name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.DateOfBirthValidator(System.DateTime)">
-            <summary>
-            Validates the date of birth.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.WorkExperienceValidator(System.Int16)">
-            <summary>
-            Validates the work experience.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.BalanceValidator(System.Decimal)">
-            <summary>
-            Validates the balance.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FavLetterValidator(System.Char)">
-            <summary>
-            Validates the favorite letter.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Validates the whole record.
-            </summary>
-            <param name="record">Record.</param>
-            <returns>Result of validation.</returns>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
             The File Cabinet Filesystem Service class.
@@ -175,7 +67,7 @@
             The file link.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.IRecordValidator,System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.Validators.IRecordValidator,System.IO.FileStream)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
@@ -327,7 +219,7 @@
             The File Cabinet Memory Service class.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.Validators.IRecordValidator)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
@@ -691,60 +583,6 @@
             </summary>
             <param name="id">The id of record to remove.</param>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
-            <summary>
-            The intarface for the record validators.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.FirstNameValidator(System.String)">
-            <summary>
-            Validates the first name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.LastNameValidator(System.String)">
-            <summary>
-            Validates the second name.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.DateOfBirthValidator(System.DateTime)">
-            <summary>
-            Validates the date of birth.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.WorkExperienceValidator(System.Int16)">
-            <summary>
-            Validates the work experience.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.BalanceValidator(System.Decimal)">
-            <summary>
-            Validates the balance.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.FavLetterValidator(System.Char)">
-            <summary>
-            Validates the favorite letter.
-            </summary>
-            <param name="value">Value.</param>
-            <returns>Result of validation.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.RecordValidator(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Validates the whole record.
-            </summary>
-            <param name="record">Record.</param>
-            <returns>Result of validation.</returns>
-        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             The main class of the program.
@@ -759,6 +597,21 @@
         <member name="M:FileCabinetApp.Program.WriteGreeting">
             <summary>
             Writes the greeting message.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomValidator">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultValidator">
+            <summary>
+            The class overriding FileCabinetService.ValidateParameters method.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Validators.IRecordValidator">
+            <summary>
+            The intarface for the record validators.
             </summary>
         </member>
         <member name="T:FileCabinetApp.XmlFileCabinetList">

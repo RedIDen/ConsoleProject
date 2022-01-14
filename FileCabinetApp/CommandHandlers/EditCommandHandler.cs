@@ -14,13 +14,6 @@ public class EditCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        string firstName;
-        string lastName;
-        DateTime dateOfBirth;
-        short workExperience;
-        decimal balance;
-        char favLetter;
-
         if (!int.TryParse(parameters, out int id))
         {
             Console.WriteLine("Wrong command syntax!");
@@ -35,20 +28,10 @@ public class EditCommandHandler : ServiceCommandHandlerBase
             return;
         }
 
-        this.ReadDataForRecord(out firstName, out lastName, out dateOfBirth, out workExperience, out balance, out favLetter);
+        var record = this.ReadDataForRecord();
+        record.Id = id;
 
-        this.fileCabinetServiceTransferHelper.fileCabinetService.EditRecord(
-            new FileCabinetRecord()
-            {
-                Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                WorkExperience = workExperience,
-                Balance = balance,
-                FavLetter = favLetter,
-            },
-            index);
+        this.fileCabinetServiceTransferHelper.fileCabinetService.EditRecord(record, index);
 
         Console.WriteLine($"Record #{id} is edited.");
     }

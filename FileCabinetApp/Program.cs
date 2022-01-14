@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
-using FileCabinetApp.CommandHandlers;
+﻿global using System.Collections.ObjectModel;
+global using System.Globalization;
+global using System.Text;
+global using FileCabinetApp.CommandHandlers;
+global using FileCabinetApp.Validators;
 
 #pragma warning disable CS8602
 

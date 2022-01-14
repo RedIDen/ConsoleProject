@@ -192,7 +192,7 @@ namespace FileCabinetApp
 
             foreach (var record in importList)
             {
-                (bool result, string message) = this.Validator.RecordValidator(record);
+                (bool result, string message) = this.Validator.Validate(record);
 
                 if (result)
                 {
