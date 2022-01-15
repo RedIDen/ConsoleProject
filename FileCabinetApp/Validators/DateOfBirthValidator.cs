@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.Validators
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class DateOfBirthValidator : IRecordValidator
     {
+        [JsonProperty("Min date of birth")]
         private DateTime from;
+
+        [JsonProperty("Max date of birth")]
         private DateTime to;
 
         public DateOfBirthValidator(DateTime from, DateTime to)

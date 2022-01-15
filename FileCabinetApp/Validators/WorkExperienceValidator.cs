@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.Validators
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class WorkExperienceValidator : IRecordValidator
     {
+        [JsonProperty("Work experience min value")]
         private short minValue;
+
+        [JsonProperty("Work experience max value")]
         private short maxValue;
 
         public WorkExperienceValidator(short minValue, short maxValue)

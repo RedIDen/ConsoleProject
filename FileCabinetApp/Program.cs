@@ -4,8 +4,11 @@ global using System.Text;
 global using FileCabinetApp.CommandHandlers;
 global using FileCabinetApp.Validators;
 global using FileCabinetApp.Validators.FullRecordValidators;
+global using Newtonsoft.Json;
 
 #pragma warning disable CS8602
+#pragma warning disable CS8604
+#pragma warning disable CS8618
 
 namespace FileCabinetApp;
 
@@ -16,9 +19,11 @@ public static class Program
 {
     private const string HintMessage = "Enter your command, or enter 'help' to get help.";
     private const string DeveloperName = "Deniska Vasilyev";
+    private const string ValidatorsDataPath = "validation-rules.json";
 
-    private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
-    private static FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper = new FileCabinetServiceTransferHelper() { fileCabinetService = Program.fileCabinetService };
+    private static Dictionary<string, CompositeValidator> validators;
+    private static IFileCabinetService fileCabinetService;
+    private static FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper;
 
     public static string validationRulesMessage = "Using default validation rules.";
     public static string storageTypeMessage = "Using memory storage.";
@@ -33,6 +38,9 @@ public static class Program
     /// <param name="args">Extra arguments to run the application.</param>
     public static void Main(string[] args)
     {
+        Program.validators = new ValidatorDeserializer().Deserialize(Program.ValidatorsDataPath);
+        Program.fileCabinetService = new FileCabinetMemoryService(Program.validators.GetValueOrDefault("default"));
+        Program.fileCabinetServiceTransferHelper = new FileCabinetServiceTransferHelper(Program.fileCabinetService);
         Program.commandHandler = Program.CreateCommandHandler();
 
         WriteGreeting();
@@ -90,7 +98,7 @@ public static class Program
         var storage = new StorageCommandHandler(Program.fileCabinetServiceTransferHelper);
         storage.SetNext(stat);
 
-        var validation = new ValidationRulesCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var validation = new ValidationRulesCommandHandler(Program.fileCabinetServiceTransferHelper, Program.validators);
         validation.SetNext(storage);
 
         var create = new CreateCommandHandler(Program.fileCabinetServiceTransferHelper);

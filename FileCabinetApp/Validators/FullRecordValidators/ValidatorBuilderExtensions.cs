@@ -9,8 +9,8 @@ namespace FileCabinetApp.Validators.FullRecordValidators
     public static class ValidatorBuilderExtensions
     {
         public static CompositeValidator CreateDefault(this ValidatorBuilder validatorBuilder) => validatorBuilder
-            .ValidateFirstName(0, 60)
-            .ValidateLastName(0, 60)
+            .ValidateFirstName(3, 60)
+            .ValidateLastName(3, 60)
             .ValidateDateOfBirth(new DateTime(1950, 1, 1), DateTime.Now)
             .ValidateFavLetter()
             .ValidateBalance(0, decimal.MaxValue)

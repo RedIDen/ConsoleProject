@@ -9,5 +9,10 @@ namespace FileCabinetApp.CommandHandlers
     public class FileCabinetServiceTransferHelper
     {
         public IFileCabinetService fileCabinetService { get; set; }
+
+        public FileCabinetServiceTransferHelper(IFileCabinetService fileCabinetService)
+        {
+            this.fileCabinetService = fileCabinetService;
+        }
     }
 }
