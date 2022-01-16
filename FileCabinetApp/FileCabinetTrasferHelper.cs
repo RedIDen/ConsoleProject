@@ -38,6 +38,10 @@ namespace FileCabinetApp
                     }
                 }
             }
+            else
+            {
+                this.Service = service;
+            }
         }
     }
 }

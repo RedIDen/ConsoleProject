@@ -38,7 +38,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Program.validators = new ValidatorDeserializer().Deserialize(Program.ValidatorsDataPath);
-        Program.fileCabinetService = new FileCabinetTrasferHelper(new ServiceMeter(new FileCabinetMemoryService(Program.validators.GetValueOrDefault("default"))));
+        Program.fileCabinetService = new FileCabinetTrasferHelper(new FileCabinetMemoryService(Program.validators.GetValueOrDefault("default")));
         Program.commandHandler = Program.CreateCommandHandler();
 
         WriteGreeting();
@@ -102,7 +102,10 @@ public static class Program
         var create = new CreateCommandHandler(Program.fileCabinetService);
         create.SetNext(validation);
 
-        return create;
+        var useStopwatch = new UseStopwatchCommandHandler(Program.fileCabinetService);
+        useStopwatch.SetNext(create);
+
+        return useStopwatch;
     }
 
     private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records, string errorMessage)

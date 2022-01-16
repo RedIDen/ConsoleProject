@@ -25,7 +25,7 @@ namespace FileCabinetApp
         public ServiceMeter(IFileCabinetService service)
         {
             this.Service = service;
-            this.Validator = service.Validator;
+            this.Service.Validator = service.Validator;
         }
 
         public int CreateRecord(FileCabinetRecord record)
