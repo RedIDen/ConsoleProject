@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class EditCommandHandler : ServiceCommandHandlerBase
 {
-    public EditCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public EditCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -20,7 +20,7 @@ public class EditCommandHandler : ServiceCommandHandlerBase
             return;
         }
 
-        int index = this.fileCabinetServiceTransferHelper.fileCabinetService.FindRecordIndexById(id);
+        int index = this.service.Service.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -31,7 +31,7 @@ public class EditCommandHandler : ServiceCommandHandlerBase
         var record = this.ReadDataForRecord();
         record.Id = id;
 
-        this.fileCabinetServiceTransferHelper.fileCabinetService.EditRecord(record, index);
+        this.service.Service.EditRecord(record, index);
 
         Console.WriteLine($"Record #{id} is edited.");
     }

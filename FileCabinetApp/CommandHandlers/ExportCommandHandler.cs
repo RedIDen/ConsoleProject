@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class ExportCommandHandler : ServiceCommandHandlerBase
 {
-    public ExportCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public ExportCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -56,7 +56,7 @@ public class ExportCommandHandler : ServiceCommandHandlerBase
         try
         {
             var streamWriter = new StreamWriter(fileName);
-            var fileCabinetServiceSnapshot = this.fileCabinetServiceTransferHelper.fileCabinetService.MakeSnapshot();
+            var fileCabinetServiceSnapshot = this.service.Service.MakeSnapshot();
 
             if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {

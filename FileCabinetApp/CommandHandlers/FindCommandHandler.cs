@@ -7,8 +7,8 @@ public class FindCommandHandler : ServiceCommandHandlerBase
 {
     private Action<IEnumerable<FileCabinetRecord>, string> recordPrinter;
 
-    public FindCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, Action<IEnumerable<FileCabinetRecord>, string> recordPrinter)
-        : base(fileCabinetServiceTransferHelper)
+    public FindCommandHandler(FileCabinetTrasferHelper service, Action<IEnumerable<FileCabinetRecord>, string> recordPrinter)
+        : base(service)
     {
         this.recordPrinter = recordPrinter;
     }
@@ -22,9 +22,9 @@ public class FindCommandHandler : ServiceCommandHandlerBase
 
         var foundRecords = parametersArray[0].ToLower() switch
         {
-            "firstname" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByFirstName(parametersArray[1]),
-            "lastname" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByLastName(parametersArray[1]),
-            "dateofbirth" => this.fileCabinetServiceTransferHelper.fileCabinetService.FindByDateOfBirth(parametersArray[1]),
+            "firstname" => this.service.Service.FindByFirstName(parametersArray[1]),
+            "lastname" => this.service.Service.FindByLastName(parametersArray[1]),
+            "dateofbirth" => this.service.Service.FindByDateOfBirth(parametersArray[1]),
             _ => new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()),
         };
 

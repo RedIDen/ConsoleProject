@@ -225,5 +225,10 @@ namespace FileCabinetApp
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
         }
+
+        public (int, int) Purge()
+        {
+            return (0, 0);
+        }
     }
 }

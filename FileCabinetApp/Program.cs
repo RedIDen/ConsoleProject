@@ -22,8 +22,7 @@ public static class Program
     private const string ValidatorsDataPath = "validation-rules.json";
 
     private static Dictionary<string, CompositeValidator> validators;
-    private static IFileCabinetService fileCabinetService;
-    private static FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper;
+    private static FileCabinetTrasferHelper fileCabinetService;
 
     public static string validationRulesMessage = "Using default validation rules.";
     public static string storageTypeMessage = "Using memory storage.";
@@ -39,8 +38,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Program.validators = new ValidatorDeserializer().Deserialize(Program.ValidatorsDataPath);
-        Program.fileCabinetService = new FileCabinetMemoryService(Program.validators.GetValueOrDefault("default"));
-        Program.fileCabinetServiceTransferHelper = new FileCabinetServiceTransferHelper(Program.fileCabinetService);
+        Program.fileCabinetService = new FileCabinetTrasferHelper(new ServiceMeter(new FileCabinetMemoryService(Program.validators.GetValueOrDefault("default"))));
         Program.commandHandler = Program.CreateCommandHandler();
 
         WriteGreeting();
@@ -68,40 +66,40 @@ public static class Program
     {
         var exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
 
-        var edit = new EditCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var edit = new EditCommandHandler(Program.fileCabinetService);
         edit.SetNext(exit);
 
-        var export = new ExportCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var export = new ExportCommandHandler(Program.fileCabinetService);
         export.SetNext(edit);
 
-        var find = new FindCommandHandler(Program.fileCabinetServiceTransferHelper, Program.DefaultRecordPrinter);
+        var find = new FindCommandHandler(Program.fileCabinetService, Program.DefaultRecordPrinter);
         find.SetNext(export);
 
         var help = new HelpCommandHandler();
         help.SetNext(find);
 
-        var import = new ImportCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var import = new ImportCommandHandler(Program.fileCabinetService);
         import.SetNext(help);
 
-        var list = new ListCommandHandler(Program.fileCabinetServiceTransferHelper, Program.DefaultRecordPrinter);
+        var list = new ListCommandHandler(Program.fileCabinetService, Program.DefaultRecordPrinter);
         list.SetNext(import);
 
-        var purge = new PurgeCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var purge = new PurgeCommandHandler(Program.fileCabinetService);
         purge.SetNext(list);
 
-        var remove = new RemoveCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var remove = new RemoveCommandHandler(Program.fileCabinetService);
         remove.SetNext(purge);
 
-        var stat = new StatCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var stat = new StatCommandHandler(Program.fileCabinetService);
         stat.SetNext(remove);
 
-        var storage = new StorageCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var storage = new StorageCommandHandler(Program.fileCabinetService);
         storage.SetNext(stat);
 
-        var validation = new ValidationRulesCommandHandler(Program.fileCabinetServiceTransferHelper, Program.validators);
+        var validation = new ValidationRulesCommandHandler(Program.fileCabinetService, Program.validators);
         validation.SetNext(storage);
 
-        var create = new CreateCommandHandler(Program.fileCabinetServiceTransferHelper);
+        var create = new CreateCommandHandler(Program.fileCabinetService);
         create.SetNext(validation);
 
         return create;

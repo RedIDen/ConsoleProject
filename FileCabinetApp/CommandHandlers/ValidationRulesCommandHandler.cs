@@ -5,8 +5,8 @@ public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
     private Dictionary<string, CompositeValidator> validators;
 
-    public ValidationRulesCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, Dictionary<string, CompositeValidator> validators)
-        : base(fileCabinetServiceTransferHelper)
+    public ValidationRulesCommandHandler(FileCabinetTrasferHelper service, Dictionary<string, CompositeValidator> validators)
+        : base(service)
     {
         this.validators = validators;
     }
@@ -43,7 +43,7 @@ public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
         var validator = this.validators.GetValueOrDefault(parametersToLower);
         if (validator != null)
         {
-            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = validator;
+            this.service.Service.Validator = validator;
             Program.validationRulesMessage = $"Using {parametersToLower} validation rules.";
         }
         else
