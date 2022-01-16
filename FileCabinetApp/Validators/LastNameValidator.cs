@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.Validators
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class LastNameValidator : IRecordValidator
     {
+        [JsonProperty("Last name min length")]
         private int minLength;
+
+        [JsonProperty("Last name max length")]
         private int maxLength;
 
         public LastNameValidator(int minLength, int maxLength)

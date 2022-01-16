@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class PurgeCommandHandler : ServiceCommandHandlerBase
 {
-    public PurgeCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public PurgeCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -14,13 +14,15 @@ public class PurgeCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        if (this.fileCabinetServiceTransferHelper.fileCabinetService is not FileCabinetFilesystemService)
+        IFileCabinetService temp = this.service.Service is IServiceDecorator ? ((IServiceDecorator)this.service.Service).GetLast() : this.service.Service;
+
+        if (temp is FileCabinetMemoryService)
         {
-            Console.WriteLine("This command is available only for filesystem storage mode.");
+            Console.WriteLine("This command isn't allowed for the memory storage.");
             return;
         }
 
-        (int deletedNum, int beforeNum) = ((FileCabinetFilesystemService)this.fileCabinetServiceTransferHelper.fileCabinetService).Purge();
+        (int deletedNum, int beforeNum) = this.service.Service.Purge();
 
         Console.WriteLine($"Data file processing is completed: {deletedNum} of {beforeNum} records were purged.");
     }

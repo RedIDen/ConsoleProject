@@ -1,7 +1,11 @@
-﻿namespace FileCabinetApp.Validators.FullRecordValidators
+﻿using System.Runtime.Serialization;
+
+namespace FileCabinetApp.Validators.FullRecordValidators
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class CompositeValidator : IRecordValidator
     {
+        [JsonProperty]
         private List<IRecordValidator> validators;
 
         public CompositeValidator(IEnumerable<IRecordValidator> validators)

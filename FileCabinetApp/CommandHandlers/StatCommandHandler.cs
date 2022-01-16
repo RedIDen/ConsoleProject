@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class StatCommandHandler : ServiceCommandHandlerBase
 {
-    public StatCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public StatCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -14,7 +14,7 @@ public class StatCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        (int records, int deleted) = this.fileCabinetServiceTransferHelper.fileCabinetService.GetStat();
+        (int records, int deleted) = this.service.Service.GetStat();
         Console.WriteLine($"{records} record(s).");
         Console.WriteLine($"{deleted} removed.");
     }

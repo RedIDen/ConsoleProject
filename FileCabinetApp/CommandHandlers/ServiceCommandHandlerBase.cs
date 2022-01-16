@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace FileCabinetApp.CommandHandlers;
 public abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
-    protected FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper;
+    protected FileCabinetTrasferHelper service;
 
-    public ServiceCommandHandlerBase(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
+    public ServiceCommandHandlerBase(FileCabinetTrasferHelper service)
     {
-        this.fileCabinetServiceTransferHelper = fileCabinetServiceTransferHelper;
+        this.service = service;
     }
 
     protected FileCabinetRecord ReadDataForRecord()
@@ -40,7 +40,7 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
             Console.Write("Favorite letter: ");
             record.FavLetter = this.ReadInput(this.CharConverter);
 
-            var validationResult = this.fileCabinetServiceTransferHelper.fileCabinetService.Validator.Validate(record);
+            var validationResult = this.service.Service.Validator.Validate(record);
             if (!validationResult.Item1)
             {
                 Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");

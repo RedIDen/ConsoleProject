@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class RemoveCommandHandler : ServiceCommandHandlerBase
 {
-    public RemoveCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public RemoveCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -20,7 +20,7 @@ public class RemoveCommandHandler : ServiceCommandHandlerBase
             return;
         }
 
-        int index = this.fileCabinetServiceTransferHelper.fileCabinetService.FindRecordIndexById(id);
+        int index = this.service.Service.FindRecordIndexById(id);
 
         if (index == -1)
         {
@@ -28,7 +28,7 @@ public class RemoveCommandHandler : ServiceCommandHandlerBase
             return;
         }
 
-        this.fileCabinetServiceTransferHelper.fileCabinetService.RemoveRecord(index);
+        this.service.Service.RemoveRecord(index);
 
         Console.WriteLine($"Record #{id} is removed.");
     }

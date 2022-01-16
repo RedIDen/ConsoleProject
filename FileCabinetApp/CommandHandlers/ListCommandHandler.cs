@@ -7,8 +7,8 @@ public class ListCommandHandler : ServiceCommandHandlerBase
 {
     private Action<IEnumerable<FileCabinetRecord>, string> recordPrinter;
 
-    public ListCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper, Action<IEnumerable<FileCabinetRecord>, string> recordPrinter)
-        : base(fileCabinetServiceTransferHelper)
+    public ListCommandHandler(FileCabinetTrasferHelper service, Action<IEnumerable<FileCabinetRecord>, string> recordPrinter)
+        : base(service)
     {
         this.recordPrinter = recordPrinter;
     }
@@ -17,7 +17,7 @@ public class ListCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        ReadOnlyCollection<FileCabinetRecord> list = this.fileCabinetServiceTransferHelper.fileCabinetService.GetRecords();
+        ReadOnlyCollection<FileCabinetRecord> list = this.service.Service.GetRecords();
         this.recordPrinter(list, "The list is empty.");
     }
 }

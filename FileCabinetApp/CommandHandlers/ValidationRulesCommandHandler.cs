@@ -3,9 +3,12 @@
 namespace FileCabinetApp.CommandHandlers;
 public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
-    public ValidationRulesCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    private Dictionary<string, CompositeValidator> validators;
+
+    public ValidationRulesCommandHandler(FileCabinetTrasferHelper service, Dictionary<string, CompositeValidator> validators)
+        : base(service)
     {
+        this.validators = validators;
     }
 
     protected override string CommandName { get; set; } = "--validation-rules";
@@ -36,15 +39,12 @@ public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
     /// <param name="parameters">Extra parameteres for the method.</param>
     protected override void MakeWork(string parameters)
     {
-        if (parameters.Equals("default", StringComparison.InvariantCultureIgnoreCase))
+        var parametersToLower = parameters.ToLower();
+        var validator = this.validators.GetValueOrDefault(parametersToLower);
+        if (validator != null)
         {
-            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new ValidatorBuilder().CreateDefault();
-            Program.validationRulesMessage = "Using default validation rules.";
-        }
-        else if (parameters.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
-        {
-            this.fileCabinetServiceTransferHelper.fileCabinetService.Validator = new ValidatorBuilder().CreateCustom();
-            Program.validationRulesMessage = "Using custom validation rules.";
+            this.service.Service.Validator = validator;
+            Program.validationRulesMessage = $"Using {parametersToLower} validation rules.";
         }
         else
         {

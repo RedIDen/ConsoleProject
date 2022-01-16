@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class ImportCommandHandler : ServiceCommandHandlerBase
 {
-    public ImportCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public ImportCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -49,7 +49,7 @@ public class ImportCommandHandler : ServiceCommandHandlerBase
                     snapshot.LoadFromXml(fileStream);
                 }
 
-                this.fileCabinetServiceTransferHelper.fileCabinetService.Restore(snapshot);
+                this.service.Service.Restore(snapshot);
 
                 Console.WriteLine($"All records are imported from {fileName}.");
                 fileStream.Close();

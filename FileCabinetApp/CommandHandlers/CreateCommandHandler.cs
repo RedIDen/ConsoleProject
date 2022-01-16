@@ -5,8 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class CreateCommandHandler : ServiceCommandHandlerBase
 {
-    public CreateCommandHandler(FileCabinetServiceTransferHelper fileCabinetServiceTransferHelper)
-        : base(fileCabinetServiceTransferHelper)
+    public CreateCommandHandler(FileCabinetTrasferHelper service)
+        : base(service)
     {
     }
 
@@ -14,7 +14,7 @@ public class CreateCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        int id = this.fileCabinetServiceTransferHelper.fileCabinetService.CreateRecord(this.ReadDataForRecord());
+        int id = this.service.Service.CreateRecord(this.ReadDataForRecord());
 
         Console.WriteLine($"Record #{id} is created.");
     }

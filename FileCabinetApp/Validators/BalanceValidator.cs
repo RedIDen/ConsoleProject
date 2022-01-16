@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.Validators
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class BalanceValidator : IRecordValidator
     {
+        [JsonProperty("Balance min value")]
         private decimal minValue;
+
+        [JsonProperty("Balance max value")]
         private decimal maxValue;
 
         public BalanceValidator(decimal minValue, decimal maxValue)
