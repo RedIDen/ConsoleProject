@@ -105,7 +105,10 @@ public static class Program
         var useStopwatch = new UseStopwatchCommandHandler(Program.fileCabinetService);
         useStopwatch.SetNext(create);
 
-        return useStopwatch;
+        var useLogger = new UseLoggerCommandHandler(Program.fileCabinetService);
+        useLogger.SetNext(useStopwatch);
+
+        return useLogger;
     }
 
     private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records, string errorMessage)
