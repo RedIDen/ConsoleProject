@@ -85,9 +85,6 @@
             </summary>
             <value>The object of the class realizing the IRecordValidator interface.</value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
-            <inheritdoc/>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Close">
             <summary>
             Closes all the opened file streams.
