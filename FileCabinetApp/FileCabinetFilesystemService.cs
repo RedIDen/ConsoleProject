@@ -14,7 +14,7 @@ namespace FileCabinetApp
     /// <summary>
     /// The File Cabinet Filesystem Service class.
     /// </summary>
-    public class FileCabinetFilesystemService : IFileCabinetService, IDisposable
+    public class FileCabinetFilesystemService : IFileCabinetService
     {
         /// <summary>
         /// The file link.
@@ -25,9 +25,9 @@ namespace FileCabinetApp
         private readonly BinaryWriter writer;
         private readonly BinaryReader reader;
 
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<long>> firstNameDictionary = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, List<long>> lastNameDictionary = new Dictionary<string, List<long>>();
+        private readonly Dictionary<DateTime, List<long>> dateOfBirthDictionary = new Dictionary<DateTime, List<long>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -57,12 +57,6 @@ namespace FileCabinetApp
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
         public IRecordValidator Validator { get; set; }
 
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            this.Close();
-        }
-
         /// <summary>
         /// Closes all the opened file streams.
         /// </summary>
@@ -83,9 +77,9 @@ namespace FileCabinetApp
             var list = this.GetListOfRecords();
             record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
 
-            this.AddToDictionaries(record);
-
             this.WriteRecord(record, this.writer.BaseStream.Length);
+
+            this.AddToDictionaries(record);
 
             return record.Id;
         }
@@ -97,14 +91,13 @@ namespace FileCabinetApp
         /// <param name="index">The index of the record to edit.</param>
         public void EditRecord(FileCabinetRecord record, int index)
         {
-            int position = index * RECORDLENGTH;
+            long position = index * FileCabinetFilesystemService.RECORDLENGTH;
             this.reader.BaseStream.Position = position;
 
             var oldRecord = this.GetRecord();
             this.DeleteFromDictionaries(oldRecord);
-
-            this.AddToDictionaries(record);
             this.WriteRecord(record, position);
+            this.AddToDictionaries(record);
         }
 
         /// <summary>
@@ -112,14 +105,17 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="date">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             DateTime dateOfBirth = DateTime.Parse(
                 date,
                 CultureInfo.CreateSpecificCulture("en-US"),
                 DateTimeStyles.None);
 
-            return new ReadOnlyCollection<FileCabinetRecord>((this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth) ?? new List<FileCabinetRecord>()).ToArray());
+            var result = new List<FileCabinetRecord>();
+
+            var positions = this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth);
+            return this.GetEnumerable(positions);
         }
 
         /// <summary>
@@ -127,16 +123,39 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName) =>
-                    new ReadOnlyCollection<FileCabinetRecord>((this.firstNameDictionary.GetValueOrDefault(firstName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray());
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        {
+            var result = new List<FileCabinetRecord>();
+
+            var positions = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
+            return this.GetEnumerable(positions);
+        }
 
         /// <summary>
         /// Returns the list of the records with recieved last name.
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName) =>
-            new ReadOnlyCollection<FileCabinetRecord>((this.lastNameDictionary.GetValueOrDefault(lastName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray());
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        {
+            var result = new List<FileCabinetRecord>();
+
+            var positions = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
+            return this.GetEnumerable(positions);
+        }
+
+        private IEnumerable<FileCabinetRecord> GetEnumerable(List<long>? positions)
+        {
+            if (positions == null)
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return new FilesystemEnumerator<FileCabinetRecord>(
+                positions,
+                () => this.GetRecord(),
+                (long value) => this.fileStream.Position = value);
+        }
 
         /// <summary>
         /// Returnd the index of the record with the recieved id.
@@ -155,10 +174,10 @@ namespace FileCabinetApp
                 {
                     this.reader.BaseStream.Position -= 6;
                     short deleted = this.reader.ReadInt16();
-                    return (deleted >> 2 & 1) == 1 ? -1 : (int)(this.reader.BaseStream.Position / RECORDLENGTH);
+                    return (deleted >> 2 & 1) == 1 ? -1 : (int)(this.reader.BaseStream.Position / FileCabinetFilesystemService.RECORDLENGTH);
                 }
 
-                this.reader.BaseStream.Position += RECORDLENGTH - 4;
+                this.reader.BaseStream.Position += FileCabinetFilesystemService.RECORDLENGTH - 4;
             }
 
             return -1;
@@ -168,13 +187,13 @@ namespace FileCabinetApp
         /// Returns the readonly collection of all records.
         /// </summary>
         /// <returns>The readonly collection of all records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
+        public IEnumerable<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
 
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
         /// <returns>The number of records in the list and the number of deleted records.</returns>
-        public (int, int) GetStat() => ((int)(this.fileStream.Length / RECORDLENGTH), this.CountDeletedRecords());
+        public (int, int) GetStat() => ((int)(this.fileStream.Length / FileCabinetFilesystemService.RECORDLENGTH), this.CountDeletedRecords());
 
         /// <summary>
         /// Creates the snapshot of the record list.
@@ -221,7 +240,7 @@ namespace FileCabinetApp
         /// <param name="index">The id of record to remove.</param>
         public void RemoveRecord(int index)
         {
-            int position = RECORDLENGTH * index;
+            long position = FileCabinetFilesystemService.RECORDLENGTH * index;
             this.reader.BaseStream.Position = position;
 
             var record = this.GetRecord();
@@ -246,7 +265,7 @@ namespace FileCabinetApp
 
             long writerPosition = 0;
             long readerPosition;
-            this.writer.BaseStream.Position = 0;
+            this.writer.BaseStream.Position = writerPosition;
 
             while (this.fileStream.Position < this.fileStream.Length)
             {
@@ -254,8 +273,12 @@ namespace FileCabinetApp
                 if (this.TryGetRecord(ref record))
                 {
                     readerPosition = this.reader.BaseStream.Position;
+                    this.DeleteFromDictionaries(record);
+                    this.reader.BaseStream.Position = readerPosition;
                     this.WriteRecord(record, writerPosition);
-                    writerPosition += RECORDLENGTH;
+                    writerPosition += FileCabinetFilesystemService.RECORDLENGTH;
+                    this.reader.BaseStream.Position = readerPosition;
+                    this.AddToDictionaries(record);
                     this.reader.BaseStream.Position = readerPosition;
                 }
             }
@@ -264,7 +287,7 @@ namespace FileCabinetApp
 
             long lengthAfter = this.fileStream.Length;
 
-            return ((int)((lengthBefore - lengthAfter) / RECORDLENGTH), (int)(lengthBefore / RECORDLENGTH));
+            return ((int)((lengthBefore - lengthAfter) / FileCabinetFilesystemService.RECORDLENGTH), (int)(lengthBefore / FileCabinetFilesystemService.RECORDLENGTH));
         }
 
         /// <summary>
@@ -300,15 +323,9 @@ namespace FileCabinetApp
 
             this.reader.BaseStream.Position -= 2;
 
-            if ((deleted >> 2 & 1) == 1)
-            {
-                this.reader.BaseStream.Position += RECORDLENGTH;
-                return false;
-            }
-
             record = this.GetRecord();
 
-            return true;
+            return (deleted >> 2 & 1) != 1;
         }
 
         /// <summary>
@@ -320,8 +337,6 @@ namespace FileCabinetApp
             this.reader.ReadInt16();
 
             var record = new FileCabinetRecord();
-
-            record = new FileCabinetRecord();
 
             record.Id = this.reader.ReadInt32();
 
@@ -398,15 +413,16 @@ namespace FileCabinetApp
         private void AddToDictionaries(FileCabinetRecord record)
         {
             string lowerFirstName = record.FirstName.ToLower();
+            long position = this.FindRecordIndexById(record.Id) * FileCabinetFilesystemService.RECORDLENGTH;
 
             if (this.firstNameDictionary.ContainsKey(lowerFirstName))
             {
-                this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Add(record);
+                this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Add(position);
             }
             else
             {
-                var list = new List<FileCabinetRecord>();
-                list.Add(record);
+                var list = new List<long>();
+                list.Add(position);
                 this.firstNameDictionary.Add(lowerFirstName, list);
             }
 
@@ -414,23 +430,23 @@ namespace FileCabinetApp
 
             if (this.lastNameDictionary.ContainsKey(lowerLastName))
             {
-                this.lastNameDictionary.GetValueOrDefault(lowerLastName).Add(record);
+                this.lastNameDictionary.GetValueOrDefault(lowerLastName).Add(position);
             }
             else
             {
-                var list = new List<FileCabinetRecord>();
-                list.Add(record);
+                var list = new List<long>();
+                list.Add(position);
                 this.lastNameDictionary.Add(lowerLastName, list);
             }
 
             if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
             {
-                this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Add(record);
+                this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Add(position);
             }
             else
             {
-                var list = new List<FileCabinetRecord>();
-                list.Add(record);
+                var list = new List<long>();
+                list.Add(position);
                 this.dateOfBirthDictionary.Add(record.DateOfBirth, list);
             }
         }
@@ -441,17 +457,21 @@ namespace FileCabinetApp
         /// <param name="record">The record to delete.</param>
         private void DeleteFromDictionaries(FileCabinetRecord record)
         {
+            long position = this.FindRecordIndexById(record.Id) * FileCabinetFilesystemService.RECORDLENGTH;
+
             string lowerFirstName = record.FirstName.ToLower();
             this.firstNameDictionary
                 .GetValueOrDefault(lowerFirstName)
-                .Remove(record);
+                .Remove(position);
 
             string lowerLastName = record.LastName.ToLower();
             this.lastNameDictionary
                 .GetValueOrDefault(lowerLastName)
-                .Remove(record);
+                .Remove(position);
 
-            this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
+            this.dateOfBirthDictionary
+                .GetValueOrDefault(record.DateOfBirth)
+                .Remove(position);
         }
 
         private int CountDeletedRecords()
