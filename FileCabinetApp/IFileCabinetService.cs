@@ -43,7 +43,7 @@ namespace FileCabinetApp
         /// Returns the list of all records.
         /// </summary>
         /// <returns>The list of all records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords();
+        public IEnumerable<FileCabinetRecord> GetRecords();
 
         /// <summary>
         /// Returns the stats (the number of records in the list).
@@ -56,21 +56,21 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Returns the list of the records with recieved last name.
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Returns the list of the records with recieved date of birth.
         /// </summary>
         /// <param name="date">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date);
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date);
 
         /// <summary>
         /// Makes the snapshot of the service.

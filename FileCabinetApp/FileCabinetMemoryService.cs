@@ -78,7 +78,7 @@ namespace FileCabinetApp
         /// Returns the readonly collection of all records.
         /// </summary>
         /// <returns>The readonly collection of all records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.list);
+        public IEnumerable<FileCabinetRecord> GetRecords() => this.list;
 
         /// <summary>
         /// Returns the stats (the number of records in the list).
@@ -91,30 +91,37 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName) =>
-            new ReadOnlyCollection<FileCabinetRecord>((this.firstNameDictionary.GetValueOrDefault(firstName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray());
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        {
+            var list = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
+            return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+        }
 
         /// <summary>
         /// Returns the list of the records with recieved last name.
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName) =>
-            new ReadOnlyCollection<FileCabinetRecord>((this.lastNameDictionary.GetValueOrDefault(lastName.ToLower()) ?? new List<FileCabinetRecord>()).ToArray());
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        {
+            var list = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
+            return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+        }
 
         /// <summary>
         /// Returns the list of the records with recieved date of birth.
         /// </summary>
         /// <param name="date">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             DateTime dateOfBirth = DateTime.Parse(
                 date,
                 CultureInfo.CreateSpecificCulture("en-US"),
                 DateTimeStyles.None);
 
-            return new ReadOnlyCollection<FileCabinetRecord>((this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth) ?? new List<FileCabinetRecord>()).ToArray());
+            var list = this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth);
+            return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
         }
 
         /// <summary>

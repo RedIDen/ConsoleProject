@@ -77,9 +77,9 @@ namespace FileCabinetApp
             var list = this.GetListOfRecords();
             record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
 
-            this.AddToDictionaries(record);
-
             this.WriteRecord(record, this.writer.BaseStream.Length);
+
+            this.AddToDictionaries(record);
 
             return record.Id;
         }
@@ -96,9 +96,8 @@ namespace FileCabinetApp
 
             var oldRecord = this.GetRecord();
             this.DeleteFromDictionaries(oldRecord);
-
-            this.AddToDictionaries(record);
             this.WriteRecord(record, position);
+            this.AddToDictionaries(record);
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="date">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             DateTime dateOfBirth = DateTime.Parse(
                 date,
@@ -116,18 +115,7 @@ namespace FileCabinetApp
             var result = new List<FileCabinetRecord>();
 
             var positions = this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth);
-            if (positions == null)
-            {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
-            }
-
-            foreach (var position in positions)
-            {
-                this.reader.BaseStream.Position = position;
-                result.Add(this.GetRecord());
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return this.GetEnumerable(positions);
         }
 
         /// <summary>
@@ -135,23 +123,12 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var result = new List<FileCabinetRecord>();
 
             var positions = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
-            if (positions == null)
-            {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
-            }
-
-            foreach (var position in positions)
-            {
-                this.reader.BaseStream.Position = position;
-                result.Add(this.GetRecord());
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return this.GetEnumerable(positions);
         }
 
         /// <summary>
@@ -159,23 +136,25 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var result = new List<FileCabinetRecord>();
 
             var positions = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
+            return this.GetEnumerable(positions);
+        }
+
+        private IEnumerable<FileCabinetRecord> GetEnumerable(List<long>? positions)
+        {
             if (positions == null)
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            foreach (var position in positions)
-            {
-                this.reader.BaseStream.Position = position;
-                result.Add(this.GetRecord());
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new FilesystemEnumerator<FileCabinetRecord>(
+                positions,
+                () => this.GetRecord(),
+                (long value) => this.fileStream.Position = value);
         }
 
         /// <summary>
@@ -208,7 +187,7 @@ namespace FileCabinetApp
         /// Returns the readonly collection of all records.
         /// </summary>
         /// <returns>The readonly collection of all records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
+        public IEnumerable<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
 
         /// <summary>
         /// Returns the stats (the number of records in the list).

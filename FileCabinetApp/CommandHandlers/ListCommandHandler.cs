@@ -17,7 +17,7 @@ public class ListCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        ReadOnlyCollection<FileCabinetRecord> list = this.service.Service.GetRecords();
+        IEnumerable<FileCabinetRecord> list = this.service.Service.GetRecords();
         this.recordPrinter(list, "The list is empty.");
     }
 }

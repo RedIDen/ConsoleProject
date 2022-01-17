@@ -38,27 +38,27 @@ namespace FileCabinetApp
             this.Service.EditRecord(record, index);
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string date)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             this.WriteLog($"Calling FindByDateOfBirth() with Date = '{date}'");
             var result = this.Service.FindByDateOfBirth(date);
-            this.WriteLog($"FindByDateOfBirth() returned list with Size = '{result.Count}'");
+            this.WriteLog($"FindByDateOfBirth() returned list with Size = '{result.Count()}'");
             return result;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.WriteLog($"Calling FindByFirstName() with Date = '{firstName}'");
             var result = this.Service.FindByFirstName(firstName);
-            this.WriteLog($"FindByFirstName() returned list with Size = '{result.Count}'");
+            this.WriteLog($"FindByFirstName() returned list with Size = '{result.Count()}'");
             return result;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.WriteLog($"Calling FindByLastName() with Date = '{lastName}'");
             var result = this.Service.FindByLastName(lastName);
-            this.WriteLog($"FindByLastName() returned list with Size = '{result.Count}'");
+            this.WriteLog($"FindByLastName() returned list with Size = '{result.Count()}'");
             return result;
         }
 
@@ -67,11 +67,11 @@ namespace FileCabinetApp
             return this.Service.FindRecordIndexById(id);
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             this.WriteLog($"Calling GetRecords()");
             var result = this.Service.GetRecords();
-            this.WriteLog($"GetRecords() returned list with Size = '{result.Count}'");
+            this.WriteLog($"GetRecords() returned list with Size = '{result.Count()}'");
             return result;
         }
 
