@@ -31,6 +31,13 @@
             <param name="value">Value.</param>
             <returns>Result.</returns>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.IntConverter(System.String)">
+            <summary>
+            Converter to int.
+            </summary>
+            <param name="value">Value.</param>
+            <returns>Result.</returns>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.DecimalConverter(System.String)">
             <summary>
             Converter to decimal.

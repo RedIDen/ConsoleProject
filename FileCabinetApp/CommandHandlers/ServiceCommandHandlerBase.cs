@@ -118,6 +118,23 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
     }
 
     /// <summary>
+    /// Converter to int.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <returns>Result.</returns>
+    protected (bool, string, int) IntConverter(string value)
+    {
+        if (int.TryParse(value, out int result))
+        {
+            return (true, string.Empty, result);
+        }
+        else
+        {
+            return (false, "enter the correct number", result);
+        }
+    }
+
+    /// <summary>
     /// Converter to decimal.
     /// </summary>
     /// <param name="value">Value.</param>

@@ -99,7 +99,7 @@ public static class Program
         var validation = new ValidationRulesCommandHandler(Program.fileCabinetService, Program.validators);
         validation.SetNext(storage);
 
-        var create = new CreateCommandHandler(Program.fileCabinetService);
+        var create = new InsertCommandHandler(Program.fileCabinetService);
         create.SetNext(validation);
 
         var useStopwatch = new UseStopwatchCommandHandler(Program.fileCabinetService);
@@ -113,7 +113,7 @@ public static class Program
 
     private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records, string errorMessage)
     {
-        if (records.Count() == 0)
+        if (!records.Any())
         {
             Console.WriteLine(errorMessage);
             return;

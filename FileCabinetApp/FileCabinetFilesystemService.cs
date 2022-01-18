@@ -64,7 +64,7 @@ namespace FileCabinetApp
         {
             this.reader.Close();
             this.writer.Close();
-            this.fileStream.Close();
+            this.fileStream.Dispose();
         }
 
         /// <summary>
@@ -75,7 +75,11 @@ namespace FileCabinetApp
         public int CreateRecord(FileCabinetRecord record)
         {
             var list = this.GetListOfRecords();
-            record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
+
+            if (record.Id == 0)
+            {
+                record.Id = list.Count == 0 ? 1 : list.Max(x => x.Id) + 1;
+            }
 
             this.WriteRecord(record, this.writer.BaseStream.Length);
 
