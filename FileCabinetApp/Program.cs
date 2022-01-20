@@ -87,7 +87,7 @@ public static class Program
         var purge = new PurgeCommandHandler(Program.fileCabinetService);
         purge.SetNext(list);
 
-        var remove = new RemoveCommandHandler(Program.fileCabinetService);
+        var remove = new DeleteCommandHandler(Program.fileCabinetService);
         remove.SetNext(purge);
 
         var stat = new StatCommandHandler(Program.fileCabinetService);

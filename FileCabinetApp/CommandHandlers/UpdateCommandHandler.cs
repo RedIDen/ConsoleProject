@@ -57,7 +57,7 @@ public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
         }
         else if (count == 1)
         {
-            Console.Write($"Record #{list.First().Id} is updated.");
+            Console.Write($"Record #{ids[0]} is updated.");
         }
         else
         {
