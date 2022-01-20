@@ -246,7 +246,7 @@
             <summary>
             Edits the existing record.
             </summary>
-            <param name="record">The new record data.</param>
+            <param name="newRecordData">The new record data.</param>
             <param name="index">The index of the record to edit.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindRecordIndexById(System.Int32)">
@@ -309,7 +309,7 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
-            Adds new record to dicionaries.
+            Adds new record to dictionaries.
             </summary>
             <param name="record">The record to add.</param>
         </member>

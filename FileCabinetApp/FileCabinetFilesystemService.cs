@@ -93,13 +93,44 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="record">The new record data.</param>
         /// <param name="index">The index of the record to edit.</param>
-        public void EditRecord(FileCabinetRecord record, int index)
+        public void EditRecord(FileCabinetRecord newRecordData, int index)
         {
             long position = index * FileCabinetFilesystemService.RECORDLENGTH;
             this.reader.BaseStream.Position = position;
 
-            var oldRecord = this.GetRecord();
-            this.DeleteFromDictionaries(oldRecord);
+            var record = this.GetRecord();
+            this.DeleteFromDictionaries(record);
+
+            if (!string.IsNullOrEmpty(newRecordData.FirstName))
+            {
+                record.FirstName = newRecordData.FirstName;
+            }
+
+            if (!string.IsNullOrEmpty(newRecordData.LastName))
+            {
+                record.LastName = newRecordData.LastName;
+            }
+
+            if (newRecordData.DateOfBirth != new DateTime(0))
+            {
+                record.DateOfBirth = newRecordData.DateOfBirth;
+            }
+
+            if (newRecordData.Balance != -1)
+            {
+                record.Balance = newRecordData.Balance;
+            }
+
+            if (newRecordData.WorkExperience != -1)
+            {
+                record.WorkExperience = newRecordData.WorkExperience;
+            }
+
+            if (newRecordData.FavLetter != '\0')
+            {
+                record.WorkExperience = newRecordData.WorkExperience;
+            }
+
             this.WriteRecord(record, position);
             this.AddToDictionaries(record);
         }

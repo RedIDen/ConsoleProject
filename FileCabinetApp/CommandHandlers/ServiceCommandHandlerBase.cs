@@ -167,4 +167,87 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
             return (false, "enter the correct char", result);
         }
     }
+
+    protected (bool, string) TryInsertId(FileCabinetRecord record, string value)
+    {
+        var result = this.IntConverter(value);
+        if (result.Item1)
+        {
+            record.Id = result.Item3;
+        }
+
+        if (this.service.Service.FindRecordIndexById(result.Item3) != -1)
+        {
+            string thisIdAlreadyExistsError = "this id is already taken";
+            return (false, thisIdAlreadyExistsError);
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertFirstName(FileCabinetRecord record, string value)
+    {
+        var result = this.StringConverter(value);
+        if (result.Item1)
+        {
+            record.FirstName = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertLastName(FileCabinetRecord record, string value)
+    {
+        var result = this.StringConverter(value);
+        if (result.Item1)
+        {
+            record.LastName = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertDateOfBirth(FileCabinetRecord record, string value)
+    {
+        var result = this.DateConverter(value);
+        if (result.Item1)
+        {
+            record.DateOfBirth = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertBalance(FileCabinetRecord record, string value)
+    {
+        var result = this.DecimalConverter(value);
+        if (result.Item1)
+        {
+            record.Balance = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertWorkExperience(FileCabinetRecord record, string value)
+    {
+        var result = this.ShortConverter(value);
+        if (result.Item1)
+        {
+            record.WorkExperience = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
+
+    protected (bool, string) TryInsertFavLetter(FileCabinetRecord record, string value)
+    {
+        var result = this.CharConverter(value);
+        if (result.Item1)
+        {
+            record.FavLetter = result.Item3;
+        }
+
+        return (result.Item1, result.Item2);
+    }
 }

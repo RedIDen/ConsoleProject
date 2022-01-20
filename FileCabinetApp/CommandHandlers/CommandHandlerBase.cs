@@ -5,6 +5,8 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public abstract class CommandHandlerBase : ICommandHandler
 {
+    public const string WrongSyntaxError = "Wrong command syntax!";
+
     protected ICommandHandler nextHandler;
 
     protected virtual string CommandName { get; set; }

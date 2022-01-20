@@ -66,7 +66,7 @@ public static class Program
     {
         var exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
 
-        var edit = new EditCommandHandler(Program.fileCabinetService);
+        var edit = new UpdateCommandHandler(Program.fileCabinetService);
         edit.SetNext(exit);
 
         var export = new ExportCommandHandler(Program.fileCabinetService);

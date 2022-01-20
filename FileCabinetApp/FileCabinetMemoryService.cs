@@ -57,15 +57,42 @@ namespace FileCabinetApp
         /// <summary>
         /// Edits the existing record.
         /// </summary>
-        /// <param name="record">The new record data.</param>
+        /// <param name="newRecordData">The new record data.</param>
         /// <param name="index">The index of the record to edit.</param>
-        public void EditRecord(FileCabinetRecord record, int index)
+        public void EditRecord(FileCabinetRecord newRecordData, int index)
         {
-            record.Id = this.list[index].Id;
-
+            var record = this.list[index];
             this.DeleteFromDictionaries(this.list[index]);
 
-            this.list[index] = record;
+            if (!string.IsNullOrEmpty(newRecordData.FirstName))
+            {
+                record.FirstName = newRecordData.FirstName;
+            }
+
+            if (!string.IsNullOrEmpty(newRecordData.LastName))
+            {
+                record.LastName = newRecordData.LastName;
+            }
+
+            if (newRecordData.DateOfBirth != new DateTime(0))
+            {
+                record.DateOfBirth = newRecordData.DateOfBirth;
+            }
+
+            if (newRecordData.Balance != -1)
+            {
+                record.Balance = newRecordData.Balance;
+            }
+
+            if (newRecordData.WorkExperience != -1)
+            {
+                record.WorkExperience = newRecordData.WorkExperience;
+            }
+
+            if (newRecordData.FavLetter != '\0')
+            {
+                record.WorkExperience = newRecordData.WorkExperience;
+            }
 
             this.AddToDictionaries(record);
         }
@@ -178,7 +205,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Adds new record to dicionaries.
+        /// Adds new record to dictionaries.
         /// </summary>
         /// <param name="record">The record to add.</param>
         private void AddToDictionaries(FileCabinetRecord record)
