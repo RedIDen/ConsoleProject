@@ -10,7 +10,7 @@ public class InsertCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "insert";
+    protected override string[] CommandNames { get; } = { "insert" };
 
     protected override void MakeWork(string parameters)
     {

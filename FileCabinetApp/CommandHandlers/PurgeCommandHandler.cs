@@ -10,7 +10,7 @@ public class PurgeCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "purge";
+    protected override string[] CommandNames { get; } = { "purge" };
 
     protected override void MakeWork(string parameters)
     {

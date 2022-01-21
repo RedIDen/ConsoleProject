@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileCabinetApp.CommandHandlers
+namespace FileCabinetApp
 {
-    public class FileCabineRecordsComparer : IEqualityComparer<FileCabinetRecord>
+    public class FileCabinetRecordsComparer : IEqualityComparer<FileCabinetRecord>
     {
         public bool Equals(FileCabinetRecord? x, FileCabinetRecord? y)
         {

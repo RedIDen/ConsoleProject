@@ -10,7 +10,7 @@ public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "update";
+    protected override string[] CommandNames { get; } = { "update" };
 
     protected override void MakeWork(string parameters)
     {

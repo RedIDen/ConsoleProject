@@ -10,7 +10,7 @@ public class ImportCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "import";
+    protected override string[] CommandNames { get; } = { "import" };
 
     protected override void MakeWork(string parameters)
     {
@@ -18,7 +18,7 @@ public class ImportCommandHandler : ServiceCommandHandlerBase
 
         if (parametersArray.Length != 2)
         {
-            Console.WriteLine("Wrong command syntax!");
+            Console.WriteLine(WrongSyntaxError);
             return;
         }
 

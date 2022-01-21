@@ -13,7 +13,7 @@ public class ListCommandHandler : ServiceCommandHandlerBase
         this.recordPrinter = recordPrinter;
     }
 
-    protected override string CommandName { get; set; } = "list";
+    protected override string[] CommandNames { get; } = { "list" };
 
     protected override void MakeWork(string parameters)
     {

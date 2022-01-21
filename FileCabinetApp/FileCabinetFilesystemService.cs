@@ -207,7 +207,11 @@ namespace FileCabinetApp
 
             if (int.TryParse(data, out int id))
             {
-                positions.Add(this.FindRecordIndexById(id) * FileCabinetFilesystemService.RECORDLENGTH);
+                var index = this.FindRecordIndexById(id);
+                if (index != -1)
+                {
+                    positions.Add(index * FileCabinetFilesystemService.RECORDLENGTH);
+                }
             }
 
             return this.GetEnumerable(positions);
@@ -243,10 +247,17 @@ namespace FileCabinetApp
                 {
                     this.reader.BaseStream.Position -= 6;
                     short deleted = this.reader.ReadInt16();
-                    return (deleted >> 2 & 1) == 1 ? -1 : (int)(this.reader.BaseStream.Position / FileCabinetFilesystemService.RECORDLENGTH);
-                }
+                    if ((deleted >> 2 & 1) != 1)
+                    {
+                        return (int)(this.reader.BaseStream.Position / FileCabinetFilesystemService.RECORDLENGTH);
+                    }
 
-                this.reader.BaseStream.Position += FileCabinetFilesystemService.RECORDLENGTH - 4;
+                    this.reader.BaseStream.Position += FileCabinetFilesystemService.RECORDLENGTH;
+                }
+                else
+                {
+                    this.reader.BaseStream.Position += FileCabinetFilesystemService.RECORDLENGTH - 4;
+                }
             }
 
             return -1;

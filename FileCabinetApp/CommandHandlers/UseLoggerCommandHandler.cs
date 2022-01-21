@@ -12,7 +12,7 @@ public class UseLoggerCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "use-logger";
+    protected override string[] CommandNames { get; } = { "use-logger" };
 
     protected override void MakeWork(string parameters)
     {

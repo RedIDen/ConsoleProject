@@ -59,7 +59,7 @@ public abstract class ServiceCommandWithWhereSyntaxHandlerBase : ServiceCommandH
         results.Push(this.GetRecords(polandNotation[0].Split('=')));
 
         IEnumerable<FileCabinetRecord> first, second;
-        var comparer = new FileCabineRecordsComparer();
+        var comparer = new FileCabinetRecordsComparer();
 
         for (int i = 1; i < polandNotation.Count; i++)
         {

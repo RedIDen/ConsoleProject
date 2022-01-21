@@ -7,23 +7,79 @@ public abstract class CommandHandlerBase : ICommandHandler
 {
     public const string WrongSyntaxError = "Wrong command syntax!";
 
+    protected static List<string> allCommands = new List<string>();
+
     protected ICommandHandler nextHandler;
 
-    protected virtual string CommandName { get; set; }
+    protected abstract string[] CommandNames { get; }
+
+    public CommandHandlerBase()
+    {
+        foreach (var command in this.CommandNames)
+        {
+            CommandHandlerBase.allCommands.Add(command);
+        }
+    }
 
     public virtual void Handle(AppCommandRequest appCommandRequest)
     {
-        if (string.Equals(appCommandRequest.Command, this.CommandName, StringComparison.InvariantCultureIgnoreCase))
+        foreach (var commandName in this.CommandNames)
         {
-            this.MakeWork(appCommandRequest.Parameters);
+            if (string.Equals(appCommandRequest.Command, commandName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                this.MakeWork(appCommandRequest.Parameters);
+                return;
+            }
         }
-        else if (this.nextHandler != null)
+
+        if (this.nextHandler != null)
         {
             this.nextHandler.Handle(appCommandRequest);
         }
         else
         {
             Console.WriteLine($"There is no '{appCommandRequest.Command}' command.");
+            Console.WriteLine();
+
+            var similarCommands = new List<string>();
+
+            foreach (var command in CommandHandlerBase.allCommands)
+            {
+                if (command.Contains(appCommandRequest.Command) ||
+                    !command.ToCharArray().OrderBy(x => x).Except(appCommandRequest.Command.ToCharArray().OrderBy(x => x)).Any())
+                {
+                    similarCommands.Add(command);
+                }
+                else
+                {
+                    int intersects = command.ToCharArray().Intersect(appCommandRequest.Command.ToCharArray()).Count();
+                    int delta = command.Length - intersects;
+
+                    const int maxDelta = 2;
+
+                    if (delta <= maxDelta && Math.Abs(command.Length - appCommandRequest.Command.Length) < maxDelta)
+                    {
+                        similarCommands.Add(command);
+                    }
+                }
+            }
+
+            if (similarCommands.Count == 0)
+            {
+                return;
+            }
+
+            const string oneSimilarCommandText = "The most similar command is";
+            const string manySimilarCommandsText = "The most similar commands are";
+
+            Console.WriteLine(similarCommands.Count == 1 ? oneSimilarCommandText : manySimilarCommandsText);
+
+            foreach (var command in similarCommands)
+            {
+                Console.Write('\t');
+                Console.WriteLine(command);
+            }
+
             Console.WriteLine();
         }
     }

@@ -6,7 +6,7 @@ namespace FileCabinetApp.CommandHandlers;
 
 public class HelpCommandHandler : CommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "help";
+    protected override string[] CommandNames { get; } = { "help" };
 
     private const int CommandHelpIndex = 0;
     private const int DescriptionHelpIndex = 1;

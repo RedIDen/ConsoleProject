@@ -10,7 +10,7 @@ public class StatCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "stat";
+    protected override string[] CommandNames { get; } = { "stat" };
 
     protected override void MakeWork(string parameters)
     {

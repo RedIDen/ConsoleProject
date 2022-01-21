@@ -8,27 +8,7 @@ public class StorageCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "--storage";
-
-    private string ShortCommandName { get; set; } = "-s";
-
-    public override void Handle(AppCommandRequest appCommandRequest)
-    {
-        if (string.Equals(appCommandRequest.Command, this.CommandName, StringComparison.InvariantCultureIgnoreCase) ||
-            string.Equals(appCommandRequest.Command, this.ShortCommandName, StringComparison.InvariantCultureIgnoreCase))
-        {
-            this.MakeWork(appCommandRequest.Parameters);
-        }
-        else if (this.nextHandler != null)
-        {
-            this.nextHandler.Handle(appCommandRequest);
-        }
-        else
-        {
-            Console.WriteLine($"There is no '{appCommandRequest.Command}' command.");
-            Console.WriteLine();
-        }
-    }
+    protected override string[] CommandNames { get; } = { "--storage", "-s" };
 
     /// <summary>
     /// Shows the list of all commands and their descriptions.

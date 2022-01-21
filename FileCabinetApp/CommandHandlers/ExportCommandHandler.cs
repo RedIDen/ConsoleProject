@@ -10,7 +10,7 @@ public class ExportCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "export";
+    protected override string[] CommandNames { get; } = { "export" };
 
     protected override void MakeWork(string parameters)
     {

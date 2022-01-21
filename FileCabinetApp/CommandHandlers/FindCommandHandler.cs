@@ -13,7 +13,7 @@ public class FindCommandHandler : ServiceCommandHandlerBase
         this.recordPrinter = recordPrinter;
     }
 
-    protected override string CommandName { get; set; } = "find";
+    protected override string[] CommandNames { get; } = { "find" };
 
     protected override void MakeWork(string parameters)
     {

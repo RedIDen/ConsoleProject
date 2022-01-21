@@ -5,11 +5,12 @@ using System.Text;
 namespace FileCabinetApp.CommandHandlers;
 public class ExitCommandHandler : CommandHandlerBase
 {
-    protected override string CommandName { get; set; } = "exit";
+    protected override string[] CommandNames { get; } = { "exit" };
 
     private Action<bool> setProgramIsRunning;
 
     public ExitCommandHandler(Action<bool> action)
+        : base()
     {
         this.setProgramIsRunning = action;
     }

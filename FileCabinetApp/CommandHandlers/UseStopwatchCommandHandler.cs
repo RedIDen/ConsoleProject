@@ -12,7 +12,7 @@ public class UseStopwatchCommandHandler : ServiceCommandHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "use-stopwatch";
+    protected override string[] CommandNames { get; } = { "use-stopwatch" };
 
     protected override void MakeWork(string parameters)
     {

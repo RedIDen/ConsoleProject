@@ -12,6 +12,7 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
     protected FileCabinetTrasferHelper service;
 
     public ServiceCommandHandlerBase(FileCabinetTrasferHelper service)
+        : base()
     {
         this.service = service;
     }

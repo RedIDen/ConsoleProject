@@ -10,7 +10,7 @@ public class DeleteCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
     {
     }
 
-    protected override string CommandName { get; set; } = "delete";
+    protected override string[] CommandNames { get; } = { "delete" };
 
     protected override void MakeWork(string parameters)
     {
