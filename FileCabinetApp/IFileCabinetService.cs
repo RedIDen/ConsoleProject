@@ -72,6 +72,14 @@ namespace FileCabinetApp
         /// <returns>The list of the records with recieved date of birth.</returns>
         public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date);
 
+        public IEnumerable<FileCabinetRecord> FindByBalance(string data);
+
+        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string data);
+
+        public IEnumerable<FileCabinetRecord> FindByFavLetter(string data);
+
+        public IEnumerable<FileCabinetRecord> FindById(string data);
+
         /// <summary>
         /// Makes the snapshot of the service.
         /// </summary>

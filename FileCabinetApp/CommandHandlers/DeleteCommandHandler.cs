@@ -27,11 +27,11 @@ public class DeleteCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
 
         if (count == 0)
         {
-            Console.Write("No records found.");
+            Console.WriteLine("No records found.");
         }
         else if (count == 1)
         {
-            Console.Write($"Record #{ids[0]} is deleted.");
+            Console.WriteLine($"Record #{ids[0]} is deleted.");
         }
         else
         {

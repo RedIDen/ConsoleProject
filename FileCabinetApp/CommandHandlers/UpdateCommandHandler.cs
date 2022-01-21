@@ -53,11 +53,11 @@ public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
 
         if (count == 0)
         {
-            Console.Write("No records found.");
+            Console.WriteLine("No records found.");
         }
         else if (count == 1)
         {
-            Console.Write($"Record #{ids[0]} is updated.");
+            Console.WriteLine($"Record #{ids[0]} is updated.");
         }
         else
         {

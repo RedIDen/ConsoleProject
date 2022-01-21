@@ -62,6 +62,38 @@ namespace FileCabinetApp
             return result;
         }
 
+        public IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
+        {
+            this.WriteLog($"Calling FindByBalance() with Date = '{lastName}'");
+            var result = this.Service.FindByBalance(lastName);
+            this.WriteLog($"FindByBalance() returned list with Size = '{result.Count()}'");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
+        {
+            this.WriteLog($"Calling FindByWorkExperience() with Date = '{lastName}'");
+            var result = this.Service.FindByWorkExperience(lastName);
+            this.WriteLog($"FindByWorkExperience() returned list with Size = '{result.Count()}'");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
+        {
+            this.WriteLog($"Calling FindByFavLetter() with Date = '{lastName}'");
+            var result = this.Service.FindByFavLetter(lastName);
+            this.WriteLog($"FindByFavLetter() returned list with Size = '{result.Count()}'");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindById(string lastName)
+        {
+            this.WriteLog($"Calling FindById() with Date = '{lastName}'");
+            var result = this.Service.FindById(lastName);
+            this.WriteLog($"FindById() returned list with Size = '{result.Count()}'");
+            return result;
+        }
+
         public int FindRecordIndexById(int id)
         {
             return this.Service.FindRecordIndexById(id);

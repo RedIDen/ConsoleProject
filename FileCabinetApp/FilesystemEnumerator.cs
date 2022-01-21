@@ -9,11 +9,11 @@ namespace FileCabinetApp
 {
     public class FilesystemEnumerator<T> : IEnumerable<T>
     {
-        private readonly List<long> list;
+        private readonly IEnumerable<long> list;
         private readonly Func<T> getRecord;
         private readonly Action<long> setReaderPosition;
 
-        public FilesystemEnumerator(List<long> list, Func<T> getRecord, Action<long> setReaderPosition)
+        public FilesystemEnumerator(IEnumerable<long> list, Func<T> getRecord, Action<long> setReaderPosition)
         {
             this.list = list;
             this.getRecord = getRecord;

@@ -9,9 +9,9 @@ namespace FileCabinetApp
 {
     public class MemoryEnumerator<T> : IEnumerable<T>
     {
-        private readonly List<T> list;
+        private readonly IEnumerable<T> list;
 
-        public MemoryEnumerator(List<T> list)
+        public MemoryEnumerator(IEnumerable<T> list)
         {
             this.list = list;
         }

@@ -67,6 +67,38 @@ namespace FileCabinetApp
             return result;
         }
 
+        public IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
+        {
+            this.StartStopwatch();
+            var result = this.Service.FindByBalance(lastName);
+            this.StopStopwatch("Find balance");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
+        {
+            this.StartStopwatch();
+            var result = this.Service.FindByWorkExperience(lastName);
+            this.StopStopwatch("Find lastname");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
+        {
+            this.StartStopwatch();
+            var result = this.Service.FindByFavLetter(lastName);
+            this.StopStopwatch("Find lastname");
+            return result;
+        }
+
+        public IEnumerable<FileCabinetRecord> FindById(string lastName)
+        {
+            this.StartStopwatch();
+            var result = this.Service.FindById(lastName);
+            this.StopStopwatch("Find lastname");
+            return result;
+        }
+
         public int FindRecordIndexById(int id)
         {
             return this.Service.FindRecordIndexById(id);

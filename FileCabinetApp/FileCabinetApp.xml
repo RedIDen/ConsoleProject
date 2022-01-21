@@ -286,7 +286,7 @@
             <summary>
             Returns the list of the records with recieved date of birth.
             </summary>
-            <param name="date">Date of birth.</param>
+            <param name="data">Date of birth.</param>
             <returns>The list of the records with recieved date of birth.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">

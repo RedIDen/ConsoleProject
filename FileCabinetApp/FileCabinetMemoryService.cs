@@ -19,6 +19,9 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly Dictionary<decimal, List<FileCabinetRecord>> balanceDictionary = new Dictionary<decimal, List<FileCabinetRecord>>();
+        private readonly Dictionary<short, List<FileCabinetRecord>> workExperienceDictionary = new Dictionary<short, List<FileCabinetRecord>>();
+        private readonly Dictionary<char, List<FileCabinetRecord>> favLetterDictionary = new Dictionary<char, List<FileCabinetRecord>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
@@ -91,7 +94,7 @@ namespace FileCabinetApp
 
             if (newRecordData.FavLetter != '\0')
             {
-                record.WorkExperience = newRecordData.WorkExperience;
+                record.FavLetter = newRecordData.FavLetter;
             }
 
             this.AddToDictionaries(record);
@@ -141,17 +144,73 @@ namespace FileCabinetApp
         /// <summary>
         /// Returns the list of the records with recieved date of birth.
         /// </summary>
-        /// <param name="date">Date of birth.</param>
+        /// <param name="data">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string data)
         {
-            DateTime dateOfBirth = DateTime.Parse(
-                date,
+            var parseResult = DateTime.TryParse(
+                data,
                 CultureInfo.CreateSpecificCulture("en-US"),
-                DateTimeStyles.None);
+                DateTimeStyles.None,
+                out DateTime dateOfBirth);
 
-            var list = this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth);
-            return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+            if (parseResult)
+            {
+                var list = this.dateOfBirthDictionary.GetValueOrDefault(dateOfBirth);
+                return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+            }
+
+            return Array.Empty<FileCabinetRecord>();
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByBalance(string data)
+        {
+            var parseResult = decimal.TryParse(
+                data,
+                out decimal balance);
+
+            if (parseResult)
+            {
+                var list = this.balanceDictionary.GetValueOrDefault(balance);
+                return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+            }
+
+            return Array.Empty<FileCabinetRecord>();
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
+        {
+            var parseResult = short.TryParse(
+                data,
+                out short workExperience);
+
+            if (parseResult)
+            {
+                var list = this.workExperienceDictionary.GetValueOrDefault(workExperience);
+                return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+            }
+
+            return Array.Empty<FileCabinetRecord>();
+        }
+
+        public IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
+        {
+            var parseResult = char.TryParse(
+                data,
+                out char favLetter);
+
+            if (parseResult)
+            {
+                var list = this.favLetterDictionary.GetValueOrDefault(favLetter);
+                return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
+            }
+
+            return Array.Empty<FileCabinetRecord>();
+        }
+
+        public IEnumerable<FileCabinetRecord> FindById(string data)
+        {
+            return int.TryParse(data, out int id) ? new MemoryEnumerator<FileCabinetRecord>(this.list.Where(x => x.Id == id)) : Array.Empty<FileCabinetRecord>();
         }
 
         /// <summary>
@@ -246,6 +305,39 @@ namespace FileCabinetApp
                 list.Add(record);
                 this.dateOfBirthDictionary.Add(record.DateOfBirth, list);
             }
+
+            if (this.balanceDictionary.ContainsKey(record.Balance))
+            {
+                this.balanceDictionary.GetValueOrDefault(record.Balance).Add(record);
+            }
+            else
+            {
+                var list = new List<FileCabinetRecord>();
+                list.Add(record);
+                this.balanceDictionary.Add(record.Balance, list);
+            }
+
+            if (this.workExperienceDictionary.ContainsKey(record.WorkExperience))
+            {
+                this.workExperienceDictionary.GetValueOrDefault(record.WorkExperience).Add(record);
+            }
+            else
+            {
+                var list = new List<FileCabinetRecord>();
+                list.Add(record);
+                this.workExperienceDictionary.Add(record.WorkExperience, list);
+            }
+
+            if (this.favLetterDictionary.ContainsKey(record.FavLetter))
+            {
+                this.favLetterDictionary.GetValueOrDefault(record.FavLetter).Add(record);
+            }
+            else
+            {
+                var list = new List<FileCabinetRecord>();
+                list.Add(record);
+                this.favLetterDictionary.Add(record.FavLetter, list);
+            }
         }
 
         /// <summary>
@@ -261,11 +353,17 @@ namespace FileCabinetApp
             this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
 
             this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
+
+            this.balanceDictionary.GetValueOrDefault(record.Balance).Remove(record);
+
+            this.workExperienceDictionary.GetValueOrDefault(record.WorkExperience).Remove(record);
+
+            this.favLetterDictionary.GetValueOrDefault(record.FavLetter).Remove(record);
         }
 
         public (int, int) Purge()
         {
-            return (0, 0);
+            return this.GetStat();
         }
     }
 }

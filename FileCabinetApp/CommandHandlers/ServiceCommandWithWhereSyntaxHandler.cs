@@ -84,13 +84,17 @@ public abstract class ServiceCommandWithWhereSyntaxHandlerBase : ServiceCommandH
         return results.Pop().OrderBy(x => x.Id);
     }
 
-    protected IEnumerable<FileCabinetRecord> GetRecords(string[] predicates)
+    protected IEnumerable<FileCabinetRecord> GetRecords(string[] conditions)
     {
-        return predicates[0] switch
+        return conditions[0] switch
         {
-            FirstNameWord => this.service.Service.FindByFirstName(predicates[1]),
-            LastNameWord => this.service.Service.FindByLastName(predicates[1]),
-            DateOfBirthWord => this.service.Service.FindByDateOfBirth(predicates[1]),
+            IdWord => this.service.Service.FindById(conditions[1]),
+            FirstNameWord => this.service.Service.FindByFirstName(conditions[1]),
+            LastNameWord => this.service.Service.FindByLastName(conditions[1]),
+            DateOfBirthWord => this.service.Service.FindByDateOfBirth(conditions[1]),
+            BalanceWord => this.service.Service.FindByBalance(conditions[1]),
+            WorkExperienceWord => this.service.Service.FindByWorkExperience(conditions[1]),
+            FavLetterWord => this.service.Service.FindByFavLetter(conditions[1]),
             _ => Array.Empty<FileCabinetRecord>(),
         };
     }
