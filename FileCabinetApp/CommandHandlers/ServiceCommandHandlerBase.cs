@@ -9,6 +9,19 @@ using System.Threading.Tasks;
 namespace FileCabinetApp.CommandHandlers;
 public abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
+    protected const string IdWord = "id";
+    protected const string FirstNameWord = "firstname";
+    protected const string LastNameWord = "lastname";
+    protected const string DateOfBirthWord = "dateofbirth";
+    protected const string BalanceWord = "balance";
+    protected const string WorkExperienceWord = "workexperience";
+    protected const string FavLetterWord = "favletter";
+    protected const string OpeningBrace = "(";
+    protected const string ClosingBrace = ")";
+    protected const string AndWord = "and";
+    protected const string OrWord = "or";
+    protected const string WrongSyntaxError = "Wrong command syntax!";
+
     protected FileCabinetTrasferHelper service;
 
     public ServiceCommandHandlerBase(FileCabinetTrasferHelper service)

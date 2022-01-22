@@ -13,7 +13,7 @@ namespace FileCabinetApp
     /// <summary>
     /// The File Cabinet Memory Service class.
     /// </summary>
-    public class FileCabinetMemoryService : IFileCabinetService
+    public class FileCabinetMemoryService : FileCabinetServiceBase
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -22,6 +22,8 @@ namespace FileCabinetApp
         private readonly Dictionary<decimal, List<FileCabinetRecord>> balanceDictionary = new Dictionary<decimal, List<FileCabinetRecord>>();
         private readonly Dictionary<short, List<FileCabinetRecord>> workExperienceDictionary = new Dictionary<short, List<FileCabinetRecord>>();
         private readonly Dictionary<char, List<FileCabinetRecord>> favLetterDictionary = new Dictionary<char, List<FileCabinetRecord>>();
+
+        private readonly Dictionary<string, IEnumerable<FileCabinetRecord>> memoizedConditions = new Dictionary<string, IEnumerable<FileCabinetRecord>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
@@ -36,14 +38,14 @@ namespace FileCabinetApp
         /// Gets or sets the record validator.
         /// </summary>
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
-        public IRecordValidator Validator { get; set; }
+        public override IRecordValidator Validator { get; set; }
 
         /// <summary>
         /// If there's a correct data, adds the record to the list.
         /// </summary>
         /// <param name="record">The record to add to the list.</param>
         /// <returns>Returns the id of the new record.</returns>
-        public int CreateRecord(FileCabinetRecord record)
+        public override int CreateRecord(FileCabinetRecord record)
         {
             if (record.Id == 0)
             {
@@ -62,7 +64,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="newRecordData">The new record data.</param>
         /// <param name="index">The index of the record to edit.</param>
-        public void EditRecord(FileCabinetRecord newRecordData, int index)
+        public override void EditRecord(FileCabinetRecord newRecordData, int index)
         {
             var record = this.list[index];
             this.DeleteFromDictionaries(this.list[index]);
@@ -98,6 +100,7 @@ namespace FileCabinetApp
             }
 
             this.AddToDictionaries(record);
+            this.memoizedConditions.Clear();
         }
 
         /// <summary>
@@ -105,26 +108,26 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="id">The record's id.</param>
         /// <returns>The index in the list of rhe record with the recieved id.</returns>
-        public int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
+        public override int FindRecordIndexById(int id) => this.list.FindIndex(e => e.Id == id);
 
         /// <summary>
         /// Returns the readonly collection of all records.
         /// </summary>
         /// <returns>The readonly collection of all records.</returns>
-        public IEnumerable<FileCabinetRecord> GetRecords() => this.list;
+        public override IEnumerable<FileCabinetRecord> GetRecords() => this.list;
 
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
         /// <returns>The number of records in the list and the number of deleted records.</returns>
-        public (int, int) GetStat() => (this.list.Count, 0);
+        public override (int, int) GetStat() => (this.list.Count, 0);
 
         /// <summary>
         /// Returns the list of the records with recieved first name.
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var list = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
             return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
@@ -135,7 +138,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var list = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
             return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
@@ -146,7 +149,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="data">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string data)
+        public override IEnumerable<FileCabinetRecord> FindByDateOfBirth(string data)
         {
             var parseResult = DateTime.TryParse(
                 data,
@@ -163,7 +166,7 @@ namespace FileCabinetApp
             return Array.Empty<FileCabinetRecord>();
         }
 
-        public IEnumerable<FileCabinetRecord> FindByBalance(string data)
+        public override IEnumerable<FileCabinetRecord> FindByBalance(string data)
         {
             var parseResult = decimal.TryParse(
                 data,
@@ -178,7 +181,7 @@ namespace FileCabinetApp
             return Array.Empty<FileCabinetRecord>();
         }
 
-        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
+        public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
         {
             var parseResult = short.TryParse(
                 data,
@@ -193,7 +196,7 @@ namespace FileCabinetApp
             return Array.Empty<FileCabinetRecord>();
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
+        public override IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
         {
             var parseResult = char.TryParse(
                 data,
@@ -208,7 +211,7 @@ namespace FileCabinetApp
             return Array.Empty<FileCabinetRecord>();
         }
 
-        public IEnumerable<FileCabinetRecord> FindById(string data)
+        public override IEnumerable<FileCabinetRecord> FindById(string data)
         {
             return int.TryParse(data, out int id) ? new MemoryEnumerator<FileCabinetRecord>(this.list.Where(x => x.Id == id)) : Array.Empty<FileCabinetRecord>();
         }
@@ -217,13 +220,13 @@ namespace FileCabinetApp
         /// Creates the snapshot of the record list.
         /// </summary>
         /// <returns>The new snapshot object.</returns>
-        public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.list);
+        public override FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.list);
 
         /// <summary>
         /// Resores the list from the snapshot.
         /// </summary>
         /// <param name="snapshot">THe snapshot to restore from.</param>
-        public void Restore(FileCabinetServiceSnapshot snapshot)
+        public override void Restore(FileCabinetServiceSnapshot snapshot)
         {
             var importList = snapshot.GetRecords();
 
@@ -256,11 +259,12 @@ namespace FileCabinetApp
         /// Removes the existing record.
         /// </summary>
         /// <param name="index">The id of record to remove.</param>
-        public void RemoveRecord(int index)
+        public override void RemoveRecord(int index)
         {
             var record = this.list[index];
             this.DeleteFromDictionaries(record);
             this.list.Remove(record);
+            this.memoizedConditions.Clear();
         }
 
         /// <summary>
@@ -361,9 +365,24 @@ namespace FileCabinetApp
             this.favLetterDictionary.GetValueOrDefault(record.FavLetter).Remove(record);
         }
 
-        public (int, int) Purge()
+        public override (int, int) Purge()
         {
             return this.GetStat();
+        }
+
+        public override IEnumerable<FileCabinetRecord> Find(string parameters)
+        {
+            var found = this.memoizedConditions.GetValueOrDefault(parameters);
+            if (found is not null)
+            {
+                return found;
+            }
+
+            var result = base.Find(parameters);
+
+            this.memoizedConditions.Add(parameters, result);
+
+            return result;
         }
     }
 }

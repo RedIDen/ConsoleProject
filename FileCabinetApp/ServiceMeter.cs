@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
-    public class ServiceMeter : IServiceDecorator
+    public class ServiceMeter : FileCabinetServiceBase
     {
         private readonly Stopwatch stopwatch = new Stopwatch();
 
-        public IRecordValidator Validator { get => this.Service.Validator;
+        public override IRecordValidator Validator { get => this.Service.Validator;
             set
             {
                 this.StartStopwatch();
@@ -20,15 +20,15 @@ namespace FileCabinetApp
             }
         }
 
-        public IFileCabinetService Service { get; set; }
+        public FileCabinetServiceBase Service { get; set; }
 
-        public ServiceMeter(IFileCabinetService service)
+        public ServiceMeter(FileCabinetServiceBase service)
         {
             this.Service = service;
             this.Service.Validator = service.Validator;
         }
 
-        public int CreateRecord(FileCabinetRecord record)
+        public override int CreateRecord(FileCabinetRecord record)
         {
             this.StartStopwatch();
             var result = this.Service.CreateRecord(record);
@@ -36,14 +36,14 @@ namespace FileCabinetApp
             return result;
         }
 
-        public void EditRecord(FileCabinetRecord record, int index)
+        public override void EditRecord(FileCabinetRecord record, int index)
         {
             this.StartStopwatch();
             this.Service.EditRecord(record, index);
             this.StopStopwatch("Edit");
         }
 
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
+        public override IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             this.StartStopwatch();
             var result = this.Service.FindByDateOfBirth(date);
@@ -51,7 +51,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.StartStopwatch();
             var result = this.Service.FindByFirstName(firstName);
@@ -59,7 +59,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.StartStopwatch();
             var result = this.Service.FindByLastName(lastName);
@@ -67,7 +67,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
         {
             this.StartStopwatch();
             var result = this.Service.FindByBalance(lastName);
@@ -75,7 +75,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
         {
             this.StartStopwatch();
             var result = this.Service.FindByWorkExperience(lastName);
@@ -83,7 +83,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
         {
             this.StartStopwatch();
             var result = this.Service.FindByFavLetter(lastName);
@@ -91,7 +91,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindById(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindById(string lastName)
         {
             this.StartStopwatch();
             var result = this.Service.FindById(lastName);
@@ -99,12 +99,12 @@ namespace FileCabinetApp
             return result;
         }
 
-        public int FindRecordIndexById(int id)
+        public override int FindRecordIndexById(int id)
         {
             return this.Service.FindRecordIndexById(id);
         }
 
-        public IEnumerable<FileCabinetRecord> GetRecords()
+        public override IEnumerable<FileCabinetRecord> GetRecords()
         {
             this.StartStopwatch();
             var result = this.Service.GetRecords();
@@ -112,7 +112,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public (int, int) GetStat()
+        public override (int, int) GetStat()
         {
             this.StartStopwatch();
             var result = this.Service.GetStat();
@@ -120,19 +120,27 @@ namespace FileCabinetApp
             return result;
         }
 
-        public FileCabinetServiceSnapshot MakeSnapshot()
+        public override FileCabinetServiceSnapshot MakeSnapshot()
         {
             return this.Service.MakeSnapshot();
         }
 
-        public void RemoveRecord(int id)
+        public override void RemoveRecord(int id)
         {
             this.StartStopwatch();
             this.Service.RemoveRecord(id);
             this.StopStopwatch("Remove");
         }
 
-        public void Restore(FileCabinetServiceSnapshot snapshot)
+        public override IEnumerable<FileCabinetRecord> Find(string parameters)
+        {
+            this.StartStopwatch();
+            var result = this.Service.Find(parameters);
+            this.StopStopwatch("Find");
+            return result;
+        }
+
+        public override void Restore(FileCabinetServiceSnapshot snapshot)
         {
             this.Service.Restore(snapshot);
         }
@@ -143,18 +151,18 @@ namespace FileCabinetApp
             this.stopwatch.Start();
         }
 
-        private void StopStopwatch(string methodName)
-        {
-            this.stopwatch.Stop();
-            Console.WriteLine($"{methodName} method execution duration {this.stopwatch.ElapsedTicks} ticks.");
-        }
-
-        public (int, int) Purge()
+        public override (int, int) Purge()
         {
             this.StartStopwatch();
             var result = this.Service.Purge();
             this.StopStopwatch("Purge");
             return result;
+        }
+
+        private void StopStopwatch(string methodName)
+        {
+            this.stopwatch.Stop();
+            Console.WriteLine($"{methodName} method execution duration {this.stopwatch.ElapsedTicks} ticks.");
         }
     }
 }

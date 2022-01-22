@@ -14,7 +14,7 @@ namespace FileCabinetApp
     /// <summary>
     /// The File Cabinet Filesystem Service class.
     /// </summary>
-    public class FileCabinetFilesystemService : IFileCabinetService
+    public class FileCabinetFilesystemService : FileCabinetServiceBase
     {
         /// <summary>
         /// The file link.
@@ -58,7 +58,7 @@ namespace FileCabinetApp
         /// Gets or sets the record validator.
         /// </summary>
         /// <value>The object of the class realizing the IRecordValidator interface.</value>
-        public IRecordValidator Validator { get; set; }
+        public override IRecordValidator Validator { get; set; }
 
         /// <summary>
         /// Closes all the opened file streams.
@@ -75,7 +75,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="record">The record to add to the list.</param>
         /// <returns>Returns the id of the new record.</returns>
-        public int CreateRecord(FileCabinetRecord record)
+        public override int CreateRecord(FileCabinetRecord record)
         {
             var list = this.GetListOfRecords();
 
@@ -96,7 +96,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="record">The new record data.</param>
         /// <param name="index">The index of the record to edit.</param>
-        public void EditRecord(FileCabinetRecord newRecordData, int index)
+        public override void EditRecord(FileCabinetRecord newRecordData, int index)
         {
             long position = index * FileCabinetFilesystemService.RECORDLENGTH;
             this.reader.BaseStream.Position = position;
@@ -143,7 +143,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="date">Date of birth.</param>
         /// <returns>The list of the records with recieved date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
+        public override IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             var parseResult = DateTime.TryParse(
                 date,
@@ -160,7 +160,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name.</param>
         /// <returns>The list of the records with recieved first name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var positions = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
             return this.GetEnumerable(positions);
@@ -171,13 +171,13 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Last name.</param>
         /// <returns>The list of the records with recieved last name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var positions = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
             return this.GetEnumerable(positions);
         }
 
-        public IEnumerable<FileCabinetRecord> FindByBalance(string data)
+        public override IEnumerable<FileCabinetRecord> FindByBalance(string data)
         {
             var parseResult = decimal.TryParse(data, out decimal balance);
 
@@ -185,7 +185,7 @@ namespace FileCabinetApp
             return this.GetEnumerable(positions);
         }
 
-        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
+        public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
         {
             var parseResult = short.TryParse(data, out short workExperience);
 
@@ -193,7 +193,7 @@ namespace FileCabinetApp
             return this.GetEnumerable(positions);
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
+        public override IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
         {
             var parseResult = char.TryParse(data, out char favLetter);
 
@@ -201,7 +201,7 @@ namespace FileCabinetApp
             return this.GetEnumerable(positions);
         }
 
-        public IEnumerable<FileCabinetRecord> FindById(string data)
+        public override IEnumerable<FileCabinetRecord> FindById(string data)
         {
             var positions = new List<long>(0);
 
@@ -235,7 +235,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="id">The record's id.</param>
         /// <returns>The index in the list of rhe record with the recieved id.</returns>
-        public int FindRecordIndexById(int id)
+        public override int FindRecordIndexById(int id)
         {
             this.reader.BaseStream.Position = 2;
 
@@ -267,25 +267,25 @@ namespace FileCabinetApp
         /// Returns the readonly collection of all records.
         /// </summary>
         /// <returns>The readonly collection of all records.</returns>
-        public IEnumerable<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
+        public override IEnumerable<FileCabinetRecord> GetRecords() => new ReadOnlyCollection<FileCabinetRecord>(this.GetListOfRecords());
 
         /// <summary>
         /// Returns the stats (the number of records in the list).
         /// </summary>
         /// <returns>The number of records in the list and the number of deleted records.</returns>
-        public (int, int) GetStat() => ((int)(this.fileStream.Length / FileCabinetFilesystemService.RECORDLENGTH), this.CountDeletedRecords());
+        public override (int, int) GetStat() => ((int)(this.fileStream.Length / FileCabinetFilesystemService.RECORDLENGTH), this.CountDeletedRecords());
 
         /// <summary>
         /// Creates the snapshot of the record list.
         /// </summary>
         /// <returns>The new snapshot object.</returns>
-        public FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.GetListOfRecords());
+        public override FileCabinetServiceSnapshot MakeSnapshot() => new FileCabinetServiceSnapshot(this.GetListOfRecords());
 
         /// <summary>
         /// Resores the list from the snapshot.
         /// </summary>
         /// <param name="snapshot">THe snapshot to restore from.</param>
-        public void Restore(FileCabinetServiceSnapshot snapshot)
+        public override void Restore(FileCabinetServiceSnapshot snapshot)
         {
             var importList = snapshot.GetRecords();
 
@@ -318,7 +318,7 @@ namespace FileCabinetApp
         /// Removes the existing record.
         /// </summary>
         /// <param name="index">The id of record to remove.</param>
-        public void RemoveRecord(int index)
+        public override void RemoveRecord(int index)
         {
             long position = FileCabinetFilesystemService.RECORDLENGTH * index;
             this.reader.BaseStream.Position = position;
@@ -339,7 +339,7 @@ namespace FileCabinetApp
         /// Purges the records with deleted-flag.
         /// </summary>
         /// <returns>The number of purged records, the number of all the records before purge.</returns>
-        public (int, int) Purge()
+        public override (int, int) Purge()
         {
             long lengthBefore = this.fileStream.Length;
 

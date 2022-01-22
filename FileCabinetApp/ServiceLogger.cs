@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
-    public class ServiceLogger : IServiceDecorator
+    public class ServiceLogger : FileCabinetServiceBase
     {
         public const string FileName = "log.txt";
 
-        public IFileCabinetService Service { get; set; }
+        public FileCabinetServiceBase Service { get; set; }
 
-        public IRecordValidator Validator
+        public override IRecordValidator Validator
         {
             get => this.Service.Validator;
             set => this.Service.Validator = value;
         }
 
-        public ServiceLogger(IFileCabinetService service)
+        public ServiceLogger(FileCabinetServiceBase service)
         {
             this.Service = service;
             this.Service.Validator = service.Validator;
         }
 
-        public int CreateRecord(FileCabinetRecord record)
+        public override int CreateRecord(FileCabinetRecord record)
         {
             this.WriteLog($"Calling Create() with FirstName = '{record.FirstName}', LastName = '{record.LastName}', DateOfBirth = '{record.DateOfBirth:MM/dd/yyyy}', Balance = '{record.Balance}', WorkExperience = '{record.WorkExperience}', FavLetter = '{record.FavLetter}'");
             var result = this.Service.CreateRecord(record);
@@ -32,13 +32,13 @@ namespace FileCabinetApp
             return result;
         }
 
-        public void EditRecord(FileCabinetRecord record, int index)
+        public override void EditRecord(FileCabinetRecord record, int index)
         {
             this.WriteLog($"Calling Edit() for Index = '{index}' with FirstName = '{record.FirstName}', LastName = '{record.LastName}', DateOfBirth = '{record.DateOfBirth:MM/dd/yyyy}', Balance = '{record.Balance}', WorkExperience = '{record.WorkExperience}', FavLetter = '{record.FavLetter}'");
             this.Service.EditRecord(record, index);
         }
 
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
+        public override IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date)
         {
             this.WriteLog($"Calling FindByDateOfBirth() with Date = '{date}'");
             var result = this.Service.FindByDateOfBirth(date);
@@ -46,7 +46,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.WriteLog($"Calling FindByFirstName() with Date = '{firstName}'");
             var result = this.Service.FindByFirstName(firstName);
@@ -54,7 +54,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.WriteLog($"Calling FindByLastName() with Date = '{lastName}'");
             var result = this.Service.FindByLastName(lastName);
@@ -62,7 +62,15 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
+        public override IEnumerable<FileCabinetRecord> Find(string parameters)
+        {
+            this.WriteLog($"Calling Find() with Parameters = '{parameters}'");
+            var result = this.Service.Find(parameters);
+            this.WriteLog($"Find() returned list with Size = '{result.Count()}'");
+            return result;
+        }
+
+        public override IEnumerable<FileCabinetRecord> FindByBalance(string lastName)
         {
             this.WriteLog($"Calling FindByBalance() with Date = '{lastName}'");
             var result = this.Service.FindByBalance(lastName);
@@ -70,7 +78,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string lastName)
         {
             this.WriteLog($"Calling FindByWorkExperience() with Date = '{lastName}'");
             var result = this.Service.FindByWorkExperience(lastName);
@@ -78,7 +86,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindByFavLetter(string lastName)
         {
             this.WriteLog($"Calling FindByFavLetter() with Date = '{lastName}'");
             var result = this.Service.FindByFavLetter(lastName);
@@ -86,7 +94,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public IEnumerable<FileCabinetRecord> FindById(string lastName)
+        public override IEnumerable<FileCabinetRecord> FindById(string lastName)
         {
             this.WriteLog($"Calling FindById() with Date = '{lastName}'");
             var result = this.Service.FindById(lastName);
@@ -94,12 +102,12 @@ namespace FileCabinetApp
             return result;
         }
 
-        public int FindRecordIndexById(int id)
+        public override int FindRecordIndexById(int id)
         {
             return this.Service.FindRecordIndexById(id);
         }
 
-        public IEnumerable<FileCabinetRecord> GetRecords()
+        public override IEnumerable<FileCabinetRecord> GetRecords()
         {
             this.WriteLog($"Calling GetRecords()");
             var result = this.Service.GetRecords();
@@ -107,7 +115,7 @@ namespace FileCabinetApp
             return result;
         }
 
-        public (int, int) GetStat()
+        public override (int, int) GetStat()
         {
             this.WriteLog($"Calling GetStat()");
             var result = this.Service.GetStat();
@@ -115,12 +123,12 @@ namespace FileCabinetApp
             return result;
         }
 
-        public FileCabinetServiceSnapshot MakeSnapshot()
+        public override FileCabinetServiceSnapshot MakeSnapshot()
         {
             throw new NotImplementedException();
         }
 
-        public (int, int) Purge()
+        public override (int, int) Purge()
         {
             this.WriteLog($"Calling Purge()");
             var result = this.Service.Purge();
@@ -128,13 +136,13 @@ namespace FileCabinetApp
             return result;
         }
 
-        public void RemoveRecord(int id)
+        public override void RemoveRecord(int id)
         {
             this.WriteLog($"Calling RemoveRecord() with Id = '{id}'");
             this.Service.RemoveRecord(id);
         }
 
-        public void Restore(FileCabinetServiceSnapshot snapshot)
+        public override void Restore(FileCabinetServiceSnapshot snapshot)
         {
             throw new NotImplementedException();
         }

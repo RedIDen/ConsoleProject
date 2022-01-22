@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class SelectCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
+public class SelectCommandHandler : ServiceCommandHandlerBase
 {
     private Action<IEnumerable<FileCabinetRecord>, IEnumerable<string>> recordPrinter;
 
@@ -25,7 +25,7 @@ public class SelectCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
 
         if (parametersAndPredicates.Length == 2)
         {
-            list = this.GetRecordsWithWhereParameters(parametersAndPredicates[1]);
+            list = this.service.Service.Find(parametersAndPredicates[1]);
         }
         else
         {

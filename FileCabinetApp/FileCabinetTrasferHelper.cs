@@ -8,9 +8,9 @@ namespace FileCabinetApp
 {
     public class FileCabinetTrasferHelper
     {
-        public IFileCabinetService Service { get; set; }
+        public FileCabinetServiceBase Service { get; set; }
 
-        public FileCabinetTrasferHelper(IFileCabinetService service)
+        public FileCabinetTrasferHelper(FileCabinetServiceBase service)
         {
             this.Service = service;
         }
@@ -20,7 +20,7 @@ namespace FileCabinetApp
             return this.Service is IServiceDecorator ? ((IServiceDecorator)this.Service).GetLast() : this.Service;
         }
 
-        public void SetLast(IFileCabinetService service)
+        public void SetLast(FileCabinetServiceBase service)
         {
             var temp = this.Service;
             if (this.Service is IServiceDecorator)
