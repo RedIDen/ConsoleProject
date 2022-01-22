@@ -24,7 +24,7 @@ public abstract class ServiceCommandWithWhereSyntaxHandlerBase : ServiceCommandH
     {
     }
 
-    protected IEnumerable<FileCabinetRecord> ParseWhereParameters(string parameters)
+    protected IEnumerable<FileCabinetRecord> GetRecordsWithWhereParameters(string parameters)
     {
         char[] symbols = { ',', ' ', '\'', '\"', '=' };
         var parametersList = parameters.Split(symbols, StringSplitOptions.RemoveEmptyEntries).ToList();

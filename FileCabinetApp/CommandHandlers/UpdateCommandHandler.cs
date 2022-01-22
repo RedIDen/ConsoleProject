@@ -40,7 +40,7 @@ public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
             }
         }
 
-        var list = this.ParseWhereParameters(parametersAndPredicates[1]);
+        var list = this.GetRecordsWithWhereParameters(parametersAndPredicates[1]);
         var ids = new List<int>();
 
         int count = 0;

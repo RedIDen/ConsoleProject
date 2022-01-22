@@ -14,7 +14,7 @@ public class DeleteCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        var list = this.ParseWhereParameters(parameters.Replace("where", string.Empty));
+        var list = this.GetRecordsWithWhereParameters(parameters.Replace("where", string.Empty));
         var ids = new List<int>();
 
         int count = 0;
