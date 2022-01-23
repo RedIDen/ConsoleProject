@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
+public class UpdateCommandHandler : ServiceCommandHandlerBase
 {
     public UpdateCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
@@ -40,7 +40,7 @@ public class UpdateCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
             }
         }
 
-        var list = this.ParseWhereParameters(parametersAndPredicates[1]);
+        var list = this.service.Service.Find(parametersAndPredicates[1]);
         var ids = new List<int>();
 
         int count = 0;

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp.CommandHandlers;
-public class DeleteCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
+public class DeleteCommandHandler : ServiceCommandHandlerBase
 {
     public DeleteCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
@@ -14,7 +14,7 @@ public class DeleteCommandHandler : ServiceCommandWithWhereSyntaxHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        var list = this.ParseWhereParameters(parameters.Replace("where", string.Empty));
+        var list = this.service.Service.Find(parameters.Replace("where", string.Empty));
         var ids = new List<int>();
 
         int count = 0;

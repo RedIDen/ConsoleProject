@@ -90,14 +90,16 @@ namespace FileCabinetApp
         /// Restores the list from the snapshot.
         /// </summary>
         /// <param name="snapshot">The snapshot to restore from.</param>
-        void Restore(FileCabinetServiceSnapshot snapshot);
+        public void Restore(FileCabinetServiceSnapshot snapshot);
 
         /// <summary>
         /// Removes the existing record.
         /// </summary>
         /// <param name="id">The id of record to remove.</param>
-        void RemoveRecord(int id);
+        public void RemoveRecord(int id);
 
-        (int, int) Purge();
+        public (int, int) Purge();
+
+        public IEnumerable<FileCabinetRecord> Find(string parameters);
     }
 }
