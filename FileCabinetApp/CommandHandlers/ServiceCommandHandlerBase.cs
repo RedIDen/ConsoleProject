@@ -1,4 +1,5 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
+
 public abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
     protected const string IdWord = "id";
@@ -8,18 +9,15 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
     protected const string BalanceWord = "balance";
     protected const string WorkExperienceWord = "workexperience";
     protected const string FavLetterWord = "favletter";
-    protected const string OpeningBrace = "(";
-    protected const string ClosingBrace = ")";
-    protected const string AndWord = "and";
-    protected const string OrWord = "or";
+
     protected const string WrongSyntaxError = "Wrong command syntax!";
 
-    protected FileCabinetTrasferHelper service;
+    protected FileCabinetTrasferHelper transferHelper;
 
     public ServiceCommandHandlerBase(FileCabinetTrasferHelper service)
         : base()
     {
-        this.service = service;
+        this.transferHelper = service;
     }
 
     /// <summary>
@@ -124,7 +122,7 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
             record.Id = result.Item3;
         }
 
-        if (this.service.Service.FindRecordIndexById(result.Item3) != -1)
+        if (this.transferHelper.Service.FindRecordIndexById(result.Item3) != -1)
         {
             string thisIdAlreadyExistsError = "this id is already taken";
             return (false, thisIdAlreadyExistsError);

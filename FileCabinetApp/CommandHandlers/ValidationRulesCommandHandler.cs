@@ -21,7 +21,7 @@ public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
         var validator = this.validators.GetValueOrDefault(parametersToLower);
         if (validator != null)
         {
-            this.service.Service.Validator = validator;
+            this.transferHelper.Service.Validator = validator;
             Program.validationRulesMessage = $"Using {parametersToLower} validation rules.";
         }
         else

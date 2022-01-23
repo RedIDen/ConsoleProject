@@ -45,7 +45,7 @@ public class ImportCommandHandler : ServiceCommandHandlerBase
                     snapshot.LoadFromXml(fileStream);
                 }
 
-                this.service.Service.Restore(snapshot);
+                this.transferHelper.Service.Restore(snapshot);
 
                 Console.WriteLine($"All records are imported from {fileName}.");
                 fileStream.Close();

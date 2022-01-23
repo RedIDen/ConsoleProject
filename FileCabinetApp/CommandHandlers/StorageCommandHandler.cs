@@ -15,7 +15,7 @@ public class StorageCommandHandler : ServiceCommandHandlerBase
     /// <param name="parameters">Extra parameteres for the method.</param>
     protected override void MakeWork(string parameters)
     {
-        var temp = this.service.Service is IServiceDecorator ? ((IServiceDecorator)this.service.Service).GetLast() : this.service.Service;
+        var temp = this.transferHelper.Service is IServiceDecorator ? ((IServiceDecorator)this.transferHelper.Service).GetLast() : this.transferHelper.Service;
 
         if (parameters == "memory")
         {
@@ -27,7 +27,7 @@ public class StorageCommandHandler : ServiceCommandHandlerBase
 
             ((FileCabinetFilesystemService)temp).Close();
             Program.storageTypeMessage = "Using memory storage.";
-            this.service.SetLast(new FileCabinetMemoryService(temp.Validator));
+            this.transferHelper.SetLast(new FileCabinetMemoryService(temp.Validator));
         }
         else if (parameters == "file")
         {
@@ -38,7 +38,7 @@ public class StorageCommandHandler : ServiceCommandHandlerBase
             }
 
             Program.storageTypeMessage = "Using filesystem storage.";
-            this.service.SetLast(new FileCabinetFilesystemService(temp.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate)));
+            this.transferHelper.SetLast(new FileCabinetFilesystemService(temp.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate)));
         }
         else
         {

@@ -10,7 +10,7 @@ public class DeleteCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        var list = this.service.Service.Find(parameters.Replace("where", string.Empty));
+        var list = this.transferHelper.Service.Find(parameters.Replace("where", string.Empty));
         var ids = new List<int>();
 
         int count = 0;
@@ -18,7 +18,7 @@ public class DeleteCommandHandler : ServiceCommandHandlerBase
         {
             ids.Add(foundRecord.Id);
             count++;
-            this.service.Service.RemoveRecord(this.service.Service.FindRecordIndexById(foundRecord.Id));
+            this.transferHelper.Service.RemoveRecord(this.transferHelper.Service.FindRecordIndexById(foundRecord.Id));
         }
 
         if (count == 0)
@@ -34,9 +34,7 @@ public class DeleteCommandHandler : ServiceCommandHandlerBase
             Console.Write("Records ");
             foreach (var id in ids)
             {
-                Console.Write('#');
-                Console.Write(id);
-                Console.Write(' ');
+                Console.Write($"#{id} ");
             }
 
             Console.WriteLine("are deleted.");

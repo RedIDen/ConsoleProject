@@ -15,10 +15,10 @@ public class UseStopwatchCommandHandler : ServiceCommandHandlerBase
     {
         if (this.useStopwatch)
         {
-            var temp = this.service.Service;
+            var temp = this.transferHelper.Service;
             if (temp is ServiceMeter meter1)
             {
-                this.service.Service = meter1.Service;
+                this.transferHelper.Service = meter1.Service;
             }
             else
             {
@@ -37,7 +37,7 @@ public class UseStopwatchCommandHandler : ServiceCommandHandlerBase
         }
         else
         {
-            this.service.Service = new ServiceMeter(this.service.Service);
+            this.transferHelper.Service = new ServiceMeter(this.transferHelper.Service);
             this.useStopwatch = true;
             Console.WriteLine("Stopwatch enabled.");
         }

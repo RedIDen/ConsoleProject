@@ -11,7 +11,7 @@ public class StatCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        (int records, int deleted) = this.service.Service.GetStat();
+        (int records, int deleted) = this.transferHelper.Service.GetStat();
         Console.WriteLine($"{records} record(s).");
         Console.WriteLine($"{deleted} removed.");
     }

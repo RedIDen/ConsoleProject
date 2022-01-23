@@ -10,7 +10,7 @@ public class PurgeCommandHandler : ServiceCommandHandlerBase
 
     protected override void MakeWork(string parameters)
     {
-        IFileCabinetService temp = this.service.Service is IServiceDecorator ? ((IServiceDecorator)this.service.Service).GetLast() : this.service.Service;
+        IFileCabinetService temp = this.transferHelper.Service is IServiceDecorator ? ((IServiceDecorator)this.transferHelper.Service).GetLast() : this.transferHelper.Service;
 
         if (temp is FileCabinetMemoryService)
         {
@@ -18,7 +18,7 @@ public class PurgeCommandHandler : ServiceCommandHandlerBase
             return;
         }
 
-        (int deletedNum, int beforeNum) = this.service.Service.Purge();
+        (int deletedNum, int beforeNum) = this.transferHelper.Service.Purge();
 
         Console.WriteLine($"Data file processing is completed: {deletedNum} of {beforeNum} records were purged.");
     }

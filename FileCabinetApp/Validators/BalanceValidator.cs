@@ -20,13 +20,12 @@ public class BalanceValidator : IRecordValidator
         {
             return (false, $"the balance can't be less than {this.minValue}");
         }
-        else if (value > this.maxValue)
+
+        if (value > this.maxValue)
         {
             return (false, $"the balance can't be more than {this.maxValue}");
         }
-        else
-        {
-            return (true, string.Empty);
-        }
+
+        return (true, string.Empty);
     }
 }

@@ -15,10 +15,10 @@ public class UseLoggerCommandHandler : ServiceCommandHandlerBase
     {
         if (this.useLogger)
         {
-            var temp = this.service.Service;
+            var temp = this.transferHelper.Service;
             if (temp is ServiceLogger meter1)
             {
-                this.service.Service = meter1.Service;
+                this.transferHelper.Service = meter1.Service;
             }
             else
             {
@@ -37,7 +37,7 @@ public class UseLoggerCommandHandler : ServiceCommandHandlerBase
         }
         else
         {
-            this.service.Service = new ServiceLogger(this.service.Service);
+            this.transferHelper.Service = new ServiceLogger(this.transferHelper.Service);
             this.useLogger = true;
             Console.WriteLine($"Logger enabled. Logs are stored in {ServiceLogger.FileName}.");
         }

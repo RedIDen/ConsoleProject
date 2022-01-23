@@ -156,7 +156,7 @@ public static class Program
             {
                 case idWord:
                     var idName = "Id";
-                    idLength = (byte)Math.Max(records.Select(x => x.Id.ToString().Length).Max(), idName.Length);
+                    idLength = (byte)Math.Max(records.Select(x => x.Id).Max().ToString().Length, idName.Length);
                     fieldWriters.Add(WriteId);
                     borderLine.Append('-', idLength + freeSpace);
                     fieldNames.Append(idName);
@@ -180,7 +180,7 @@ public static class Program
                     break;
                 case dateOfBirthWord:
                     var dateOfBirthName = "DateOfBirth";
-                    dateOfBirthLength = (byte)Math.Max(records.Select(x => x.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture).Length).Max(), dateOfBirthName.Length);
+                    dateOfBirthLength = (byte)Math.Max("yyyy-MMM-dd".Length, dateOfBirthName.Length);
                     fieldWriters.Add(WriteDateOfBirth);
                     borderLine.Append('-', dateOfBirthLength + freeSpace);
                     fieldNames.Append(dateOfBirthName);
@@ -188,7 +188,7 @@ public static class Program
                     break;
                 case balanceWord:
                     var balanceName = "Balance";
-                    balanceLength = (byte)Math.Max(records.Select(x => x.Balance.ToString().Length).Max(), balanceName.Length);
+                    balanceLength = (byte)Math.Max(records.Select(x => x.Balance).Max().ToString().Length, balanceName.Length);
                     fieldWriters.Add(WriteBalance);
                     borderLine.Append('-', balanceLength + freeSpace);
                     fieldNames.Append(balanceName);
@@ -196,7 +196,7 @@ public static class Program
                     break;
                 case workExperienceWord:
                     var workExperienceName = "WorkExperience";
-                    workExperienceLength = (byte)Math.Max(records.Select(x => x.WorkExperience.ToString().Length).Max(), workExperienceName.Length);
+                    workExperienceLength = (byte)Math.Max(records.Select(x => x.WorkExperience).Max().ToString().Length, workExperienceName.Length);
                     fieldWriters.Add(WriteWorkExperience);
                     borderLine.Append('-', workExperienceLength + freeSpace);
                     fieldNames.Append(workExperienceName);
@@ -303,7 +303,7 @@ public static class Program
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(' ');
-            string favLetter = record.FavLetter.ToString();
+            string favLetter = (record.FavLetter == '\0' ? '-' : record.FavLetter).ToString();
             stringBuilder.Append(favLetter);
             stringBuilder.Append(' ', favLetterLength - favLetter.Length);
             stringBuilder.Append(" |");

@@ -21,11 +21,11 @@ public class SelectCommandHandler : ServiceCommandHandlerBase
 
         if (parametersAndPredicates.Length == 2)
         {
-            list = this.service.Service.Find(parametersAndPredicates[1]);
+            list = this.transferHelper.Service.Find(parametersAndPredicates[1]);
         }
         else
         {
-            list = this.service.Service.GetRecords();
+            list = this.transferHelper.Service.GetRecords();
         }
 
         var parametersList = parametersAndPredicates[0].Split(symbols, StringSplitOptions.RemoveEmptyEntries).ToList();

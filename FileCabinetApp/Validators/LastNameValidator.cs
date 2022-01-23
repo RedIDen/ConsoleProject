@@ -16,25 +16,21 @@ public class LastNameValidator : IRecordValidator
     {
         var value = record.LastName;
 
-        if (value is null)
+        if (string.IsNullOrWhiteSpace(value))
         {
-            return (false, "the name is null");
+            return (false, "the last name is null or consists of only whitespaces");
         }
-        else if (value.Length > this.maxLength)
+
+        if (value.Length > this.maxLength)
         {
-            return (false, "the name is too long");
+            return (false, "the last name is too long");
         }
-        else if (value.Length < this.minLength)
+
+        if (value.Length < this.minLength)
         {
-            return (false, "the name is too short");
+            return (false, "the last name is too short");
         }
-        else if (value.Trim().Length == 0)
-        {
-            return (false, "the name can't consist of only whitespaces");
-        }
-        else
-        {
-            return (true, string.Empty);
-        }
+
+        return (true, string.Empty);
     }
 }

@@ -50,22 +50,23 @@ public class InsertCommandHandler : ServiceCommandHandlerBase
 
             if (!convertResult.Item1)
             {
-                Console.WriteLine($"Error: {convertResult.Item2}.");
+                var convertError = $"Error: {convertResult.Item2}.";
+                Console.WriteLine(convertError);
                 return;
             }
         }
 
-        if (record.FirstName == null || record.LastName == null)
+        var validationResult = this.transferHelper.Service.Validator.Validate(record);
+
+        if (validationResult.Item1)
         {
-            string oneOfNamesIsNullError = $"Error: first name and last name can not be null.";
-            Console.WriteLine(oneOfNamesIsNullError);
-            return;
+            int id = this.transferHelper.Service.CreateRecord(record);
+            Console.WriteLine($"Record #{id} is created.");
         }
-
-        var validationResult = this.service.Service.Validator.Validate(record);
-
-        int id = this.service.Service.CreateRecord(record);
-
-        Console.WriteLine($"Record #{id} is created.");
+        else
+        {
+            var validationError = $"Error: {validationResult.Item2}.";
+            Console.WriteLine(validationError);
+        }
     }
 }

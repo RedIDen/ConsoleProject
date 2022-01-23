@@ -30,7 +30,8 @@ public class FileCabinetRecordCsvWriter
         stringBuilder.Append($"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.CreateSpecificCulture("en-US"))},");
         stringBuilder.Append($"{record.Balance},");
         stringBuilder.Append($"{record.FavLetter},");
-        stringBuilder.Append($"{record.WorkExperience}\n");
+        stringBuilder.Append($"{record.WorkExperience}");
+        stringBuilder.Append(Environment.NewLine);
 
         this.textWriter.Write(stringBuilder.ToString());
     }

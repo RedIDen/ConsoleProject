@@ -50,6 +50,11 @@ public abstract class FileCabinetServiceBase : IFileCabinetService
 
     public virtual IEnumerable<FileCabinetRecord> Find(string parameters)
     {
+        if (string.IsNullOrEmpty(parameters))
+        {
+            return Array.Empty<FileCabinetRecord>();
+        }
+
         char[] symbols = { ',', ' ', '\'', '\"', '=' };
         var parametersList = parameters.Split(symbols, StringSplitOptions.RemoveEmptyEntries).ToList();
 
@@ -74,8 +79,16 @@ public abstract class FileCabinetServiceBase : IFileCabinetService
                 case BalanceWord:
                 case WorkExperienceWord:
                 case FavLetterWord:
-                    polandNotation.Add(string.Concat(lowerParameter, '=', parametersList[++i]));
-                    break;
+                    if (++i < parametersList.Count)
+                    {
+                        polandNotation.Add(string.Concat(lowerParameter, '=', parametersList[i]));
+                        break;
+                    }
+                    else
+                    {
+                        return Array.Empty<FileCabinetRecord>();
+                    }
+
                 default:
                     return Array.Empty<FileCabinetRecord>();
             }
@@ -98,11 +111,21 @@ public abstract class FileCabinetServiceBase : IFileCabinetService
             {
                 case AndWord:
                     first = results.Pop();
+                    if (!results.Any())
+                    {
+                        return Array.Empty<FileCabinetRecord>();
+                    }
+
                     second = results.Pop();
                     results.Push(first.Intersect(second, comparer));
                     break;
                 case OrWord:
                     first = results.Pop();
+                    if (!results.Any())
+                    {
+                        return Array.Empty<FileCabinetRecord>();
+                    }
+
                     second = results.Pop();
                     results.Push(first.Concat(second).Distinct(comparer));
                     break;

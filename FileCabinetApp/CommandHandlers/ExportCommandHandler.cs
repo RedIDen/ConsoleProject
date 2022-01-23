@@ -52,7 +52,7 @@ public class ExportCommandHandler : ServiceCommandHandlerBase
         try
         {
             var streamWriter = new StreamWriter(fileName);
-            var fileCabinetServiceSnapshot = this.service.Service.MakeSnapshot();
+            var fileCabinetServiceSnapshot = this.transferHelper.Service.MakeSnapshot();
 
             if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
