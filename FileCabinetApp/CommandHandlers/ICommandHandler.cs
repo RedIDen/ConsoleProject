@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.CommandHandlers;
 
-namespace FileCabinetApp.CommandHandlers
+public interface ICommandHandler
 {
-    public interface ICommandHandler
-    {
-        public void SetNext(ICommandHandler commandHandler);
+    public void SetNext(ICommandHandler commandHandler);
 
-        public void Handle(AppCommandRequest appCommandRequest);
-    }
+    public void Handle(AppCommandRequest appCommandRequest);
 }

@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
+﻿namespace FileCabinetApp.CommandHandlers;
 
-namespace FileCabinetApp.CommandHandlers;
 public class StatCommandHandler : ServiceCommandHandlerBase
 {
     public StatCommandHandler(FileCabinetTrasferHelper service)

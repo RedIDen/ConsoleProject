@@ -1,47 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp;
 
-namespace FileCabinetApp
+public class FileCabinetTrasferHelper
 {
-    public class FileCabinetTrasferHelper
+    public FileCabinetServiceBase Service { get; set; }
+
+    public FileCabinetTrasferHelper(FileCabinetServiceBase service)
     {
-        public FileCabinetServiceBase Service { get; set; }
+        this.Service = service;
+    }
 
-        public FileCabinetTrasferHelper(FileCabinetServiceBase service)
-        {
-            this.Service = service;
-        }
+    public IFileCabinetService GetLast()
+    {
+        return this.Service is IServiceDecorator ? ((IServiceDecorator)this.Service).GetLast() : this.Service;
+    }
 
-        public IFileCabinetService GetLast()
+    public void SetLast(FileCabinetServiceBase service)
+    {
+        var temp = this.Service;
+        if (this.Service is IServiceDecorator)
         {
-            return this.Service is IServiceDecorator ? ((IServiceDecorator)this.Service).GetLast() : this.Service;
-        }
-
-        public void SetLast(FileCabinetServiceBase service)
-        {
-            var temp = this.Service;
-            if (this.Service is IServiceDecorator)
+            while (true)
             {
-                while (true)
+                if (((IServiceDecorator)temp).Service is IServiceDecorator)
                 {
-                    if (((IServiceDecorator)temp).Service is IServiceDecorator)
-                    {
-                        temp = ((IServiceDecorator)temp).Service;
-                    }
-                    else
-                    {
-                        ((IServiceDecorator)temp).Service = service;
-                        return;
-                    }
+                    temp = ((IServiceDecorator)temp).Service;
+                }
+                else
+                {
+                    ((IServiceDecorator)temp).Service = service;
+                    return;
                 }
             }
-            else
-            {
-                this.Service = service;
-            }
+        }
+        else
+        {
+            this.Service = service;
         }
     }
 }

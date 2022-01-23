@@ -1,33 +1,29 @@
-﻿using System.Runtime.Serialization;
+﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
-namespace FileCabinetApp.Validators.FullRecordValidators
+[JsonObject(MemberSerialization.Fields)]
+public class CompositeValidator : IRecordValidator
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public class CompositeValidator : IRecordValidator
+    private List<IRecordValidator> validators;
+
+    public CompositeValidator(IEnumerable<IRecordValidator> validators)
     {
-        [JsonProperty]
-        private List<IRecordValidator> validators;
+        this.validators = validators.ToList();
+    }
 
-        public CompositeValidator(IEnumerable<IRecordValidator> validators)
+    public (bool, string) Validate(FileCabinetRecord record)
+    {
+        bool result = true;
+        StringBuilder errorMessage = new StringBuilder();
+        bool tempResult;
+        string tempMessage;
+
+        foreach (var validator in this.validators)
         {
-            this.validators = validators.ToList();
+            (tempResult, tempMessage) = validator.Validate(record);
+            result &= tempResult;
+            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + '\n');
         }
 
-        public (bool, string) Validate(FileCabinetRecord record)
-        {
-            bool result = true;
-            StringBuilder errorMessage = new StringBuilder();
-            bool tempResult;
-            string tempMessage;
-
-            foreach (var validator in this.validators)
-            {
-                (tempResult, tempMessage) = validator.Validate(record);
-                result &= tempResult;
-                errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + '\n');
-            }
-
-            return (result, errorMessage.ToString().Trim('\n'));
-        }
+        return (result, errorMessage.ToString().Trim('\n'));
     }
 }

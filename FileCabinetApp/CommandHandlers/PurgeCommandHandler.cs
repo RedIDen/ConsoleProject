@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
-
-namespace FileCabinetApp.CommandHandlers;
+﻿namespace FileCabinetApp.CommandHandlers;
 public class PurgeCommandHandler : ServiceCommandHandlerBase
 {
     public PurgeCommandHandler(FileCabinetTrasferHelper service)

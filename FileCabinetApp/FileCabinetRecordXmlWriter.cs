@@ -1,56 +1,54 @@
-﻿using System.Globalization;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 
-namespace FileCabinetApp
+namespace FileCabinetApp;
+
+/// <summary>
+/// The file cabinet record XML writer.
+/// </summary>
+public class FileCabinetRecordXmlWriter
 {
+    private readonly XmlSerializer xmlSerializer;
+    private readonly XmlWriter xmlWriter;
+
     /// <summary>
-    /// The file cabinet record XML writer.
+    /// Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.
     /// </summary>
-    public class FileCabinetRecordXmlWriter
+    /// <param name="textWriter">The TextWriter object to work with.</param>
+    public FileCabinetRecordXmlWriter(TextWriter textWriter)
     {
-        private readonly XmlSerializer xmlSerializer;
-        private readonly XmlWriter xmlWriter;
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.
-        /// </summary>
-        /// <param name="textWriter">The TextWriter object to work with.</param>
-        public FileCabinetRecordXmlWriter(TextWriter textWriter)
+        XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings);
+
+        this.xmlSerializer = new XmlSerializer(typeof(XmlFileCabinetList));
+        this.xmlWriter = xmlWriter;
+    }
+
+    /// <summary>
+    /// Wtites the record into the file.
+    /// </summary>
+    /// <param name="records">The record to wtire.</param>
+    public void Write(IReadOnlyCollection<FileCabinetRecord> records)
+    {
+        var xmlRecords = new List<XmlFileCabinetRecord>(records.Count);
+
+        foreach (var record in records)
         {
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-
-            XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings);
-
-            this.xmlSerializer = new XmlSerializer(typeof(XmlFileCabinetList));
-            this.xmlWriter = xmlWriter;
+            xmlRecords.Add(new XmlFileCabinetRecord(record));
         }
 
-        /// <summary>
-        /// Wtites the record into the file.
-        /// </summary>
-        /// <param name="records">The record to wtire.</param>
-        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
-        {
-            var xmlRecords = new List<XmlFileCabinetRecord>(records.Count);
+        var xmlRecordsObject = new XmlFileCabinetList(xmlRecords);
 
-            foreach (var record in records)
-            {
-                xmlRecords.Add(new XmlFileCabinetRecord(record));
-            }
+        this.xmlSerializer.Serialize(this.xmlWriter, xmlRecordsObject);
+    }
 
-            var xmlRecordsObject = new XmlFileCabinetList(xmlRecords);
-
-            this.xmlSerializer.Serialize(this.xmlWriter, xmlRecordsObject);
-        }
-
-        /// <summary>
-        /// Closes the current writer.
-        /// </summary>
-        public void Close()
-        {
-            this.xmlWriter.Close();
-        }
+    /// <summary>
+    /// Closes the current writer.
+    /// </summary>
+    public void Close()
+    {
+        this.xmlWriter.Close();
     }
 }

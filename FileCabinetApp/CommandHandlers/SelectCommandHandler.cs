@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
-
-namespace FileCabinetApp.CommandHandlers;
+﻿namespace FileCabinetApp.CommandHandlers;
 public class SelectCommandHandler : ServiceCommandHandlerBase
 {
     private Action<IEnumerable<FileCabinetRecord>, IEnumerable<string>> recordPrinter;

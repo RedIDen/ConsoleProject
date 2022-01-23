@@ -1,42 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Validators
+public class BalanceValidator : IRecordValidator
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public class BalanceValidator : IRecordValidator
+    private decimal minValue;
+
+    private decimal maxValue;
+
+    public BalanceValidator(decimal minValue, decimal maxValue)
     {
-        [JsonProperty("Balance min value")]
-        private decimal minValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
 
-        [JsonProperty("Balance max value")]
-        private decimal maxValue;
+    public (bool, string) Validate(FileCabinetRecord record)
+    {
+        var value = record.Balance;
 
-        public BalanceValidator(decimal minValue, decimal maxValue)
+        if (value < this.minValue)
         {
-            this.minValue = minValue;
-            this.maxValue = maxValue;
+            return (false, $"the balance can't be less than {this.minValue}");
         }
-
-        public (bool, string) Validate(FileCabinetRecord record)
+        else if (value > this.maxValue)
         {
-            var value = record.Balance;
-
-            if (value < this.minValue)
-            {
-                return (false, $"the balance can't be less than {this.minValue}");
-            }
-            else if (value > this.maxValue)
-            {
-                return (false, $"the balance can't be more than {this.maxValue}");
-            }
-            else
-            {
-                return (true, string.Empty);
-            }
+            return (false, $"the balance can't be more than {this.maxValue}");
+        }
+        else
+        {
+            return (true, string.Empty);
         }
     }
 }

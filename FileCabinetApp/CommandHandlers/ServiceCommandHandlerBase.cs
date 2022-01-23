@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileCabinetApp.CommandHandlers;
+﻿namespace FileCabinetApp.CommandHandlers;
 public abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
     protected const string IdWord = "id";

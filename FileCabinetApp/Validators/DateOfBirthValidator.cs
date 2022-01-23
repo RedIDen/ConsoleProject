@@ -1,38 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Validators
+public class DateOfBirthValidator : IRecordValidator
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public class DateOfBirthValidator : IRecordValidator
+    private DateTime from;
+
+    private DateTime to;
+
+    public DateOfBirthValidator(DateTime from, DateTime to)
     {
-        [JsonProperty("Min date of birth")]
-        private DateTime from;
+        this.from = from;
+        this.to = to;
+    }
 
-        [JsonProperty("Max date of birth")]
-        private DateTime to;
+    public (bool, string) Validate(FileCabinetRecord record)
+    {
+        var value = record.DateOfBirth;
 
-        public DateOfBirthValidator(DateTime from, DateTime to)
+        if (value < this.from || value > this.to)
         {
-            this.from = from;
-            this.to = to;
+            return (false, $"the date should be between {this.from} and {this.to}");
         }
-
-        public (bool, string) Validate(FileCabinetRecord record)
+        else
         {
-            var value = record.DateOfBirth;
-
-            if (value < this.from || value > this.to)
-            {
-                return (false, $"the date should be between {this.from} and {this.to}");
-            }
-            else
-            {
-                return (true, string.Empty);
-            }
+            return (true, string.Empty);
         }
     }
 }

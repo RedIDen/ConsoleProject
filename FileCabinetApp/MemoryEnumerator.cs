@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp;
 
-namespace FileCabinetApp
+public class MemoryEnumerator<T> : IEnumerable<T>
 {
-    public class MemoryEnumerator<T> : IEnumerable<T>
+    private readonly IEnumerable<T> list;
+
+    public MemoryEnumerator(IEnumerable<T> list)
     {
-        private readonly IEnumerable<T> list;
+        this.list = list;
+    }
 
-        public MemoryEnumerator(IEnumerable<T> list)
+    public IEnumerator<T> GetEnumerator()
+    {
+        foreach (var record in this.list)
         {
-            this.list = list;
+            yield return record;
         }
+    }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var record in this.list)
-            {
-                yield return record;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

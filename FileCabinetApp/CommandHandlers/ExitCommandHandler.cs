@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
-
-namespace FileCabinetApp.CommandHandlers;
+﻿namespace FileCabinetApp.CommandHandlers;
 public class ExitCommandHandler : CommandHandlerBase
 {
     protected override string[] CommandNames { get; } = { "exit" };

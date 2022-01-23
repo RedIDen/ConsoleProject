@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace FileCabinetApp.CommandHandlers;
+﻿namespace FileCabinetApp.CommandHandlers;
 public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
     private Dictionary<string, CompositeValidator> validators;
