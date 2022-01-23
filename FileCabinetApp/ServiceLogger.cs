@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public class ServiceLogger : FileCabinetServiceBase
+internal class ServiceLogger : FileCabinetServiceBase
 {
     public const string FileName = "log.txt";
 

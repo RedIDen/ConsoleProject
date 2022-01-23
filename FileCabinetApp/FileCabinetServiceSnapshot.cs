@@ -3,7 +3,7 @@
 /// <summary>
 /// The file cabinet service snapshot.
 /// </summary>
-public class FileCabinetServiceSnapshot
+internal class FileCabinetServiceSnapshot
 {
     private ReadOnlyCollection<FileCabinetRecord> list;
 

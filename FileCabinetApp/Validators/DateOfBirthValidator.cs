@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators;
 
-public class DateOfBirthValidator : IRecordValidator
+internal class DateOfBirthValidator : IRecordValidator
 {
     private DateTime from;
 

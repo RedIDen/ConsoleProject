@@ -1,8 +1,6 @@
-﻿using System.Collections;
+﻿namespace FileCabinetApp;
 
-namespace FileCabinetApp
-{
-    public class FilesystemEnumerator<T> : IEnumerable<T>
+    internal class FilesystemEnumerator<T> : IEnumerable<T>
     {
         private readonly IEnumerable<long> list;
         private readonly Func<T> getRecord;
@@ -29,4 +27,3 @@ namespace FileCabinetApp
             return this.GetEnumerator();
         }
     }
-}

@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
-public class ValidatorDeserializer
+internal class ValidatorDeserializer
 {
     public Dictionary<string, CompositeValidator> Deserialize(string path)
     {

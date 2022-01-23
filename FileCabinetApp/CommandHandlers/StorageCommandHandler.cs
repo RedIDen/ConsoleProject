@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public class StorageCommandHandler : ServiceCommandHandlerBase
+internal class StorageCommandHandler : ServiceCommandHandlerBase
 {
     public StorageCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

@@ -1,5 +1,5 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class ExitCommandHandler : CommandHandlerBase
+internal class ExitCommandHandler : CommandHandlerBase
 {
     protected override string[] CommandNames { get; } = { "exit" };
 

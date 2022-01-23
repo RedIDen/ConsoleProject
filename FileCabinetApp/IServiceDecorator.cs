@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public interface IServiceDecorator : IFileCabinetService
+internal interface IServiceDecorator : IFileCabinetService
 {
     public FileCabinetServiceBase Service { get; set; }
 

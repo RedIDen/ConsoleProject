@@ -1,5 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class PurgeCommandHandler : ServiceCommandHandlerBase
+
+internal class PurgeCommandHandler : ServiceCommandHandlerBase
 {
     public PurgeCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators;
 
-public class WorkExperienceValidator : IRecordValidator
+internal class WorkExperienceValidator : IRecordValidator
 {
     private short minValue;
 

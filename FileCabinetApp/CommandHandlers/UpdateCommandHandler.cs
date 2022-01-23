@@ -1,5 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class UpdateCommandHandler : ServiceCommandHandlerBase
+
+internal class UpdateCommandHandler : ServiceCommandHandlerBase
 {
     public UpdateCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

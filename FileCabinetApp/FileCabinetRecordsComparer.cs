@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public class FileCabinetRecordsComparer : IEqualityComparer<FileCabinetRecord>
+internal class FileCabinetRecordsComparer : IEqualityComparer<FileCabinetRecord>
 {
     public bool Equals(FileCabinetRecord? x, FileCabinetRecord? y)
     {

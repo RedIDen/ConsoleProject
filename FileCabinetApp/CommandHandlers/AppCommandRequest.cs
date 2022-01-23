@@ -1,5 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class AppCommandRequest
+
+internal class AppCommandRequest
 {
     public string Command { get; }
 

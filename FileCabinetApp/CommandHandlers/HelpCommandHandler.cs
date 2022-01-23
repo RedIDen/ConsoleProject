@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public class HelpCommandHandler : CommandHandlerBase
+internal class HelpCommandHandler : CommandHandlerBase
 {
     protected override string[] CommandNames { get; } = { "help" };
 

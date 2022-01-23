@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public class StatCommandHandler : ServiceCommandHandlerBase
+internal class StatCommandHandler : ServiceCommandHandlerBase
 {
     public StatCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

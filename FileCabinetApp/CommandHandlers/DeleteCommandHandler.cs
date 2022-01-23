@@ -1,5 +1,5 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class DeleteCommandHandler : ServiceCommandHandlerBase
+internal class DeleteCommandHandler : ServiceCommandHandlerBase
 {
     public DeleteCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

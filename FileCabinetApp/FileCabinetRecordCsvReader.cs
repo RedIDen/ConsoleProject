@@ -5,7 +5,7 @@ namespace FileCabinetApp;
 /// <summary>
 /// The file cabinet record CSV reader.
 /// </summary>
-public class FileCabinetRecordCsvReader
+internal class FileCabinetRecordCsvReader
 {
     private readonly StreamReader stream;
 

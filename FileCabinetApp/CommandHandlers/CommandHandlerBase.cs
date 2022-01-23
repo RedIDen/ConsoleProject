@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public abstract class CommandHandlerBase : ICommandHandler
+internal abstract class CommandHandlerBase : ICommandHandler
 {
     public const string WrongSyntaxError = "Wrong command syntax!";
 

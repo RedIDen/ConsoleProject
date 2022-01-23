@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public class MemoryEnumerator<T> : IEnumerable<T>
+internal class MemoryEnumerator<T> : IEnumerable<T>
 {
     private readonly IEnumerable<T> list;
 

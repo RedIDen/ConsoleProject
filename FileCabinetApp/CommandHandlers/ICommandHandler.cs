@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public interface ICommandHandler
+internal interface ICommandHandler
 {
     public void SetNext(ICommandHandler commandHandler);
 

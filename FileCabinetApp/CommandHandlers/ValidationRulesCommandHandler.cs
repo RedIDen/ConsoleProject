@@ -1,5 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
+
+internal class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
     private Dictionary<string, CompositeValidator> validators;
 

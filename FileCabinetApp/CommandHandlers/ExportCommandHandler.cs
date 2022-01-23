@@ -1,5 +1,5 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class ExportCommandHandler : ServiceCommandHandlerBase
+internal class ExportCommandHandler : ServiceCommandHandlerBase
 {
     public ExportCommandHandler(FileCabinetTrasferHelper service)
         : base(service)

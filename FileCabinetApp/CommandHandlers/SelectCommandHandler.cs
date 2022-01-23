@@ -1,5 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
-public class SelectCommandHandler : ServiceCommandHandlerBase
+
+internal class SelectCommandHandler : ServiceCommandHandlerBase
 {
     private Action<IEnumerable<FileCabinetRecord>, IEnumerable<string>> recordPrinter;
 

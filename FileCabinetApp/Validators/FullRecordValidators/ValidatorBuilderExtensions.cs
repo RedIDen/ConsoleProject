@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
-public static class ValidatorBuilderExtensions
+internal static class ValidatorBuilderExtensions
 {
     public static CompositeValidator CreateDefault(this ValidatorBuilder validatorBuilder) => validatorBuilder
         .ValidateFirstName(3, 60)

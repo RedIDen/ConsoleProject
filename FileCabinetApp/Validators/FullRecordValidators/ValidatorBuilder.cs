@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
-public class ValidatorBuilder
+internal class ValidatorBuilder
 {
     private readonly List<IRecordValidator> validators = new List<IRecordValidator>();
 

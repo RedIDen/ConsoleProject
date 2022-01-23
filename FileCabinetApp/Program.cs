@@ -17,7 +17,7 @@ namespace FileCabinetApp;
 /// <summary>
 /// The main class of the program.
 /// </summary>
-public static class Program
+internal static class Program
 {
     private const string HintMessage = "Enter your command, or enter 'help' to get help.";
     private const string DeveloperName = "Deniska Vasilyev";

@@ -1,7 +1,7 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
 [JsonObject(MemberSerialization.Fields)]
-public class CompositeValidator : IRecordValidator
+internal class CompositeValidator : IRecordValidator
 {
     private readonly List<IRecordValidator> validators;
 

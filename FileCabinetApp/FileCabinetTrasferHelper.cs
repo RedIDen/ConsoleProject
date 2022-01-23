@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public class FileCabinetTrasferHelper
+internal class FileCabinetTrasferHelper
 {
     public FileCabinetServiceBase Service { get; set; }
 

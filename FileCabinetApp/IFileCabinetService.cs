@@ -3,7 +3,7 @@
 /// <summary>
 /// The interface for the File Cabinet Service.
 /// </summary>
-public interface IFileCabinetService
+internal interface IFileCabinetService
 {
     /// <summary>
     /// Gets or sets the record validator.

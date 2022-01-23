@@ -11,7 +11,7 @@ namespace FileCabinetApp;
 /// <summary>
 /// The file cabinet record XML reader.
 /// </summary>
-public class FileCabinetRecordXmlReader
+internal class FileCabinetRecordXmlReader
 {
     private readonly XmlSerializer xmlSerializer;
     private readonly StreamReader stream;

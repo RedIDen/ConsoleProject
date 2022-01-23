@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public class UseLoggerCommandHandler : ServiceCommandHandlerBase
+internal class UseLoggerCommandHandler : ServiceCommandHandlerBase
 {
     private bool useLogger = false;
 

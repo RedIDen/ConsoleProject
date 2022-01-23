@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp;
 
-public abstract class FileCabinetServiceBase : IFileCabinetService
+internal abstract class FileCabinetServiceBase : IFileCabinetService
 {
     protected const string IdWord = "id";
     protected const string FirstNameWord = "firstname";

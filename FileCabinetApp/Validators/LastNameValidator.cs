@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators;
 
-public class LastNameValidator : IRecordValidator
+internal class LastNameValidator : IRecordValidator
 {
     private int minLength;
 

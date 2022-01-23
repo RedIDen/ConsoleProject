@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public class UseStopwatchCommandHandler : ServiceCommandHandlerBase
+internal class UseStopwatchCommandHandler : ServiceCommandHandlerBase
 {
     private bool useStopwatch = false;
 

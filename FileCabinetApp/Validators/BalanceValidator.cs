@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.Validators;
 
-public class BalanceValidator : IRecordValidator
+internal class BalanceValidator : IRecordValidator
 {
     private decimal minValue;
 

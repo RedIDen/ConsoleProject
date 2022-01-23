@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 
 namespace FileCabinetApp;
-public class ServiceMeter : FileCabinetServiceBase
+internal class ServiceMeter : FileCabinetServiceBase
 {
     private readonly Stopwatch stopwatch = new Stopwatch();
 

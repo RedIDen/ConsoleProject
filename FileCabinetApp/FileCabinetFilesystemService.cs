@@ -6,7 +6,7 @@ namespace FileCabinetApp;
 /// <summary>
 /// The File Cabinet Filesystem Service class.
 /// </summary>
-public class FileCabinetFilesystemService : FileCabinetServiceBase
+internal class FileCabinetFilesystemService : FileCabinetServiceBase
 {
     /// <summary>
     /// The file link.

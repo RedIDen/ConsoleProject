@@ -5,7 +5,7 @@ namespace FileCabinetApp;
 /// <summary>
 /// The File Cabinet Memory Service class.
 /// </summary>
-public class FileCabinetMemoryService : FileCabinetServiceBase
+internal class FileCabinetMemoryService : FileCabinetServiceBase
 {
     private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
     private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();

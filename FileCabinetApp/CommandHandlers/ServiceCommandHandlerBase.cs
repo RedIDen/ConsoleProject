@@ -1,6 +1,6 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
-public abstract class ServiceCommandHandlerBase : CommandHandlerBase
+internal abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
     protected const string IdWord = "id";
     protected const string FirstNameWord = "firstname";

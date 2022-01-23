@@ -3,7 +3,7 @@
 /// <summary>
 /// The intarface for the record validators.
 /// </summary>
-public interface IRecordValidator
+internal interface IRecordValidator
 {
     public (bool, string) Validate(FileCabinetRecord record);
 }
