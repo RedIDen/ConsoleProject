@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#pragma warning disable CS8602
+#pragma warning disable CA1822
 
 namespace FileCabinetApp.Validators.FullRecordValidators;
 
-public class ValidatorDeserializer
+/// <summary>
+/// The validstor deserializer.
+/// </summary>
+internal class ValidatorDeserializer
 {
+    /// <summary>
+    /// Deserializes validators form file.
+    /// </summary>
+    /// <param name="path">File path.</param>
+    /// <returns>Dictionary of validation rules and their names.</returns>
     public Dictionary<string, CompositeValidator> Deserialize(string path)
     {
         if (!File.Exists(path))
@@ -19,7 +24,7 @@ public class ValidatorDeserializer
                 };
         }
 
-        var Validators = new
+        var validators = new
         {
             Default = new
             {
@@ -89,7 +94,7 @@ public class ValidatorDeserializer
             }
         }
 
-        var tempClasses = JsonConvert.DeserializeAnonymousType(json, Validators);
+        var tempClasses = JsonConvert.DeserializeAnonymousType(json, validators);
 
         return new Dictionary<string, CompositeValidator>
         {

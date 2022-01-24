@@ -1,50 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Validators
+/// <summary>
+/// The FirstName validator.
+/// </summary>
+internal class FirstNameValidator : IRecordValidator
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public class FirstNameValidator : IRecordValidator
+    private readonly int minLength;
+
+    private readonly int maxLength;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
+    /// </summary>
+    /// <param name="minLength">Minimal length.</param>
+    /// <param name="maxLength">Maximal length.</param>
+    public FirstNameValidator(int minLength, int maxLength)
     {
-       // [JsonProperty("First name min length")]
-        private int minLength;
+        this.minLength = minLength;
+        this.maxLength = maxLength;
+    }
 
-       // [JsonProperty("First name max length")]
-        private int maxLength;
+    /// <summary>
+    /// Validates the record's first name.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
+    public (bool, string) Validate(FileCabinetRecord record)
+    {
+        var value = record.FirstName;
 
-        public FirstNameValidator(int minLength, int maxLength)
+        if (string.IsNullOrWhiteSpace(value))
         {
-            this.minLength = minLength;
-            this.maxLength = maxLength;
+            return (false, "the first name is null or consists of only whitespaces");
         }
 
-        public (bool, string) Validate(FileCabinetRecord record)
+        if (value.Length > this.maxLength)
         {
-            var value = record.FirstName;
-
-            if (value is null)
-            {
-                return (false, "the name is null");
-            }
-            else if (value.Length > this.maxLength)
-            {
-                return (false, "the name is too long");
-            }
-            else if (value.Length < this.minLength)
-            {
-                return (false, "the name is too short");
-            }
-            else if (value.Trim().Length == 0)
-            {
-                return (false, "the name can't consist of only whitespaces");
-            }
-            else
-            {
-                return (true, string.Empty);
-            }
+            return (false, "the first name is too long");
         }
+
+        if (value.Length < this.minLength)
+        {
+            return (false, "the first name is too short");
+        }
+
+        return (true, string.Empty);
     }
 }

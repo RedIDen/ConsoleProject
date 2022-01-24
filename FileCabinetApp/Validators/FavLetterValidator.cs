@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Validators
+/// <summary>
+/// The favorite letter validator.
+/// </summary>
+internal class FavLetterValidator : IRecordValidator
 {
-    public class FavLetterValidator : IRecordValidator
+    /// <summary>
+    /// Validates the record's favorite letter.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
+    public (bool, string) Validate(FileCabinetRecord record)
     {
-        public (bool, string) Validate(FileCabinetRecord record)
-        {
-            var value = record.FavLetter;
+        var value = record.FavLetter;
 
-            if (!char.IsLetter(value))
-            {
-                return (false, "enter the correct letter");
-            }
-            else
-            {
-                return (true, string.Empty);
-            }
+        if (value == '\0')
+        {
+            return (true, string.Empty);
         }
+
+        if (!char.IsLetter(value))
+        {
+            return (false, "enter the correct letter");
+        }
+
+        return (true, string.Empty);
     }
 }

@@ -1,32 +1,55 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
+﻿#pragma warning disable CS8618
 
 namespace FileCabinetApp.CommandHandlers;
 
-public abstract class CommandHandlerBase : ICommandHandler
+/// <summary>
+/// Tha command hadler base.
+/// </summary>
+internal abstract class CommandHandlerBase : ICommandHandler
 {
+    /// <summary>
+    /// Wrong syntax error.
+    /// </summary>
     public const string WrongSyntaxError = "Wrong command syntax!";
 
-    protected static List<string> allCommands = new List<string>();
+    /// <summary>
+    /// The list of all commands added to the application.
+    /// </summary>
+    protected static readonly List<string> AllCommands = new List<string>();
 
-    protected ICommandHandler nextHandler;
+    /// <summary>
+    /// The next command hadler link.
+    /// </summary>
+    private ICommandHandler nextHandler;
 
-    protected abstract string[] CommandNames { get; }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandHandlerBase"/> class.
+    /// </summary>
     public CommandHandlerBase()
     {
         foreach (var command in this.CommandNames)
         {
-            CommandHandlerBase.allCommands.Add(command);
+            CommandHandlerBase.AllCommands.Add(command);
         }
     }
 
-    public virtual void Handle(AppCommandRequest appCommandRequest)
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
+    protected abstract string[] CommandNames { get; }
+
+    /// <summary>
+    /// Handles the command request.
+    /// </summary>
+    /// <param name="appCommandRequest">The command request.</param>
+    public void Handle(AppCommandRequest appCommandRequest)
     {
         foreach (var commandName in this.CommandNames)
         {
-            if (string.Equals(appCommandRequest.Command, commandName, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(appCommandRequest.Command, commandName, StringComparison.OrdinalIgnoreCase))
             {
                 this.MakeWork(appCommandRequest.Parameters);
                 return;
@@ -44,9 +67,9 @@ public abstract class CommandHandlerBase : ICommandHandler
 
             var similarCommands = new List<string>();
 
-            foreach (var command in CommandHandlerBase.allCommands)
+            foreach (var command in CommandHandlerBase.AllCommands)
             {
-                if (command.Contains(appCommandRequest.Command) ||
+                if (command.Contains(appCommandRequest.Command, StringComparison.InvariantCultureIgnoreCase) ||
                     !command.ToCharArray().OrderBy(x => x).Except(appCommandRequest.Command.ToCharArray().OrderBy(x => x)).Any())
                 {
                     similarCommands.Add(command);
@@ -85,10 +108,18 @@ public abstract class CommandHandlerBase : ICommandHandler
         }
     }
 
-    protected abstract void MakeWork(string parameters);
-
+    /// <summary>
+    /// Sets the next command handler.
+    /// </summary>
+    /// <param name="commandHandler">The next command handler.</param>
     public void SetNext(ICommandHandler commandHandler)
     {
         this.nextHandler = commandHandler;
     }
+
+    /// <summary>
+    /// The main method of the command handler. Called when the command request name is similar to the current command name.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
+    protected abstract void MakeWork(string parameters);
 }

@@ -1,20 +1,34 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
+﻿namespace FileCabinetApp.CommandHandlers;
 
-namespace FileCabinetApp.CommandHandlers;
-public class DeleteCommandHandler : ServiceCommandHandlerBase
+/// <summary>
+/// The delete command handler.
+/// </summary>
+internal class DeleteCommandHandler : ServiceCommandHandlerBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DeleteCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
     public DeleteCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "delete" };
 
+    /// <summary>
+    /// Delete records with current parameters.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
-        var list = this.service.Service.Find(parameters.Replace("where", string.Empty));
+        var list = this.transferHelper.Service.Find(parameters.Replace("where", string.Empty, StringComparison.InvariantCultureIgnoreCase));
         var ids = new List<int>();
 
         int count = 0;
@@ -22,7 +36,7 @@ public class DeleteCommandHandler : ServiceCommandHandlerBase
         {
             ids.Add(foundRecord.Id);
             count++;
-            this.service.Service.RemoveRecord(this.service.Service.FindRecordIndexById(foundRecord.Id));
+            this.transferHelper.Service.RemoveRecord(this.transferHelper.Service.FindRecordIndexById(foundRecord.Id));
         }
 
         if (count == 0)
@@ -38,9 +52,7 @@ public class DeleteCommandHandler : ServiceCommandHandlerBase
             Console.Write("Records ");
             foreach (var id in ids)
             {
-                Console.Write('#');
-                Console.Write(id);
-                Console.Write(' ');
+                Console.Write($"#{id} ");
             }
 
             Console.WriteLine("are deleted.");

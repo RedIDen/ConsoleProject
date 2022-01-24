@@ -1,30 +1,47 @@
-﻿using System.Globalization;
+﻿namespace FileCabinetApp.CommandHandlers;
 
-namespace FileCabinetApp.CommandHandlers;
-public class ValidationRulesCommandHandler : ServiceCommandHandlerBase
+/// <summary>
+/// The validation rules command handler.
+/// </summary>
+internal class ValidationRulesCommandHandler : ServiceCommandHandlerBase
 {
-    private Dictionary<string, CompositeValidator> validators;
+    private readonly Dictionary<string, CompositeValidator> validators;
 
-    public ValidationRulesCommandHandler(FileCabinetTrasferHelper service, Dictionary<string, CompositeValidator> validators)
+    private readonly Action<string> setValidationString;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ValidationRulesCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
+    /// <param name="validators">The dictionary of validators and their names.</param>
+    /// <param name="setValidationString">Delegate setting validation string.</param>
+    public ValidationRulesCommandHandler(FileCabinetTrasferHelper service, Dictionary<string, CompositeValidator> validators, Action<string> setValidationString)
         : base(service)
     {
         this.validators = validators;
+        this.setValidationString = setValidationString;
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "--validation-rules", "-v" };
 
     /// <summary>
-    /// Shows the list of all commands and their descriptions.
+    /// Changes the validator.
     /// </summary>
-    /// <param name="parameters">Extra parameteres for the method.</param>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
-        var parametersToLower = parameters.ToLower();
+        var parametersToLower = parameters.ToLower(CultureInfo.InvariantCulture);
         var validator = this.validators.GetValueOrDefault(parametersToLower);
         if (validator != null)
         {
-            this.service.Service.Validator = validator;
-            Program.validationRulesMessage = $"Using {parametersToLower} validation rules.";
+            this.transferHelper.Service.Validator = validator;
+            this.setValidationString($"Using {parametersToLower} validation rules.");
         }
         else
         {

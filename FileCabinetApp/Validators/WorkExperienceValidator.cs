@@ -1,42 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Validators
+/// <summary>
+/// The work experience validator.
+/// </summary>
+internal class WorkExperienceValidator : IRecordValidator
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public class WorkExperienceValidator : IRecordValidator
+    private readonly short minValue;
+
+    private readonly short maxValue;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WorkExperienceValidator"/> class.
+    /// </summary>
+    /// <param name="minValue">Minimal value.</param>
+    /// <param name="maxValue">Maximal value.</param>
+    public WorkExperienceValidator(short minValue, short maxValue)
     {
-        [JsonProperty("Work experience min value")]
-        private short minValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
 
-        [JsonProperty("Work experience max value")]
-        private short maxValue;
+    /// <summary>
+    /// Validates the record's work experience.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
+    public (bool, string) Validate(FileCabinetRecord record)
+    {
+        var value = record.WorkExperience;
 
-        public WorkExperienceValidator(short minValue, short maxValue)
+        if (value < this.minValue)
         {
-            this.minValue = minValue;
-            this.maxValue = maxValue;
+            return (false, $"the work experience can't be less than {this.minValue}");
         }
 
-        public (bool, string) Validate(FileCabinetRecord record)
+        if (value > this.maxValue)
         {
-            var value = record.WorkExperience;
-
-            if (value < this.minValue)
-            {
-                return (false, $"the work experience can't be less than {this.minValue}");
-            }
-            else if (value > this.maxValue)
-            {
-                return (false, $"the work experience can't be more than {this.maxValue}");
-            }
-            else
-            {
-                return (true, string.Empty);
-            }
+            return (false, $"the work experience can't be more than {this.maxValue}");
         }
+
+        return (true, string.Empty);
     }
 }

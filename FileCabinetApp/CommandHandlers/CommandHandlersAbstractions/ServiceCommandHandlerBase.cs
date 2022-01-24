@@ -1,33 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#pragma warning disable CA1822
+#pragma warning disable SA1401
 
 namespace FileCabinetApp.CommandHandlers;
-public abstract class ServiceCommandHandlerBase : CommandHandlerBase
+
+/// <summary>
+/// The service command handler base.
+/// </summary>
+internal abstract class ServiceCommandHandlerBase : CommandHandlerBase
 {
+    /// <summary>
+    /// id.
+    /// </summary>
     protected const string IdWord = "id";
+
+    /// <summary>
+    /// firstname.
+    /// </summary>
     protected const string FirstNameWord = "firstname";
+
+    /// <summary>
+    /// lastname.
+    /// </summary>
     protected const string LastNameWord = "lastname";
+
+    /// <summary>
+    /// dateofbirth.
+    /// </summary>
     protected const string DateOfBirthWord = "dateofbirth";
+
+    /// <summary>
+    /// balance.
+    /// </summary>
     protected const string BalanceWord = "balance";
+
+    /// <summary>
+    /// workexperience.
+    /// </summary>
     protected const string WorkExperienceWord = "workexperience";
+
+    /// <summary>
+    /// favletter.
+    /// </summary>
     protected const string FavLetterWord = "favletter";
-    protected const string OpeningBrace = "(";
-    protected const string ClosingBrace = ")";
-    protected const string AndWord = "and";
-    protected const string OrWord = "or";
-    protected const string WrongSyntaxError = "Wrong command syntax!";
 
-    protected FileCabinetTrasferHelper service;
+    /// <summary>
+    /// The service transfer helper.
+    /// </summary>
+    protected readonly FileCabinetTrasferHelper transferHelper;
 
-    public ServiceCommandHandlerBase(FileCabinetTrasferHelper service)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ServiceCommandHandlerBase"/> class.
+    /// </summary>
+    /// <param name="transferHelper">Transfer helper.</param>
+    public ServiceCommandHandlerBase(FileCabinetTrasferHelper transferHelper)
         : base()
     {
-        this.service = service;
+        this.transferHelper = transferHelper;
     }
 
     /// <summary>
@@ -124,6 +152,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         }
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertId(FileCabinetRecord record, string value)
     {
         var result = this.IntConverter(value);
@@ -132,7 +166,7 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
             record.Id = result.Item3;
         }
 
-        if (this.service.Service.FindRecordIndexById(result.Item3) != -1)
+        if (this.transferHelper.Service.FindRecordIndexById(result.Item3) != -1)
         {
             string thisIdAlreadyExistsError = "this id is already taken";
             return (false, thisIdAlreadyExistsError);
@@ -141,6 +175,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertFirstName(FileCabinetRecord record, string value)
     {
         var result = this.StringConverter(value);
@@ -152,6 +192,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertLastName(FileCabinetRecord record, string value)
     {
         var result = this.StringConverter(value);
@@ -163,6 +209,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertDateOfBirth(FileCabinetRecord record, string value)
     {
         var result = this.DateConverter(value);
@@ -174,6 +226,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertBalance(FileCabinetRecord record, string value)
     {
         var result = this.DecimalConverter(value);
@@ -185,6 +243,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertWorkExperience(FileCabinetRecord record, string value)
     {
         var result = this.ShortConverter(value);
@@ -196,6 +260,12 @@ public abstract class ServiceCommandHandlerBase : CommandHandlerBase
         return (result.Item1, result.Item2);
     }
 
+    /// <summary>
+    /// Inserts data to record if convertation is successful.
+    /// </summary>
+    /// <param name="record">Record to update.</param>
+    /// <param name="value">Value to convert and insert.</param>
+    /// <returns>The flag showing if convertion is succesful and the error message.</returns>
     protected (bool, string) TryInsertFavLetter(FileCabinetRecord record, string value)
     {
         var result = this.CharConverter(value);
