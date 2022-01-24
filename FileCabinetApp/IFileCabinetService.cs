@@ -65,12 +65,32 @@ internal interface IFileCabinetService
     /// <returns>The list of the records with recieved date of birth.</returns>
     public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string date);
 
+    /// <summary>
+    /// Returns the list of the records with recieved balance.
+    /// </summary>
+    /// <param name="data">Balance.</param>
+    /// <returns>The list of the records with recieved balance.</returns>
     public IEnumerable<FileCabinetRecord> FindByBalance(string data);
 
+    /// <summary>
+    /// Returns the list of the records with recieved work experience.
+    /// </summary>
+    /// <param name="data">Work experience.</param>
+    /// <returns>The list of the records with recieved work experience.</returns>
     public IEnumerable<FileCabinetRecord> FindByWorkExperience(string data);
 
+    /// <summary>
+    /// Returns the list of the records with recieved favorite letter.
+    /// </summary>
+    /// <param name="data">Favorite letter.</param>
+    /// <returns>The list of the records with recieved favorite letter.</returns>
     public IEnumerable<FileCabinetRecord> FindByFavLetter(string data);
 
+    /// <summary>
+    /// Returns the list of the records with recieved id.
+    /// </summary>
+    /// <param name="data">Id.</param>
+    /// <returns>The list of the records with recieved id.</returns>
     public IEnumerable<FileCabinetRecord> FindById(string data);
 
     /// <summary>
@@ -91,7 +111,16 @@ internal interface IFileCabinetService
     /// <param name="id">The id of record to remove.</param>
     public void RemoveRecord(int id);
 
+    /// <summary>
+    /// Purges the records with deleted-flag.
+    /// </summary>
+    /// <returns>The number of purged records, the number of all the records before purge.</returns>
     public (int, int) Purge();
 
+    /// <summary>
+    /// Returns the list of the records with recieved complex SQL-like 'where' condition.
+    /// </summary>
+    /// <param name="parameters">SQL-like 'where' condition.</param>
+    /// <returns>The list of the records with recieved complex SQL-like 'where' condition.</returns>
     public IEnumerable<FileCabinetRecord> Find(string parameters);
 }

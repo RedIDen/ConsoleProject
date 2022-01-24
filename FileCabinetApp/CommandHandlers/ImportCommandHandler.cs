@@ -1,14 +1,31 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
+/// <summary>
+/// The import command handler.
+/// </summary>
 internal class ImportCommandHandler : ServiceCommandHandlerBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
     public ImportCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "import" };
 
+    /// <summary>
+    /// Imports the records data from file.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
         var parametersArray = parameters.Trim().Split();
@@ -22,8 +39,8 @@ internal class ImportCommandHandler : ServiceCommandHandlerBase
         string fileType = parametersArray[0];
         string fileName = parametersArray[1];
 
-        if (!fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) &&
-            !fileType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+        if (!fileType.Equals("csv", StringComparison.OrdinalIgnoreCase) &&
+            !fileType.Equals("xml", StringComparison.OrdinalIgnoreCase))
         {
             Console.WriteLine("Wrong file type!");
             return;
@@ -37,7 +54,7 @@ internal class ImportCommandHandler : ServiceCommandHandlerBase
 
                 var snapshot = new FileCabinetServiceSnapshot();
 
-                if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                if (fileType.Equals("csv", StringComparison.OrdinalIgnoreCase))
                 {
                     snapshot.LoadFromCsv(fileStream);
                 }

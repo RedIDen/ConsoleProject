@@ -24,13 +24,13 @@ public class FileCabinetRecordCsvWriter
     {
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.Append($"{record.Id},");
-        stringBuilder.Append($"{record.FirstName},");
-        stringBuilder.Append($"{record.LastName},");
-        stringBuilder.Append($"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.CreateSpecificCulture("en-US"))},");
-        stringBuilder.Append($"{record.Balance},");
-        stringBuilder.Append($"{record.FavLetter},");
-        stringBuilder.Append($"{record.WorkExperience}");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.Id},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.FirstName},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.LastName},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.CreateSpecificCulture("en-US"))},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.Balance},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.FavLetter},");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{record.WorkExperience}");
         stringBuilder.Append(Environment.NewLine);
 
         this.textWriter.Write(stringBuilder.ToString());

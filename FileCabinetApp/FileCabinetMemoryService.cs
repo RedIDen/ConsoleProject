@@ -33,7 +33,7 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
     public override IRecordValidator Validator { get; set; }
 
     /// <summary>
-    /// If there's a correct data, adds the record to the list.
+    /// Adds the record to the list.
     /// </summary>
     /// <param name="record">The record to add to the list.</param>
     /// <returns>Returns the id of the new record.</returns>
@@ -121,7 +121,7 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
     /// <returns>The list of the records with recieved first name.</returns>
     public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
     {
-        var list = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
+        var list = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower(CultureInfo.InvariantCulture));
         return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
     }
 
@@ -132,7 +132,7 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
     /// <returns>The list of the records with recieved last name.</returns>
     public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
     {
-        var list = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
+        var list = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower(CultureInfo.InvariantCulture));
         return list == null ? Array.Empty<FileCabinetRecord>() : new MemoryEnumerator<FileCabinetRecord>(list);
     }
 
@@ -158,6 +158,11 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
         return Array.Empty<FileCabinetRecord>();
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved balance.
+    /// </summary>
+    /// <param name="data">Balance.</param>
+    /// <returns>The list of the records with recieved balance.</returns>
     public override IEnumerable<FileCabinetRecord> FindByBalance(string data)
     {
         var parseResult = decimal.TryParse(
@@ -173,6 +178,11 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
         return Array.Empty<FileCabinetRecord>();
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved work experience.
+    /// </summary>
+    /// <param name="data">Work experience.</param>
+    /// <returns>The list of the records with recieved work experience.</returns>
     public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
     {
         var parseResult = short.TryParse(
@@ -188,6 +198,11 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
         return Array.Empty<FileCabinetRecord>();
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved favorite letter.
+    /// </summary>
+    /// <param name="data">Favorite letter.</param>
+    /// <returns>The list of the records with recieved favorite letter.</returns>
     public override IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
     {
         var parseResult = char.TryParse(
@@ -203,6 +218,11 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
         return Array.Empty<FileCabinetRecord>();
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved id.
+    /// </summary>
+    /// <param name="data">Id.</param>
+    /// <returns>The list of the records with recieved id.</returns>
     public override IEnumerable<FileCabinetRecord> FindById(string data)
     {
         return int.TryParse(data, out int id) ? new MemoryEnumerator<FileCabinetRecord>(this.list.Where(x => x.Id == id)) : Array.Empty<FileCabinetRecord>();
@@ -260,12 +280,41 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
     }
 
     /// <summary>
+    /// For this class does nothing.
+    /// </summary>
+    /// <returns>Zero, the number of all the records before purge.</returns>
+    public override (int, int) Purge()
+    {
+        return this.GetStat();
+    }
+
+    /// <summary>
+    /// Returns the list of the records with recieved complex SQL-like 'where' condition.
+    /// </summary>
+    /// <param name="parameters">SQL-like 'where' condition.</param>
+    /// <returns>The list of the records with recieved complex SQL-like 'where' condition.</returns>
+    public override IEnumerable<FileCabinetRecord> Find(string parameters)
+    {
+        var found = this.memoizedConditions.GetValueOrDefault(parameters);
+        if (found is not null)
+        {
+            return found;
+        }
+
+        var result = base.Find(parameters);
+
+        this.memoizedConditions.Add(parameters, result);
+
+        return result;
+    }
+
+    /// <summary>
     /// Adds new record to dictionaries.
     /// </summary>
     /// <param name="record">The record to add.</param>
     private void AddToDictionaries(FileCabinetRecord record)
     {
-        string lowerFirstName = record.FirstName.ToLower();
+        string lowerFirstName = record.FirstName.ToLower(CultureInfo.InvariantCulture);
 
         if (this.firstNameDictionary.ContainsKey(lowerFirstName))
         {
@@ -278,7 +327,7 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
             this.firstNameDictionary.Add(lowerFirstName, list);
         }
 
-        string lowerLastName = record.LastName.ToLower();
+        string lowerLastName = record.LastName.ToLower(CultureInfo.InvariantCulture);
 
         if (this.lastNameDictionary.ContainsKey(lowerLastName))
         {
@@ -342,10 +391,10 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
     /// <param name="record">The record to delete.</param>
     private void DeleteFromDictionaries(FileCabinetRecord record)
     {
-        string lowerFirstName = record.FirstName.ToLower();
+        string lowerFirstName = record.FirstName.ToLower(CultureInfo.InvariantCulture);
         this.firstNameDictionary.GetValueOrDefault(lowerFirstName).Remove(record);
 
-        string lowerLastName = record.LastName.ToLower();
+        string lowerLastName = record.LastName.ToLower(CultureInfo.InvariantCulture);
         this.lastNameDictionary.GetValueOrDefault(lowerLastName).Remove(record);
 
         this.dateOfBirthDictionary.GetValueOrDefault(record.DateOfBirth).Remove(record);
@@ -355,25 +404,5 @@ internal class FileCabinetMemoryService : FileCabinetServiceBase
         this.workExperienceDictionary.GetValueOrDefault(record.WorkExperience).Remove(record);
 
         this.favLetterDictionary.GetValueOrDefault(record.FavLetter).Remove(record);
-    }
-
-    public override (int, int) Purge()
-    {
-        return this.GetStat();
-    }
-
-    public override IEnumerable<FileCabinetRecord> Find(string parameters)
-    {
-        var found = this.memoizedConditions.GetValueOrDefault(parameters);
-        if (found is not null)
-        {
-            return found;
-        }
-
-        var result = base.Find(parameters);
-
-        this.memoizedConditions.Add(parameters, result);
-
-        return result;
     }
 }

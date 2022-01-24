@@ -32,13 +32,13 @@ internal class FileCabinetRecordCsvReader
 
             list.Add(new FileCabinetRecord
             {
-                Id = int.Parse(data[0]),
+                Id = int.Parse(data[0], CultureInfo.InvariantCulture),
                 FirstName = data[1],
                 LastName = data[2],
                 DateOfBirth = DateTime.Parse(data[3], CultureInfo.CreateSpecificCulture("en-US"), DateTimeStyles.None),
-                Balance = decimal.Parse(data[4]),
+                Balance = decimal.Parse(data[4], CultureInfo.InvariantCulture),
                 FavLetter = char.Parse(data[5]),
-                WorkExperience = short.Parse(data[6]),
+                WorkExperience = short.Parse(data[6], CultureInfo.InvariantCulture),
             });
         }
 

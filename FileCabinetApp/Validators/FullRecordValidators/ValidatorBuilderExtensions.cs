@@ -1,7 +1,15 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
+/// <summary>
+/// The validator builder extensions.
+/// </summary>
 internal static class ValidatorBuilderExtensions
 {
+    /// <summary>
+    /// Creates default validator.
+    /// </summary>
+    /// <param name="validatorBuilder">This ValidatorBuilder.</param>
+    /// <returns>Default validator.</returns>
     public static CompositeValidator CreateDefault(this ValidatorBuilder validatorBuilder) => validatorBuilder
         .ValidateFirstName(3, 60)
         .ValidateLastName(3, 60)
@@ -11,6 +19,11 @@ internal static class ValidatorBuilderExtensions
         .ValidateWorkExperience(0, short.MaxValue)
         .Create();
 
+    /// <summary>
+    /// Creates custom validator.
+    /// </summary>
+    /// <param name="validatorBuilder">This ValidatorBuilder.</param>
+    /// <returns>Custom validator.</returns>
     public static CompositeValidator CreateCustom(this ValidatorBuilder validatorBuilder) => validatorBuilder
         .ValidateFirstName(0, 50)
         .ValidateLastName(0, 50)

@@ -1,16 +1,33 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
+/// <summary>
+/// The use-logger command handler.
+/// </summary>
 internal class UseLoggerCommandHandler : ServiceCommandHandlerBase
 {
-    private bool useLogger = false;
+    private bool useLogger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UseLoggerCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
     public UseLoggerCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "use-logger" };
 
+    /// <summary>
+    /// Enables or disables logger.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
         if (this.useLogger)

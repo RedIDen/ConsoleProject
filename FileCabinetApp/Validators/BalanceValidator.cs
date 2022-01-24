@@ -1,17 +1,30 @@
 ﻿namespace FileCabinetApp.Validators;
 
+/// <summary>
+/// The balance validator.
+/// </summary>
 internal class BalanceValidator : IRecordValidator
 {
-    private decimal minValue;
+    private readonly decimal minValue;
 
-    private decimal maxValue;
+    private readonly decimal maxValue;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BalanceValidator"/> class.
+    /// </summary>
+    /// <param name="minValue">Minimal value.</param>
+    /// <param name="maxValue">Maximal value.</param>
     public BalanceValidator(decimal minValue, decimal maxValue)
     {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
+    /// <summary>
+    /// Validates the record's firstname.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
     public (bool, string) Validate(FileCabinetRecord record)
     {
         var value = record.Balance;

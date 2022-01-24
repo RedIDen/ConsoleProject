@@ -1,14 +1,33 @@
-﻿namespace FileCabinetApp.CommandHandlers;
+﻿#pragma warning disable CS8602
 
+namespace FileCabinetApp.CommandHandlers;
+
+/// <summary>
+/// The update command handler.
+/// </summary>
 internal class UpdateCommandHandler : ServiceCommandHandlerBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UpdateCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
     public UpdateCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "update" };
 
+    /// <summary>
+    /// Updates the records with specified data.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
         var parametersAndPredicates = parameters.Split("where").ToList();
@@ -31,7 +50,7 @@ internal class UpdateCommandHandler : ServiceCommandHandlerBase
 
         for (int i = 1; i < parametersList.Count; i++)
         {
-            var convertResult = parametersList[i].ToLower() switch
+            var convertResult = parametersList[i].ToLower(CultureInfo.InvariantCulture) switch
             {
                 _ when ++i >= parametersList.Count => (false, WrongSyntaxError),
                 FirstNameWord => this.TryInsertFirstName(record, parametersList[i]),

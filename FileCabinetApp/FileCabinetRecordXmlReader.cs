@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8602
 #pragma warning disable CS8600
+#pragma warning disable CA5369
 
 using System.Collections.ObjectModel;
 using System.Globalization;

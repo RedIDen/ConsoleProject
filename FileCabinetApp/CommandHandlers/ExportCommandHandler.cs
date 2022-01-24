@@ -1,13 +1,31 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
+
+/// <summary>
+/// The export command handler.
+/// </summary>
 internal class ExportCommandHandler : ServiceCommandHandlerBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Trasfer helper.</param>
     public ExportCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "export" };
 
+    /// <summary>
+    /// Exports the records data to file.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
         var parametersArray = parameters.Trim().Split();
@@ -21,8 +39,8 @@ internal class ExportCommandHandler : ServiceCommandHandlerBase
         string fileType = parametersArray[0];
         string fileName = parametersArray[1];
 
-        if (!fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) &&
-            !fileType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+        if (!fileType.Equals("csv", StringComparison.OrdinalIgnoreCase) &&
+            !fileType.Equals("xml", StringComparison.OrdinalIgnoreCase))
         {
             Console.WriteLine("Wrong file type!");
             return;
@@ -54,7 +72,7 @@ internal class ExportCommandHandler : ServiceCommandHandlerBase
             var streamWriter = new StreamWriter(fileName);
             var fileCabinetServiceSnapshot = this.transferHelper.Service.MakeSnapshot();
 
-            if (fileType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            if (fileType.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {
                 fileCabinetServiceSnapshot.SaveToCsv(streamWriter);
             }

@@ -1,17 +1,30 @@
 ﻿namespace FileCabinetApp.Validators;
 
+/// <summary>
+/// The DateOfBirth validator.
+/// </summary>
 internal class DateOfBirthValidator : IRecordValidator
 {
-    private DateTime from;
+    private readonly DateTime from;
 
-    private DateTime to;
+    private readonly DateTime to;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateOfBirthValidator"/> class.
+    /// </summary>
+    /// <param name="from">Minimal date.</param>
+    /// <param name="to">Maximal date.</param>
     public DateOfBirthValidator(DateTime from, DateTime to)
     {
         this.from = from;
         this.to = to;
     }
 
+    /// <summary>
+    /// Validates the record's date of birth.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
     public (bool, string) Validate(FileCabinetRecord record)
     {
         var value = record.DateOfBirth;

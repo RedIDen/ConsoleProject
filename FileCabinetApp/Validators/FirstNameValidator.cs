@@ -1,17 +1,30 @@
 ﻿namespace FileCabinetApp.Validators;
 
+/// <summary>
+/// The FirstName validator.
+/// </summary>
 internal class FirstNameValidator : IRecordValidator
 {
-    private int minLength;
+    private readonly int minLength;
 
-    private int maxLength;
+    private readonly int maxLength;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
+    /// </summary>
+    /// <param name="minLength">Minimal length.</param>
+    /// <param name="maxLength">Maximal length.</param>
     public FirstNameValidator(int minLength, int maxLength)
     {
         this.minLength = minLength;
         this.maxLength = maxLength;
     }
 
+    /// <summary>
+    /// Validates the record's first name.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
     public (bool, string) Validate(FileCabinetRecord record)
     {
         var value = record.FirstName;

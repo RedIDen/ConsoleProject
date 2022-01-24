@@ -1,15 +1,26 @@
 ﻿namespace FileCabinetApp.Validators.FullRecordValidators;
 
-[JsonObject(MemberSerialization.Fields)]
+/// <summary>
+/// The composite validator.
+/// </summary>
 internal class CompositeValidator : IRecordValidator
 {
     private readonly List<IRecordValidator> validators;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CompositeValidator"/> class.
+    /// </summary>
+    /// <param name="validators">The list of validators to add.</param>
     public CompositeValidator(IEnumerable<IRecordValidator> validators)
     {
         this.validators = validators.ToList();
     }
 
+    /// <summary>
+    /// Validates the record.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
     public (bool, string) Validate(FileCabinetRecord record)
     {
         bool result = true;
@@ -27,6 +38,11 @@ internal class CompositeValidator : IRecordValidator
         return (result, errorMessage.ToString().Trim(' ', ','));
     }
 
+    /// <summary>
+    /// Validates the record's initialized fields.
+    /// </summary>
+    /// <param name="record">Record.</param>
+    /// <returns>The flag showing if validation is succesful and the error message.</returns>
     public (bool, string) ValidateInitializedFields(FileCabinetRecord record)
     {
         bool isValid = true;

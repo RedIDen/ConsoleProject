@@ -1,21 +1,38 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
+/// <summary>
+/// The storage command handler.
+/// </summary>
 internal class StorageCommandHandler : ServiceCommandHandlerBase
 {
-    public StorageCommandHandler(FileCabinetTrasferHelper service)
+    private readonly Action<string> setStorageString;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StorageCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
+    /// <param name="setStorageString">Delegate setting storage string.</param>
+    public StorageCommandHandler(FileCabinetTrasferHelper service, Action<string> setStorageString)
         : base(service)
     {
+        this.setStorageString = setStorageString;
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "--storage", "-s" };
 
     /// <summary>
-    /// Shows the list of all commands and their descriptions.
+    /// Changes the storage type.
     /// </summary>
-    /// <param name="parameters">Extra parameteres for the method.</param>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
-        var temp = this.transferHelper.Service is IServiceDecorator ? ((IServiceDecorator)this.transferHelper.Service).GetLast() : this.transferHelper.Service;
+        var temp = this.transferHelper.Service is IServiceDecorator decorator ? decorator.GetLast() : this.transferHelper.Service;
 
         if (parameters == "memory")
         {
@@ -26,7 +43,7 @@ internal class StorageCommandHandler : ServiceCommandHandlerBase
             }
 
             ((FileCabinetFilesystemService)temp).Close();
-            Program.storageTypeMessage = "Using memory storage.";
+            this.setStorageString("Using memory storage.");
             this.transferHelper.SetLast(new FileCabinetMemoryService(temp.Validator));
         }
         else if (parameters == "file")
@@ -37,7 +54,7 @@ internal class StorageCommandHandler : ServiceCommandHandlerBase
                 return;
             }
 
-            Program.storageTypeMessage = "Using filesystem storage.";
+            this.setStorageString("Using filesystem storage.");
             this.transferHelper.SetLast(new FileCabinetFilesystemService(temp.Validator, File.Open(FileCabinetFilesystemService.FILENAME, FileMode.OpenOrCreate)));
         }
         else

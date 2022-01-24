@@ -1,16 +1,34 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
+
+/// <summary>
+/// The delete command handler.
+/// </summary>
 internal class DeleteCommandHandler : ServiceCommandHandlerBase
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DeleteCommandHandler"/> class.
+    /// </summary>
+    /// <param name="service">Transfer helper.</param>
     public DeleteCommandHandler(FileCabinetTrasferHelper service)
         : base(service)
     {
     }
 
+    /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
     protected override string[] CommandNames { get; } = { "delete" };
 
+    /// <summary>
+    /// Delete records with current parameters.
+    /// </summary>
+    /// <param name="parameters">Command parameters.</param>
     protected override void MakeWork(string parameters)
     {
-        var list = this.transferHelper.Service.Find(parameters.Replace("where", string.Empty));
+        var list = this.transferHelper.Service.Find(parameters.Replace("where", string.Empty, StringComparison.InvariantCultureIgnoreCase));
         var ids = new List<int>();
 
         int count = 0;

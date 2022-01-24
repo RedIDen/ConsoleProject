@@ -1,12 +1,11 @@
-﻿
-#pragma warning disable CS8602
+﻿#pragma warning disable CS8602
 
 namespace FileCabinetApp;
 
 /// <summary>
 /// The File Cabinet Filesystem Service class.
 /// </summary>
-internal class FileCabinetFilesystemService : FileCabinetServiceBase
+internal class FileCabinetFilesystemService : FileCabinetServiceBase, IDisposable
 {
     /// <summary>
     /// The file link.
@@ -60,10 +59,11 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
         this.reader.Close();
         this.writer.Close();
         this.fileStream.Dispose();
+        this.Dispose();
     }
 
     /// <summary>
-    /// If there's a correct data, adds the record to the list.
+    /// Adds the record to the list.
     /// </summary>
     /// <param name="record">The record to add to the list.</param>
     /// <returns>Returns the id of the new record.</returns>
@@ -86,7 +86,7 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     /// <summary>
     /// Edits the existing record.
     /// </summary>
-    /// <param name="record">The new record data.</param>
+    /// <param name="newRecordData">The new record data.</param>
     /// <param name="index">The index of the record to edit.</param>
     public override void EditRecord(FileCabinetRecord newRecordData, int index)
     {
@@ -154,7 +154,7 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     /// <returns>The list of the records with recieved first name.</returns>
     public override IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
     {
-        var positions = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower());
+        var positions = this.firstNameDictionary.GetValueOrDefault(firstName.ToLower(CultureInfo.InvariantCulture));
         return this.GetEnumerable(positions);
     }
 
@@ -165,10 +165,15 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     /// <returns>The list of the records with recieved last name.</returns>
     public override IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
     {
-        var positions = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower());
+        var positions = this.lastNameDictionary.GetValueOrDefault(lastName.ToLower(CultureInfo.InvariantCulture));
         return this.GetEnumerable(positions);
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved balance.
+    /// </summary>
+    /// <param name="data">Balance.</param>
+    /// <returns>The list of the records with recieved balance.</returns>
     public override IEnumerable<FileCabinetRecord> FindByBalance(string data)
     {
         var parseResult = decimal.TryParse(data, out decimal balance);
@@ -177,6 +182,11 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
         return this.GetEnumerable(positions);
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved work experience.
+    /// </summary>
+    /// <param name="data">Work experience.</param>
+    /// <returns>The list of the records with recieved work experience.</returns>
     public override IEnumerable<FileCabinetRecord> FindByWorkExperience(string data)
     {
         var parseResult = short.TryParse(data, out short workExperience);
@@ -185,6 +195,11 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
         return this.GetEnumerable(positions);
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved favorite letter.
+    /// </summary>
+    /// <param name="data">Favorite letter.</param>
+    /// <returns>The list of the records with recieved favorite letter.</returns>
     public override IEnumerable<FileCabinetRecord> FindByFavLetter(string data)
     {
         var parseResult = char.TryParse(data, out char favLetter);
@@ -193,6 +208,11 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
         return this.GetEnumerable(positions);
     }
 
+    /// <summary>
+    /// Returns the list of the records with recieved id.
+    /// </summary>
+    /// <param name="data">Id.</param>
+    /// <returns>The list of the records with recieved id.</returns>
     public override IEnumerable<FileCabinetRecord> FindById(string data)
     {
         var positions = new List<long>(0);
@@ -207,19 +227,6 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
         }
 
         return this.GetEnumerable(positions);
-    }
-
-    private IEnumerable<FileCabinetRecord> GetEnumerable(IEnumerable<long>? positions)
-    {
-        if (positions == null)
-        {
-            return Array.Empty<FileCabinetRecord>();
-        }
-
-        return new FilesystemEnumerator<FileCabinetRecord>(
-            positions,
-            () => this.GetRecord(),
-            (long value) => this.fileStream.Position = value);
     }
 
     /// <summary>
@@ -363,6 +370,27 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     }
 
     /// <summary>
+    /// Releases all the resources used by the service.
+    /// </summary>
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+
+    private IEnumerable<FileCabinetRecord> GetEnumerable(IEnumerable<long>? positions)
+    {
+        if (positions == null)
+        {
+            return Array.Empty<FileCabinetRecord>();
+        }
+
+        return new FilesystemEnumerator<FileCabinetRecord>(
+            positions,
+            () => this.GetRecord(),
+            (long value) => this.fileStream.Position = value);
+    }
+
+    /// <summary>
     /// Returns the list of all records.
     /// </summary>
     /// <returns>The list of all records.</returns>
@@ -484,7 +512,7 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     /// <param name="record">The record to add.</param>
     private void AddToDictionaries(FileCabinetRecord record)
     {
-        string lowerFirstName = record.FirstName.ToLower();
+        string lowerFirstName = record.FirstName.ToLower(CultureInfo.InvariantCulture);
         long position = this.FindRecordIndexById(record.Id) * FileCabinetFilesystemService.RECORDLENGTH;
 
         if (this.firstNameDictionary.ContainsKey(lowerFirstName))
@@ -498,7 +526,7 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
             this.firstNameDictionary.Add(lowerFirstName, list);
         }
 
-        string lowerLastName = record.LastName.ToLower();
+        string lowerLastName = record.LastName.ToLower(CultureInfo.InvariantCulture);
 
         if (this.lastNameDictionary.ContainsKey(lowerLastName))
         {
@@ -564,12 +592,12 @@ internal class FileCabinetFilesystemService : FileCabinetServiceBase
     {
         long position = this.FindRecordIndexById(record.Id) * FileCabinetFilesystemService.RECORDLENGTH;
 
-        string lowerFirstName = record.FirstName.ToLower();
+        string lowerFirstName = record.FirstName.ToLower(CultureInfo.InvariantCulture);
         this.firstNameDictionary
             .GetValueOrDefault(lowerFirstName)
             .Remove(position);
 
-        string lowerLastName = record.LastName.ToLower();
+        string lowerLastName = record.LastName.ToLower(CultureInfo.InvariantCulture);
         this.lastNameDictionary
             .GetValueOrDefault(lowerLastName)
             .Remove(position);

@@ -23,11 +23,11 @@ internal static class Program
     private const string DeveloperName = "Deniska Vasilyev";
     private const string ValidatorsDataPath = "validation-rules.json";
 
+    private static string validationRulesMessage = "Using default validation rules.";
+    private static string storageTypeMessage = "Using memory storage.";
+
     private static Dictionary<string, CompositeValidator> validators;
     private static FileCabinetTrasferHelper fileCabinetService;
-
-    public static string validationRulesMessage = "Using default validation rules.";
-    public static string storageTypeMessage = "Using memory storage.";
 
     private static ICommandHandler commandHandler;
 
@@ -64,15 +64,27 @@ internal static class Program
         while (isRunning);
     }
 
+    /// <summary>
+    /// Writes the greeting message.
+    /// </summary>
+    public static void WriteGreeting()
+    {
+        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}.");
+        Console.WriteLine(Program.validationRulesMessage);
+        Console.WriteLine(Program.storageTypeMessage);
+        Console.WriteLine(Program.HintMessage);
+        Console.WriteLine();
+    }
+
     private static ICommandHandler CreateCommandHandler()
     {
-        var exit = new ExitCommandHandler((bool value) => Program.isRunning = value);
+        var exit = new ExitCommandHandler((value) => Program.isRunning = value);
 
-        var edit = new UpdateCommandHandler(Program.fileCabinetService);
-        edit.SetNext(exit);
+        var update = new UpdateCommandHandler(Program.fileCabinetService);
+        update.SetNext(exit);
 
         var export = new ExportCommandHandler(Program.fileCabinetService);
-        export.SetNext(edit);
+        export.SetNext(update);
 
         var help = new HelpCommandHandler();
         help.SetNext(export);
@@ -80,29 +92,29 @@ internal static class Program
         var import = new ImportCommandHandler(Program.fileCabinetService);
         import.SetNext(help);
 
-        var list = new SelectCommandHandler(Program.fileCabinetService, Program.DefaultRecordPrinter);
-        list.SetNext(import);
+        var select = new SelectCommandHandler(Program.fileCabinetService, Program.DefaultRecordPrinter);
+        select.SetNext(import);
 
         var purge = new PurgeCommandHandler(Program.fileCabinetService);
-        purge.SetNext(list);
+        purge.SetNext(select);
 
-        var remove = new DeleteCommandHandler(Program.fileCabinetService);
-        remove.SetNext(purge);
+        var delete = new DeleteCommandHandler(Program.fileCabinetService);
+        delete.SetNext(purge);
 
         var stat = new StatCommandHandler(Program.fileCabinetService);
-        stat.SetNext(remove);
+        stat.SetNext(delete);
 
-        var storage = new StorageCommandHandler(Program.fileCabinetService);
+        var storage = new StorageCommandHandler(Program.fileCabinetService, (value) => Program.storageTypeMessage = value);
         storage.SetNext(stat);
 
-        var validation = new ValidationRulesCommandHandler(Program.fileCabinetService, Program.validators);
+        var validation = new ValidationRulesCommandHandler(Program.fileCabinetService, Program.validators, (value) => Program.validationRulesMessage = value);
         validation.SetNext(storage);
 
-        var create = new InsertCommandHandler(Program.fileCabinetService);
-        create.SetNext(validation);
+        var insert = new InsertCommandHandler(Program.fileCabinetService);
+        insert.SetNext(validation);
 
         var useStopwatch = new UseStopwatchCommandHandler(Program.fileCabinetService);
-        useStopwatch.SetNext(create);
+        useStopwatch.SetNext(insert);
 
         var useLogger = new UseLoggerCommandHandler(Program.fileCabinetService);
         useLogger.SetNext(useStopwatch);
@@ -143,7 +155,7 @@ internal static class Program
 
         const int freeSpace = 2;
 
-        byte favLetterLength = (byte)(favLetterWord.Length);
+        byte favLetterLength = (byte)favLetterWord.Length;
         byte idLength, firstNameLength, lastNameLength, dateOfBirthLength, balanceLength, workExperienceLength;
 
         StringBuilder borderLine = new StringBuilder().Append('+');
@@ -152,11 +164,11 @@ internal static class Program
         {
             fieldNames.Append(' ');
 
-            switch (parameter.ToLower())
+            switch (parameter.ToLower(CultureInfo.InvariantCulture))
             {
                 case idWord:
                     var idName = "Id";
-                    idLength = (byte)Math.Max(records.Select(x => x.Id).Max().ToString().Length, idName.Length);
+                    idLength = (byte)Math.Max(records.Select(x => x.Id).Max().ToString(CultureInfo.InvariantCulture).Length, idName.Length);
                     fieldWriters.Add(WriteId);
                     borderLine.Append('-', idLength + freeSpace);
                     fieldNames.Append(idName);
@@ -188,7 +200,7 @@ internal static class Program
                     break;
                 case balanceWord:
                     var balanceName = "Balance";
-                    balanceLength = (byte)Math.Max(records.Select(x => x.Balance).Max().ToString().Length, balanceName.Length);
+                    balanceLength = (byte)Math.Max(records.Select(x => x.Balance).Max().ToString(CultureInfo.InvariantCulture).Length, balanceName.Length);
                     fieldWriters.Add(WriteBalance);
                     borderLine.Append('-', balanceLength + freeSpace);
                     fieldNames.Append(balanceName);
@@ -196,7 +208,7 @@ internal static class Program
                     break;
                 case workExperienceWord:
                     var workExperienceName = "WorkExperience";
-                    workExperienceLength = (byte)Math.Max(records.Select(x => x.WorkExperience).Max().ToString().Length, workExperienceName.Length);
+                    workExperienceLength = (byte)Math.Max(records.Select(x => x.WorkExperience).Max().ToString(CultureInfo.InvariantCulture).Length, workExperienceName.Length);
                     fieldWriters.Add(WriteWorkExperience);
                     borderLine.Append('-', workExperienceLength + freeSpace);
                     fieldNames.Append(workExperienceName);
@@ -239,7 +251,7 @@ internal static class Program
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(' ');
-            string id = record.Id.ToString();
+            string id = record.Id.ToString(CultureInfo.InvariantCulture);
             stringBuilder.Append(' ', idLength - id.Length);
             stringBuilder.Append(id);
             stringBuilder.Append(" |");
@@ -281,7 +293,7 @@ internal static class Program
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(' ');
-            string balance = record.Balance.ToString();
+            string balance = record.Balance.ToString(CultureInfo.InvariantCulture);
             stringBuilder.Append(' ', balanceLength - balance.Length);
             stringBuilder.Append(balance);
             stringBuilder.Append(" |");
@@ -292,7 +304,7 @@ internal static class Program
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(' ');
-            string workExperience = record.WorkExperience.ToString();
+            string workExperience = record.WorkExperience.ToString(CultureInfo.InvariantCulture);
             stringBuilder.Append(' ', workExperienceLength - workExperience.Length);
             stringBuilder.Append(workExperience);
             stringBuilder.Append(" |");
@@ -309,17 +321,5 @@ internal static class Program
             stringBuilder.Append(" |");
             Console.Write(stringBuilder.ToString());
         }
-    }
-
-    /// <summary>
-    /// Writes the greeting message.
-    /// </summary>
-    public static void WriteGreeting()
-    {
-        Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}.");
-        Console.WriteLine(Program.validationRulesMessage);
-        Console.WriteLine(Program.storageTypeMessage);
-        Console.WriteLine(Program.HintMessage);
-        Console.WriteLine();
     }
 }

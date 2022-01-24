@@ -1,14 +1,15 @@
 ﻿namespace FileCabinetApp.CommandHandlers;
 
+/// <summary>
+/// The help command handler.
+/// </summary>
 internal class HelpCommandHandler : CommandHandlerBase
 {
-    protected override string[] CommandNames { get; } = { "help" };
-
     private const int CommandHelpIndex = 0;
     private const int DescriptionHelpIndex = 1;
     private const int ExplanationHelpIndex = 2;
 
-    private static string[][] helpMessages = new string[][]
+    private static readonly string[][] HelpMessages = new string[][]
     {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "insert", "creates new record", "The 'insert' command creates new record." },
@@ -25,6 +26,14 @@ internal class HelpCommandHandler : CommandHandlerBase
     };
 
     /// <summary>
+    /// Gets the list of command names (only full or full and short).
+    /// </summary>
+    /// <value>
+    /// The list of command names (strings).
+    /// </value>
+    protected override string[] CommandNames { get; } = { "help" };
+
+    /// <summary>
     /// Shows the list of all commands and their descriptions.
     /// </summary>
     /// <param name="parameters">Extra parameteres for the method.</param>
@@ -32,10 +41,10 @@ internal class HelpCommandHandler : CommandHandlerBase
     {
         if (!string.IsNullOrEmpty(parameters))
         {
-            var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[HelpCommandHandler.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
+            var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[HelpCommandHandler.CommandHelpIndex], parameters, StringComparison.OrdinalIgnoreCase));
             if (index >= 0)
             {
-                Console.WriteLine(helpMessages[index][HelpCommandHandler.ExplanationHelpIndex]);
+                Console.WriteLine(HelpMessages[index][HelpCommandHandler.ExplanationHelpIndex]);
             }
             else
             {
@@ -46,7 +55,7 @@ internal class HelpCommandHandler : CommandHandlerBase
         {
             Console.WriteLine("Available commands:");
 
-            foreach (var helpMessage in helpMessages)
+            foreach (var helpMessage in HelpMessages)
             {
                 Console.WriteLine("\t{0}\t- {1}", helpMessage[HelpCommandHandler.CommandHelpIndex], helpMessage[HelpCommandHandler.DescriptionHelpIndex]);
             }
