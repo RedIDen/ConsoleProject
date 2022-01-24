@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp;
+﻿namespace FileCabinetApp.FileCabinet;
 
 /// <summary>
 /// The records enumerator for filesystem service.

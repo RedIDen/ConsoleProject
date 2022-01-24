@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS8618
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet;
 
 /// <summary>
 /// The class describing the record unit.

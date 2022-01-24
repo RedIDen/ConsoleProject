@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CA1822
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet.Decorators;
 
 /// <summary>
 /// The service logger.

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet.Decorators;
 
 /// <summary>
 /// The service meter.

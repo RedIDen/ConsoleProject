@@ -1,12 +1,10 @@
-﻿#pragma warning disable CS8602
-#pragma warning disable CS8618
-
-using FileCabinetApp;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
+﻿using FileCabinetApp.FileCabinet;
+using FileCabinetApp.FileCabinet.WorkingWithFiles;
 
 namespace FileCabinetGeneretor;
+
+#pragma warning disable CS8602
+#pragma warning disable CS8618
 
 /// <summary>
 /// The main class of the program.
@@ -18,7 +16,7 @@ public static class Program
     private static string fileName;
     private static string format;
 
-    private const string testCommand = "-t xml -o a.xml -a 1000 -i 1";
+    // private const string testCommand = "-t xml -o a.xml -a 1000 -i 1";
 
     private static readonly Random random = new Random();
 
@@ -47,8 +45,7 @@ public static class Program
         do
         {
             Console.Write("> ");
-            //var inputs = Console.ReadLine().Split(new char[] { ' ', '=' });
-            var inputs = Program.testCommand.Split(new char[] { ' ', '=' });
+            var inputs = Console.ReadLine().Split(new char[] { ' ', '=' });
 
             if (inputs[0] == "exit")
             {

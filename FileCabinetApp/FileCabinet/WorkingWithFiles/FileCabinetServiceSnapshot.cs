@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp;
+﻿namespace FileCabinetApp.FileCabinet.WorkingWithFiles;
 
 /// <summary>
 /// The file cabinet service snapshot.

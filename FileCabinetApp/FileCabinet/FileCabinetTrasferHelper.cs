@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp;
+﻿namespace FileCabinetApp.FileCabinet;
 
 /// <summary>
 /// The file cabinet transfer helper. This class is used to inject the service dependency to command handlers with the posibility to change service.

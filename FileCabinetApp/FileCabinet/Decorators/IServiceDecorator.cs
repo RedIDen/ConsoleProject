@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp;
+﻿namespace FileCabinetApp.FileCabinet.Decorators;
 
 /// <summary>
 /// The service decorator.

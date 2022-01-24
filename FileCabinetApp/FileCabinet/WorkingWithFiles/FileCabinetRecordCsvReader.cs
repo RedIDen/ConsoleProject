@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS8602
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet.WorkingWithFiles;
 
 /// <summary>
 /// The file cabinet record CSV reader.

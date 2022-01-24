@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp;
+﻿namespace FileCabinetApp.FileCabinet;
 
 /// <summary>
 /// The interface for the File Cabinet Service.

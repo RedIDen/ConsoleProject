@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS8602
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet;
 
 /// <summary>
 /// The file cabinet record comparer.

@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
-namespace FileCabinetApp;
+namespace FileCabinetApp.FileCabinet.WorkingWithFiles;
 
 /// <summary>
 /// The file cabinet record XML writer.
