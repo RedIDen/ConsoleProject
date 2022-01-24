@@ -2,12 +2,12 @@
 
 internal class FileCabinetTrasferHelper
 {
-    public FileCabinetServiceBase Service { get; set; }
-
     public FileCabinetTrasferHelper(FileCabinetServiceBase service)
     {
         this.Service = service;
     }
+
+    public FileCabinetServiceBase Service { get; set; }
 
     public IFileCabinetService GetLast()
     {

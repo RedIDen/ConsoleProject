@@ -51,7 +51,7 @@ internal class UpdateCommandHandler : ServiceCommandHandlerBase
             }
         }
 
-        var validationResult = this.Validate(record);
+        var validationResult = (this.transferHelper.Service.Validator as CompositeValidator).ValidateInitializedFields(record);
 
         if (!validationResult.Item1)
         {
@@ -89,58 +89,5 @@ internal class UpdateCommandHandler : ServiceCommandHandlerBase
 
             Console.WriteLine("are updated.");
         }
-    }
-
-    private (bool, string) Validate(FileCabinetRecord record)
-    {
-        bool isValid = true;
-        var errorMessage = new StringBuilder();
-        var validator = this.transferHelper.Service.Validator as CompositeValidator;
-        bool tempResult;
-        string tempMessage;
-
-        if (record.FirstName is not null)
-        {
-            (tempResult, tempMessage) = validator.ValidateFirstName(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        if (record.LastName is not null)
-        {
-            (tempResult, tempMessage) = validator.ValidateLastName(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        if (record.DateOfBirth != new DateTime(0))
-        {
-            (tempResult, tempMessage) = validator.ValidateDateOfBirth(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        if (record.Balance != -1)
-        {
-            (tempResult, tempMessage) = validator.ValidateBalance(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        if (record.WorkExperience != -1)
-        {
-            (tempResult, tempMessage) = validator.ValidateWorkExperience(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        if (record.FavLetter != '\0')
-        {
-            (tempResult, tempMessage) = validator.ValidateFavLeter(record);
-            isValid &= tempResult;
-            errorMessage.Append(tempMessage.Length == 0 ? tempMessage : tempMessage + ", ");
-        }
-
-        return (isValid, errorMessage.ToString().Trim(' ', ','));
     }
 }
